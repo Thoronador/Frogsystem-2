@@ -16,7 +16,7 @@ if ($_POST[dledit] && $_POST[title] && $_POST[text] && $_POST[fname][0] && $_POS
         image_delete("images/dl/", "$_POST[editdlid]_s");
         image_delete("images/dl/", $_POST[editdlid]);
         systext('Download wurde gelöscht');
-        
+
         // Delete from Search Index
         require_once ( FS2_ROOT_PATH . "includes/searchfunctions.php" );
         delete_search_index_for_one ( $_POST['editdlid'], "dl" );
@@ -60,14 +60,14 @@ if ($_POST[dledit] && $_POST[title] && $_POST[text] && $_POST[fname][0] && $_POS
                        dl_search_update = '".time()."'
                    WHERE dl_id = $_POST[editdlid]";
         mysql_query($update, $db);
-        
+
         // Update Search Index (or not)
         if ( $global_config_arr['search_index_update'] === 1 ) {
             // Include searchfunctions.php
             require_once ( FS2_ROOT_PATH . "includes/searchfunctions.php" );
             update_search_index ( "dl" );
         }
-        
+
 
         // Files  aktualisieren
         for ($i=0; $i<count($_POST[fname]); $i++)
@@ -94,7 +94,7 @@ if ($_POST[dledit] && $_POST[title] && $_POST[text] && $_POST[fname][0] && $_POS
                                        '".$_POST[fsize][$i]."',
                                        '".$_POST[fmirror][$i]."')";
                     mysql_query($insert, $db);
-                                         
+
                 }
                 elseif ($_POST[fnew][$i]==0)
                 {
@@ -112,7 +112,7 @@ if ($_POST[dledit] && $_POST[title] && $_POST[text] && $_POST[fname][0] && $_POS
         systext("Download wurde aktualisiert");
     }
 }
-  
+
 ////////////////////////////////
 ////// Download editieren //////
 ////////////////////////////////
@@ -189,7 +189,7 @@ elseif ($_POST[dlid] || $_POST[optionsadd])
         $_POST[options] = count($_POST[fname]);
     }
     $_POST[options] += $_POST[optionsadd];
-    
+
     $index = mysql_query("select * from ".$global_config_arr[pref]."dl_config", $db);
     $admin_dl_config_arr = mysql_fetch_assoc($index);
 
@@ -217,7 +217,7 @@ elseif ($_POST[dlid] || $_POST[optionsadd])
     {
         $sele = ($_POST[catid] == $cat[cat_id]) ? "selected" : "";
         echo'
-                                        <option value="'.$cat[cat_id].'" '.$sele.'>'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat[ebene]).$cat[cat_name].'</option>
+                                        <option value="'.$cat[cat_id].'" '.$sele.'>'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat['level']).$cat[cat_name].'</option>
         ';
     }
     echo'
@@ -320,7 +320,7 @@ elseif ($_POST[dlid] || $_POST[optionsadd])
             ';
         }
     }
-    
+
     echo'
                             <tr>
                                 <td class="configthin">
@@ -385,7 +385,7 @@ else
                                         <option value="'.$cat_arr[cat_id].'" '.$sele.'>'.$cat_arr[cat_name].'</option>
         ';
     }  */
-    
+
     $valid_ids = array();
     get_dl_categories (&$valid_ids, -1);
 
@@ -393,7 +393,7 @@ else
     {
         $sele = ($_POST[dlcatid] == $cat[cat_id]) ? "selected" : "";
         echo'
-                                        <option value="'.$cat[cat_id].'" '.$sele.'>'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat[ebene]).$cat[cat_name].'</option>
+                                        <option value="'.$cat[cat_id].'" '.$sele.'>'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat['level']).$cat[cat_name].'</option>
         ';
     }
 

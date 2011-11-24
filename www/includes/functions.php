@@ -53,7 +53,7 @@ function get_page_nav ( $PAGE, $NUM_OF_PAGES, $PER_PAGE, $NUM_OF_ENTRIES, $URL_T
     $template = str_replace ( "{..total_pages..}", $NUM_OF_PAGES, $template );
     $template = str_replace ( "{..prev..}", $template_prev, $template );
     $template = str_replace ( "{..next..}", $template_next, $template );
-    
+
     return $template;
 }
 
@@ -206,7 +206,7 @@ function date_loc ( $DATE_STRING, $TIMESTAMP )
 
     $week_en = array ( "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday" );
     $month_en = array ( "January","February","March","April","May","June","July","August","September","October","November","December" );
-    
+
     $localized_date = str_replace ( $week_en, explode ( ",", $phrases['week_days'] ), date ( $DATE_STRING, $TIMESTAMP ) );
     $localized_date = str_replace ( $month_en, explode ( ",", $phrases['month_names'] ), $localized_date );
 
@@ -242,7 +242,7 @@ function create_dl_cat ($CAT_ID, $GET_ID, $NAVI_TEMPLATE) {
     global $db, $global_config_arr;
     static $navi;
     static $i = 0;
-    
+
     $i++;
     $data[$CAT_ID] = mysql_query ( "
         SELECT *
@@ -358,7 +358,7 @@ function get_random_pic ()
                                 AND C.`cat_id` = S.`cat_id`
                                 LIMIT ".$rand.",1
         ", $db);
-        
+
         $dbscreen['id'] = mysql_result ( $index, 0, "screen_id" );
         settype ( $dbscreen['id'], "integer" );
         $dbscreen['caption'] = stripslashes ( mysql_result ( $index, 0, "screen_name" ) );
@@ -366,7 +366,7 @@ function get_random_pic ()
         settype ( $dbscreen['cat_id'], "integer" );
         $dbscreen['cat_title'] = stripslashes ( mysql_result ( $index, 0, "cat_name" ) );
         $dbscreen['type'] = 2;
-        
+
         return $dbscreen;
     } else {
         return FALSE;
@@ -393,12 +393,12 @@ function get_pagenav_start ( $NUM_OF_ENTRIES, $ENTRIES_PER_PAGE, $START )
     $PAGENAV_DATA['old_start'] = $OLDSTART;
     $PAGENAV_DATA['cur_start'] = $START;
     $PAGENAV_DATA['new_start'] = $NEWSTART;
-    
+
     if ( $START > 1 ) { $PAGENAV_DATA['old_start_exists'] = TRUE; }
     else { $PAGENAV_DATA['old_start_exists'] = FALSE; }
     if ( ( $START + $ENTRIES_PER_PAGE ) < $NUM_OF_ENTRIES ) { $PAGENAV_DATA['newpage_exists'] = TRUE; }
     else { $PAGENAV_DATA['newpage_exists'] = FALSE; }
-    
+
     return $PAGENAV_DATA;
 }
 
@@ -456,7 +456,7 @@ function get_filter_where ( $FILTER, $SEARCH_FIELD )
         $query = "WHERE ";
     }
     $query .= $or_query . $and_query;
-    
+
     return $query;
 }
 
@@ -525,9 +525,9 @@ function is_in_staff ( $USER_ID )
 {
     global $global_config_arr;
     global $db;
-    
+
     settype ( $USER_ID, "integer" );
-    
+
     if ( $USER_ID ) {
         $index = mysql_query ( "
                                 SELECT user_id, user_is_staff, user_is_admin
@@ -579,7 +579,7 @@ function get_template ( $TEMPLATE_NAME )
 {
     global $global_config_arr;
     global $db;
-    
+
     $index = mysql_query ( "
                             SELECT `".$TEMPLATE_NAME."`
                             FROM ".$global_config_arr['pref']."template
@@ -633,7 +633,7 @@ function send_mail ( $TO, $SUBJECT, $TEXT, $HTML = FALSE, $FROM = FALSE )
 
     $header .= "X-Mailer: PHP/" . phpversion() . "\n";
     $header .= "X-Sender-IP: " . $REMOTE_ADDR . "\n";
-    
+
     if ( $HTML == FALSE || $HTML == "html" ) {
         if ( mysql_result ( $index, 0, "html" ) == 1 ) {
             $header .= "Content-Type: text/html";
@@ -664,15 +664,15 @@ function create_textarea($name, $text="", $width="", $height="", $class="", $all
     } else {
         return false;
     }
-    
+
     if ($width != "") {
         $width2 = 'width:'.$width.'px;';
     }
-    
+
     if ($height != "") {
         $height2 = 'height:'.$height.'px';
     }
-    
+
     if ($class != "") {
         $class2 = 'class="'.$class.'"';
     }
@@ -686,7 +686,7 @@ function create_textarea($name, $text="", $width="", $height="", $class="", $all
     $index = mysql_query ( " SELECT * FROM `".$global_config_arr['pref']."editor_config` ", $db );
     $config_arr = mysql_fetch_assoc ( $index );
     $config_arr['num_smilies'] = $config_arr['smilies_rows']*$config_arr['smilies_cols'];
-            
+
     $zaehler = 0;
     $index = mysql_query ( "
                             SELECT *
@@ -699,7 +699,7 @@ function create_textarea($name, $text="", $width="", $height="", $class="", $all
         $smilie_arr['url'] = image_url ( "images/smilies/", $smilie_arr['id'] );
         $smilie_template = '<td><img src="'.$smilie_arr['url'].'" alt="'.$smilie_arr['replace_string'].'" onClick="insert(\''.$name.'\', \''.$smilie_arr['replace_string'].'\', \'\')" class="editor_smilies"></td>';
         $zaehler += 1;
-        
+
         switch ( $zaehler )
         {
             case $config_arr['smilies_cols'] == 1:
@@ -723,7 +723,7 @@ function create_textarea($name, $text="", $width="", $height="", $class="", $all
         }
     }
     $smilies_table .= '</table>';
-    
+
     // Get Smilie Template
     $smilies = new template();
     $smilies->setFile("0_editor.tpl");
@@ -737,7 +737,7 @@ function create_textarea($name, $text="", $width="", $height="", $class="", $all
   }
 
 $buttons = "";
-  
+
 if ($all==true OR $fs_b==1) {
   $buttons .= create_textarea_button('bold.gif', "B", "fett", "insert('$name', '[b]', '[/b]')");
 }
@@ -826,12 +826,12 @@ if ($all==true OR $fs_noparse==1) {
     $textarea = new template();
     $textarea->setFile("0_editor.tpl");
     $textarea->load("BODY");
-    
+
     $textarea->tag("style", $style );
     $textarea->tag("text", $text );
     $textarea->tag("buttons", $buttons );
     $textarea->tag("smilies", $smilies );
-    
+
     $textarea = $textarea->display ();
 
     return $textarea;
@@ -851,14 +851,14 @@ function create_textarea_button($img_file_name, $alt, $title, $insert)
     $button = new template();
     $button->setFile("0_editor.tpl");
     $button->load("BUTTON");
-    
+
     $button->tag("img_file_name", $img_file_name );
     $button->tag("alt", $alt );
     $button->tag("title", $title );
     $button->tag("javascript", $javascript );
-    
+
     $button = $button->display ();
-    
+
     return $button;
 }
 
@@ -928,7 +928,7 @@ function forward_message ( $TITLE, $MESSAGE, $URL)
     $template->tag ( "message", $MESSAGE );
     $template->tag ( "forward_url", $URL );
     $template->tag ( "forward_time", $global_config_arr['auto_forward'] );
-    
+
     $template = $template->display ();
     return $forward_script.$template;
 }
@@ -978,7 +978,7 @@ function cut_in_string ($string, $maxlength, $replacement)
 ///// Download Categories //////
 ////////////////////////////////
 
-function get_dl_categories (&$IDs, $CAT_ID, $SHOW_SUB = 0, $ID = 0, $LEVEL = -1 )
+function get_dl_categories (&$IDs, $CAT_ID, $SHOW_SUB = 1, $ID = 0, $LEVEL = -1 )
 {
     global $global_config_arr, $db;
 
@@ -1160,7 +1160,7 @@ function getsize ( $SIZE )
 
 function markword($text, $word)
 {
-    $text = preg_replace("=(.*?)$word(.*?)=i", 
+    $text = preg_replace("=(.*?)$word(.*?)=i",
                          "\\1<font color=\"red\"><b>$word</b></font>\\2",$text);
     return $text;
 }
@@ -1320,7 +1320,7 @@ function fscode($text, $all=true, $html=false, $para=false, $do_b=0, $do_i=0, $d
             $bbcode->setCodeFlag ('code', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);
             $bbcode->setCodeFlag ('code', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
         }
-        
+
         if ($all==true OR $do_quote==1) {
             $bbcode->addCode ('quote', 'callback_replace', 'do_bbcode_quote', array (),
                               'block', array ('listitem', 'block', 'inline'), array ('link'));

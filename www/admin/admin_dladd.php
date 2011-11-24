@@ -37,20 +37,20 @@ if ($_POST[dladd] && $_POST[title] && $_POST[text] && $_POST[fname][0] && $_POST
                          '".$_POST[dlopen]."',
                          '".time()."')
     ", $db);
-    
+
     // Update Search Index (or not)
     if ( $global_config_arr['search_index_update'] === 1 ) {
         // Include searchfunctions.php
         require ( FS2_ROOT_PATH . "includes/searchfunctions.php" );
         update_search_index ( "dl" );
     }
-                         
+
     $id = mysql_insert_id();
-    
+
     // Bild auswerten und hochladen
     $index = mysql_query("select * from ".$global_config_arr[pref]."dl_config", $db);
     $admin_dl_config_arr = mysql_fetch_assoc($index);
-    
+
     if ($_FILES[dlimg][name] != "")
     {
         $upload = upload_img($_FILES['dlimg'], "images/downloads/", $id, 2*1024*1024, $admin_dl_config_arr[screen_x], $admin_dl_config_arr[screen_y]);
@@ -111,7 +111,7 @@ else
     foreach ($valid_ids as $cat)
     {
         echo'
-                                        <option value="'.$cat[cat_id].'">'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat[ebene]).$cat[cat_name].'</option>
+                                        <option value="'.$cat[cat_id].'">'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat['level']).$cat[cat_name].'</option>
         ';
     }
     echo'
