@@ -11,8 +11,9 @@ if ($_POST['screenx'] && $_POST['screeny'] && $_POST['thumbx'] && $_POST['thumby
     settype($_POST['thumbx'], 'integer');
     settype($_POST['thumby'], 'integer');
     settype($_POST['dl_rights'], 'integer');
+    $_POST['quickinsert'] = savesql($_POST['quickinsert']);
     settype($_POST['dl_show_sub_cats'], 'integer');
-    
+
     $update = 'UPDATE '.$global_config_arr['pref']."dl_config
                SET screen_x = '$_POST[screenx]',
                    screen_y = '$_POST[screeny]',
@@ -34,17 +35,17 @@ else
 {
     $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'dl_config', $db);
     $config_arr = mysql_fetch_assoc($index);
-    
+
     settype ( $config_arr['dl_show_sub_cats'], 'integer' );
-    
+
     echo'
                     <form action="" method="post">
                         <input type="hidden" value="dl_config" name="go">
                         <table border="0" cellpadding="4" cellspacing="0" width="600">
                             <tr>
                                 <td class="config" valign="top" width="70%">
-                                    Max. Bildgröße:<br>
-                                    <font class="small">Stellt die max. Upload Größe der Vorschau-Bilder ein</font>
+                                    Max. Bildgr&ouml;&szlig;e:<br>
+                                    <font class="small">Stellt die max. Upload Gr&ouml;&szlig;e der Vorschau-Bilder ein</font>
                                 </td>
                                 <td class="config" valign="top" width="30%">
                                     <input class="text" size="5" name="screenx" value="'.$config_arr['screen_x'].'" maxlength="4">
@@ -54,8 +55,8 @@ else
                             </tr>
                             <tr>
                                 <td class="config" valign="top" width="50%">
-                                    Thumbnail Größe:<br>
-                                    <font class="small">Gibt die Größe der Thumbnails an</font>
+                                    Thumbnail Gr&ouml;&szlig;e:<br>
+                                    <font class="small">Gibt die Gr&ouml;&szlig;e der Thumbnails an</font>
                                 </td>
                                 <td class="config" valign="top" width="50%">
                                     <input class="text" size="5" name="thumbx" value="'.$config_arr['thumb_x'].'" maxlength="3">
@@ -66,7 +67,7 @@ else
                             <tr>
                                 <td class="config" valign="top" width="50%">
                                     Quick-Insert Pfad:<br>
-                                    <font class="small">Der Datei-Pfad der mit dem Quick-Insert Button eingefügt wird.</font>
+                                    <font class="small">Der Datei-Pfad der mit dem Quick-Insert Button eingef&uuml;gt wird.</font>
                                 </td>
                                 <td class="config" valign="top" width="50%">
                                     <input class="text" size="40" name="quickinsert" value="'.stripslashes(killhtml($config_arr['quickinsert'])).'" maxlength="255">
@@ -74,7 +75,7 @@ else
                             </tr>
                             <tr>
                                 <td class="config" valign="top" width="50%">
-                                    Downloads erlauben für:<br>
+                                    Downloads erlauben f&uuml;r:<br>
                                     <font class="small">Wer darf die Downloads verwenden?</font>
                                 </td>
                                 <td class="config" valign="top" width="50%">
@@ -97,7 +98,7 @@ else
                             <tr>
                                 <td class="config" valign="top" width="50%">
                                     Unterkategorien immer zeigen:<br>
-                                    <font class="small">Zeigt immer alle Unterkategorien an, auch wenn Ordner nicht geöffnet.</font>
+                                    <font class="small">Zeigt immer alle Unterkategorien an, auch wenn Ordner nicht ge&ouml;ffnet.</font>
                                 </td>
                                 <td class="config" valign="top" width="50%">
                                     <input type="checkbox" name="dl_show_sub_cats" value="1" '.getchecked ( 1, $config_arr['dl_show_sub_cats'] ).'>
