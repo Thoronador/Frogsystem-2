@@ -4,25 +4,25 @@
 //// Kategorie ändern ////
 //////////////////////////
 
-if (isset($_POST[catname]))
+if (isset($_POST['catname']))
 {
-    if (isset($_POST[delcat]))
+    settype($_POST['catid'], 'integer');
+    if (isset($_POST['delcat']))
     {
-        settype($_POST[catid], "integer");
-        mysql_query("DELETE FROM ".$global_config_arr[pref]."dl_cat WHERE cat_id = ".$_POST[catid], $db);
-        systext("Die Kategorie wurde gelöscht");
+        mysql_query('DELETE FROM '.$global_config_arr['pref'].'dl_cat WHERE cat_id = '.$_POST['catid'], $db);
+        systext('Die Kategorie wurde gelöscht.');
     }
     else
     {
-        $_POST[catname] = savesql($_POST[catname]);
-        settype($_POST[subcatof], "integer");
+        $_POST['catname'] = savesql($_POST['catname']);
+        settype($_POST['subcatof'], 'integer');
 
-        $update = "UPDATE ".$global_config_arr[pref]."dl_cat
+        $update = 'UPDATE '.$global_config_arr['pref']."dl_cat
                    SET subcat_id = '$_POST[subcatof]',
                        cat_name = '$_POST[catname]'
                    WHERE cat_id = $_POST[catid]";
         mysql_query($update, $db);
-        systext("Die Kategorie wurde editiert");
+        systext('Die Kategorie wurde editiert.');
     }
 }
 
@@ -30,19 +30,19 @@ if (isset($_POST[catname]))
 /// Kategorie Formular ///
 //////////////////////////
 
-elseif (isset($_POST[editcatid]))
+elseif (isset($_POST['editcatid']))
 {
-    settype ($_POST[editcatid], 'integer');
+    settype ($_POST['editcatid'], 'integer');
 
     $valid_ids = array();
-    get_dl_categories (&$valid_ids, $_POST[editcatid]);
+    get_dl_categories (&$valid_ids, $_POST['editcatid']);
 
-    $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."dl_cat WHERE cat_id = '$_POST[editcatid]'", $db);
+    $index = mysql_query('SELECT * FROM '.$global_config_arr['pref']."dl_cat WHERE cat_id = '$_POST[editcatid]'", $db);
     $cat_arr = mysql_fetch_assoc($index);
     echo'
                     <form action="" method="post">
                         <input type="hidden" value="dl_cat" name="go">
-                        <input type="hidden" value="'.$cat_arr[cat_id].'" name="catid">
+                        <input type="hidden" value="'.$cat_arr['cat_id'].'" name="catid">
                         <table border="0" cellpadding="4" cellspacing="0" width="600">
                             <tr>
                                 <td class="config" valign="top">
@@ -50,7 +50,7 @@ elseif (isset($_POST[editcatid]))
                                     <font class="small">Name der neuen Kategorie</font>
                                 </td>
                                 <td class="config" valign="top">
-                                    <input class="text" name="catname" size="33" value="'.$cat_arr[cat_name].'" maxlength="100">
+                                    <input class="text" name="catname" size="33" value="'.$cat_arr['cat_name'].'" maxlength="100">
                                 </td>
                             </tr>
                             <tr>
@@ -65,9 +65,9 @@ elseif (isset($_POST[editcatid]))
     ';
     foreach ($valid_ids as $cat)
     {
-        $sele = ($cat_arr[subcat_id] == $cat[cat_id]) ? "selected" : "";
+        $sele = ($cat_arr['subcat_id'] == $cat['cat_id']) ? "selected" : "";
         echo'
-                                        <option value="'.$cat[cat_id].'" '.$sele.'>'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat[ebene]).$cat[cat_name].'</option>
+                                        <option value="'.$cat['cat_id'].'" '.$sele.'>'.str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $cat['ebene']).$cat['cat_name'].'</option>
         ';
     }
     echo'
@@ -114,20 +114,20 @@ else
                                 </td>
                             </tr>
     ';
-    $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."dl_cat ORDER BY cat_name");
+    $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'dl_cat ORDER BY cat_name');
     while ($cat_arr = mysql_fetch_assoc($index))
     {
-        $sub = ($cat_arr[subcat_id] == 0) ? "Nein" : "Ja";
+        $sub = ($cat_arr['subcat_id'] == 0) ? 'Nein' : 'Ja';
         echo'
                             <tr>
                                 <td class="configthin">
-                                    '.$cat_arr[cat_name].'
+                                    '.$cat_arr['cat_name'].'
                                 </td>
                                 <td class="configthin">
                                     '.$sub.'
                                 </td>
                                 <td class="config">
-                                    <input type="radio" name="editcatid" value="'.$cat_arr[cat_id].'">
+                                    <input type="radio" name="editcatid" value="'.$cat_arr['cat_id'].'">
                                 </td>
                             </tr>
         ';
