@@ -169,8 +169,9 @@ elseif (
 // No Data to write into DB
 if ( $_POST['cat_id'] && $_POST['cat_action'] )
 {
-	// Edit Category
-	if ( $_POST['cat_action'] == "edit" )
+    settype($_POST['cat_id'], 'integer');
+    // Edit Category
+    if ( $_POST['cat_action'] == 'edit' )
 	{
 
 		// Load Data from DB
