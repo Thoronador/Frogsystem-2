@@ -7,6 +7,7 @@
 if ($_FILES['newsmilie']['name'] != "" AND $_POST['replace_string'])
 {
     $_POST[replace_string] = savesql(killhtml($_POST[replace_string]));
+    settype($_POST['insert_after'], 'integer');
 
     mysql_query("UPDATE ".$global_config_arr[pref]."smilies
                  SET `order`=`order`+1
@@ -28,6 +29,7 @@ elseif ($_POST['delete_smilies'])
 {
     foreach($_POST['delsmilie'] as $value)
     {
+            $value = intval($value);
             $index = mysql_query("SELECT id FROM ".$global_config_arr[pref]."smilies
                                   WHERE `order`=$value", $db);
             $id = mysql_result($index,0,"id");
@@ -39,6 +41,7 @@ elseif ($_POST['delete_smilies'])
     $_POST['delsmilie'] = array_reverse($_POST['delsmilie']);
     foreach($_POST['delsmilie'] as $value)
     {
+            $value = intval($value);
             mysql_query("UPDATE ".$global_config_arr[pref]."smilies
                          SET `order`=`order`-1
                          WHERE `order`>$value", $db);
@@ -52,6 +55,7 @@ elseif ($_POST['delete_smilies'])
 
 elseif (($_GET['action']=="moveup" OR $_GET['action']=="movedown") AND isset($_GET['oid']))
 {
+    $_GET['oid'] = intval($_GET['oid']);
     if ($_GET['action']=="moveup")
     {
         $index = "UPDATE ".$global_config_arr[pref]."smilies SET `order`=0 WHERE `order`=$_GET[oid]";

@@ -11,6 +11,44 @@ if ($_POST[smilies_rows] && $_POST[smilies_rows]>0 && $_POST[smilies_cols] && $_
     settype($_POST[smilies_cols], 'integer');
     settype($_POST[textarea_width], 'integer');
     settype($_POST[textarea_height], 'integer');
+    $_POST['bold'] = intval($_POST['bold']);
+    $_POST['italic'] = intval($_POST['italic']);
+    $_POST['underline'] = intval($_POST['underline']);
+    $_POST['strike'] = intval($_POST['strike']);
+    $_POST['center'] = intval($_POST['center']);
+    $_POST['font'] = intval($_POST['font']);
+    $_POST['color'] = intval($_POST['color']);
+    $_POST['size'] = intval($_POST['size']);
+    $_POST['list'] = intval($_POST['list']);
+    $_POST['numlist'] = intval($_POST['numlist']);
+    $_POST['img'] = intval($_POST['img']);
+    $_POST['cimg'] = intval($_POST['cimg']);
+    $_POST['url'] = intval($_POST['url']);
+    $_POST['home'] = intval($_POST['home']);
+    $_POST['email'] = intval($_POST['email']);
+    $_POST['code'] = intval($_POST['code']);
+    $_POST['quote'] = intval($_POST['quote']);
+    $_POST['noparse'] = intval($_POST['noparse']);
+    $_POST['smilies'] = intval($_POST['smilies']);
+    $_POST['do_bold'] = intval($_POST['do_bold']);
+    $_POST['do_italic'] = intval($_POST['do_italic']);
+    $_POST['do_underline'] = intval($_POST['do_underline']);
+    $_POST['do_strike'] = intval($_POST['do_strike']);
+    $_POST['do_center'] = intval($_POST['do_center']);
+    $_POST['do_font'] = intval($_POST['do_font']);
+    $_POST['do_color'] = intval($_POST['do_color']);
+    $_POST['do_size'] = intval($_POST['do_size']);
+    $_POST['do_list'] = intval($_POST['do_list']);
+    $_POST['do_numlist'] = intval($_POST['do_numlist']);
+    $_POST['do_img'] = intval($_POST['do_img']);
+    $_POST['do_cimg'] = intval($_POST['do_cimg']);
+    $_POST['do_url'] = intval($_POST['do_url']);
+    $_POST['do_home'] = intval($_POST['do_home']);
+    $_POST['do_email'] = intval($_POST['do_email']);
+    $_POST['do_code'] = intval($_POST['do_code']);
+    $_POST['do_quote'] = intval($_POST['do_quote']);
+    $_POST['do_noparse'] = intval($_POST['do_noparse']);
+    $_POST['do_smilies'] = intval($_POST['do_smilies']);
     
     $update = "UPDATE ".$global_config_arr['pref']."editor_config
                SET smilies_rows = '$_POST[smilies_rows]',
@@ -25,7 +63,7 @@ if ($_POST[smilies_rows] && $_POST[smilies_rows]>0 && $_POST[smilies_cols] && $_
                    font = '$_POST[font]',
                    color = '$_POST[color]',
                    size = '$_POST[size]',
-                   list = '$_POST[numlist]',
+                   list = '$_POST[list]',
                    numlist = '$_POST[numlist]',
                    img = '$_POST[img]',
                    cimg = '$_POST[cimg]',
