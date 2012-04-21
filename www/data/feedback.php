@@ -8,27 +8,28 @@
   //editor configuration
   $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'editor_config', $db);
   $editor_config = mysql_fetch_assoc($index);
-  
-  
+
+
   /***************************
    * adding new issue / note *
    ***************************/
 
   if (isset($_POST['add_note']))
   {
-  
+
     if ((trim($_POST['name']) != '' || $_SESSION['user_id'])
          && trim($_POST['title']) != ''
          && trim($_POST['text']) != ''
-         && trim($_POST['content_type']) != '')
+         && trim($_POST['content_type']) != ''
+         && trim($_POST['content_id']) != '')
     {
-    
+
       // security functions
       $_POST['text'] = savesql(trim($_POST['text']));
       $_POST['name'] = savesql(trim($_POST['name']));
       $_POST['title'] = savesql(trim($_POST['title']));
       $_POST['content_type'] = savesql(trim($_POST['content_type']));
-      settype( $_POST['content_id'], 'integer' );
+      $_POST['content_id'] = intval($_POST['content_id']);
       //get current time and IP
       $note_date = time();
       $ip = savesql($_SERVER['REMOTE_ADDR']);
@@ -45,17 +46,70 @@
                  ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
                  ."', note_date='".$note_date."', note_title='".$_POST['title']
                  ."', note_text='".$_POST['text']."', is_starter=1", $db);
-    
+
+      //check if we have a user related to the reported content
+      require_once(FS2_ROOT_PATH.'includes/feedbackfunctions.php');
+      $user_id = getFeedbackRelatedUserID($_POST['content_type'], $_POST['content_id']);
+      if ($user_id!=0 && is_in_staff($user_id))
+      {
+        //now get the mail adress of that staff member
+        $result = mysql_query('SELECT user_id, user_name, user_mail FROM '.$global_config_arr['pref'].'user '
+                             .'WHERE user_id = \''.$user_id."' LIMIT 1", $db );
+        if($row = mysql_fetch_assoc($result))
+        {
+          $to = stripslashes($row['user_email']);
+          $site = $global_config_arr['virtualhost'];
+          $subject = 'Neue Meldung auf '.$site;
+          $text = 'Hallo '.$row['user_name']."\n\n"
+                 .'Ein Benutzer hat eine neue Meldung zu ';
+          switch ($_POST['content_type'])
+          {
+            case 'article':
+                 $text .= 'einem von dir verfassten Artikel';
+                 break;
+            case 'dl':
+            case 'download':
+                 $text .= 'einem von dir eingestellten Download';
+                 break;
+            default:
+                 //just in case... should not really get here
+                 $text .= 'einem deiner Inhalte';
+                 break;
+          }//swi
+          $text .= ' auf '.$site.' abgegeben.'."\n"
+                  .'Bitte logge dich dort ein und sieh dir die Details dazu an.'."\n\n"
+                  .'Viele Gruesse,'."\n"
+                  .'Das Feedbacksystem';
+          $did_mail = send_mail($to, $subject, $text, 'plain');
+        }
+        else
+        {
+          $did_mail = false;
+        }
+      }//if user should get mail
+      else
+      {
+        $did_mail = false;
+      }
+
+      
       //generate forward message
-      $template = forward_message('R&uuml;ckmeldungen', 'Notiz wurde hinzugef&uuml;gt.', 'index.php' );
-    
+      if ($did_mail)
+      {
+        $template = forward_message('R&uuml;ckmeldungen', 'Vielen Dank!<br>Deine Notiz wurde gespeichert und der Staff benachrichtigt.', 'index.php');
+      }
+      else
+      {
+        $template = forward_message('R&uuml;ckmeldungen', 'Vielen Dank!<br>Deine Notiz wurde gespeichert.', 'index.php');
+      }
+
     }//if required fields are set
     else
     {
       $template = sys_message('R&uuml;ckmeldung wurde nicht hinzugef&uuml;gt', 'Es sind nicht alle notwendigen Felder ausgef&uuml;llt!' );
     }//else (not all required fields are set)
-  
-  
+
+
   } //if add_note
 
   /************************************
@@ -145,13 +199,31 @@
                                          $editor_config['cimg'], $editor_config['url'], $editor_config['home'], $editor_config['email'],
                                          $editor_config['code'], $editor_config['quote'], $editor_config['noparse']);
 
+    //check GET parameters
+    if (!isset($_GET['id']))
+    {
+      $_GET['id'] = 1;
+      $_GET['type'] = 'general';
+    }
+    $_GET['id'] = intval($_GET['id']);
+
+    if (!isset($_GET['type']))
+    {
+      $_GET['type'] = 'general';
+    }
+    if (($_GET['type']!=='article') && ($_GET['type']!=='dl') && ($_GET['type']!=='download'))
+    {
+      $_GET['type'] = 'general';
+    }
+
+
     // Get Comment Form Template
     $template = new template();
     $template->setFile('0_feedback.tpl');
     $template->load('COMMENT_FORM');
 
-    $template->tag('content_id', '1');
-    $template->tag('content_type', 'general');
+    $template->tag('content_id', $_GET['id']);
+    $template->tag('content_type', $_GET['type']);
     $template->tag('name_input', $form_name);
     $template->tag('textarea', $template_textarea);
     $template->tag('html', $html_active);
@@ -161,7 +233,6 @@
 
     $template = $template->display ();
     $formular_template = $template;
-
 
 
     if ( true )

@@ -17,6 +17,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+    Additional permission under GNU GPL version 3 section 7
+
+    If you modify this Program, or any covered work, by linking or combining it
+    with Frogsystem 2 (or a modified version of Frogsystem 2), containing parts
+    covered by the terms of Creative Commons Attribution-ShareAlike 3.0, the
+    licensors of this Program grant you additional permission to convey the
+    resulting work. Corresponding Source for a non-source form of such a
+    combination shall include the source code for the parts of Frogsystem used
+    as well as that of the covered work.
 */
 
 
@@ -53,7 +62,7 @@
         {
           echo 'Artikel #'.$row['content_id'];
           $sub_query = mysql_query('SELECT article_id, article_url, article_title '
-                                  .'FROM '.$global_config_arr['pref'].'articles WHERE article_id=',$row['content_id'], $db);
+                                  .'FROM '.$global_config_arr['pref'].'articles WHERE article_id='.$row['content_id'], $db);
           if ($sub = mysql_fetch_assoc($sub_query))
           {
             echo ' <a href="../?go='.$sub['article_url'].'" target=_blank">&quot;'.$sub['article_title'].'&quot;</a>';
@@ -143,11 +152,11 @@
                 <td class="config">R&uuml;ckmeldung #'.$_GET['details'].'</td>
                 <td class="config">Betrifft: ';
         //check type
-        if ($row['content_type']=='article')
+        if ($issue['content_type']=='article')
         {
           echo 'Artikel #'.$issue['content_id'];
           $sub_query = mysql_query('SELECT article_id, article_url, article_title '
-                                  .'FROM '.$global_config_arr['pref'].'articles WHERE article_id=',$issue['content_id'], $db);
+                                  .'FROM '.$global_config_arr['pref'].'articles WHERE article_id='.$issue['content_id'], $db);
           if ($sub = mysql_fetch_assoc($sub_query))
           {
             echo ' <a href="../?go='.$sub['article_url'].'" target=_blank">&quot;'.$sub['article_title'].'&quot;</a>';
@@ -161,7 +170,7 @@
         {
           echo 'Download #'.$issue['content_id'];
           $sub_query = mysql_query('SELECT dl_id, dl_name '
-                                  .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id=',$issue['content_id'], $db);
+                                  .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$issue['content_id'], $db);
           if ($sub = mysql_fetch_assoc($sub_query))
           {
             echo ' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';

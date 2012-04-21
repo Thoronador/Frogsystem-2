@@ -45,12 +45,12 @@ else
         settype ( $user_arr['user_id'], "integer" );
         $user_arr['user_name'] = kill_replacements ( $user_arr['user_name'], TRUE );
         $user_arr['user_url'] = '?go=user&id='.$user_arr['user_id'];
-        
+
         // Create Template
         $author_template = new template();
         $author_template->setFile ( "0_articles.tpl" );
         $author_template->load ( "AUTHOR" );
-        
+
         $author_template->tag ( "user_id", $user_arr['user_id'] );
         $author_template->tag ( "user_name", $user_arr['user_name'] );
         $author_template->tag ( "user_url", $user_arr['user_url'] );
@@ -90,7 +90,7 @@ else
     $article_arr['template'] = new template();
     $article_arr['template']->setFile ( "0_articles.tpl" );
     $article_arr['template']->load ( "BODY" );
-    
+
     $article_arr['template']->tag ( "title", $article_arr['article_title'] );
     $article_arr['template']->tag ( "text", $article_arr['article_text'] );
     $article_arr['template']->tag ( "date_template", $article_arr['date_template'] );
@@ -99,9 +99,10 @@ else
     $article_arr['template']->tag ( "user_id", $user_arr['user_id'] );
     $article_arr['template']->tag ( "user_name", $user_arr['user_name'] );
     $article_arr['template']->tag ( "user_url", $user_arr['user_url'] );
+    $article_arr['template']->tag ( "article_id", $article_arr['article_id'] ); //ID for feedback link
 
     $article_arr['template'] = $article_arr['template']->display ();
-    
+
     // Dynamic Title Settings
     $global_config_arr['dyn_title_page'] = $article_arr['article_title'];
     $global_config_arr['content_author'] = stripslashes ( $user_arr['user_name'] );
