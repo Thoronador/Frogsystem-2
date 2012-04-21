@@ -117,7 +117,7 @@
     $_GET['details'] = intval($_GET['details']);
 
     $result = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues WHERE issue_id='.$_GET['details'], $db);
-    if (mysql_num_rows($query)<=0)
+    if (mysql_num_rows($result)<=0)
     {
       echo '<b>Es ist keine R&uuml;ckmeldung mit der angegebenen ID verf&uuml;gbar!</b>'
           .'<br><br><a href="?go=feedback_browse">Zur&uuml;ck zur &Uuml;bersicht</a>';
@@ -126,10 +126,10 @@
     {
       $issue = mysql_fetch_assoc($result);
       //now get all the notes/comments for that issue
-      $result = mysql_query('SELECT *, IF(note_poster_id <>0, '.$global_config_arr['pref'].'user.user_name, comment_poster) AS real_name '
+      $result = mysql_query('SELECT *, IF(note_poster_id <>0, '.$global_config_arr['pref'].'user.user_name, note_poster) AS real_name '
                            .'FROM '.$global_config_arr['pref'].'feedback_notes '
                            .'LEFT JOIN '.$global_config_arr['pref'].'user ON note_poster_id=user_id WHERE issue_id='.$_GET['details'], $db);
-      if (mysql_num_rows($query)<=0)
+      if (mysql_num_rows($result)<=0)
       {
         //should never happen, usually
         echo '<b>Zu dieser R&uuml;ckmeldung sind keine Eintr&auml;ge verf&uuml;gbar.</b>'
@@ -221,7 +221,7 @@
               </tr>
               <tr><td colspan="2"><hr width="80%"></td></tr>';
         }//while
-        echo '</table>';
+        echo '</table><br><br><a href="?go=feedback_browse">Zur&uuml;ck zur &Uuml;bersicht</a>';
       }//else
 
     }//else

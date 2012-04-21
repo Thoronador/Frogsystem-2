@@ -1,0 +1,186 @@
+<?php
+
+  settype ($_SESSION['user_id'], 'integer');
+
+  //news comment configuration - we use that until we have a separate feedback config
+  $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'news_config', $db);
+  $config_arr = mysql_fetch_assoc($index);
+  //editor configuration
+  $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'editor_config', $db);
+  $editor_config = mysql_fetch_assoc($index);
+  
+  
+  /***************************
+   * adding new issue / note *
+   ***************************/
+
+  if (isset($_POST['add_note']))
+  {
+  
+    if ((trim($_POST['name']) != '' || $_SESSION['user_id'])
+         && trim($_POST['title']) != ''
+         && trim($_POST['text']) != ''
+         && trim($_POST['content_type']) != '')
+    {
+    
+      // security functions
+      $_POST['text'] = savesql(trim($_POST['text']));
+      $_POST['name'] = savesql(trim($_POST['name']));
+      $_POST['title'] = savesql(trim($_POST['title']));
+      $_POST['content_type'] = savesql(trim($_POST['content_type']));
+      settype( $_POST['content_id'], 'integer' );
+      //get current time and IP
+      $note_date = time();
+      $ip = savesql($_SERVER['REMOTE_ADDR']);
+
+      //create new issue
+      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_issues` '
+                 .'SET content_type=\''.$_POST['content_type']
+                 ."', content_id='".$_POST['content_id']."', status='0'", $db);
+      $issue_id = intval(mysql_insert_id($db));
+
+      //save note
+      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
+                 .'SET issue_id='.$issue_id.", note_poster='".$_POST['name']
+                 ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
+                 ."', note_date='".$note_date."', note_title='".$_POST['title']
+                 ."', note_text='".$_POST['text']."', is_starter=1", $db);
+    
+      //generate forward message
+      $template = forward_message('R&uuml;ckmeldungen', 'Notiz wurde hinzugef&uuml;gt.', 'index.php' );
+    
+    }//if required fields are set
+    else
+    {
+      $template = sys_message('R&uuml;ckmeldung wurde nicht hinzugef&uuml;gt', 'Es sind nicht alle notwendigen Felder ausgef&uuml;llt!' );
+    }//else (not all required fields are set)
+  
+  
+  } //if add_note
+
+  /************************************
+   * form for adding new issues/notes *
+   ************************************/
+
+  else if (true)  //yes, "nice" condition - we'll change it later
+  {
+    // Text formatieren
+    switch ($config_arr['html_code'])
+    {
+      case 1:
+      case 2:
+           $html = false;
+           break;
+      case 3:
+      case 4:
+           $html = true;
+           break;
+    }
+    switch ($config_arr['fs_code'])
+    {
+      case 1:
+      case 2:
+           $fs = false;
+           break;
+      case 3:
+      case 4:
+           $fs = true;
+           break;
+    }
+    switch ($config_arr['para_handling'])
+    {
+      case 1:
+      case 2:
+           $para = false;
+           break;
+      case 3:
+      case 4:
+           $para = true;
+           break;
+    }
+
+    //FScode-Html Anzeige
+    $fs_active = ($fs) ? 'an' : 'aus';
+    $html_active = ($html) ? 'an' : 'aus';
+
+    // Get Comments Form Name Template - will temporarily use the news comments form
+    $form_name = new template();
+    $form_name->setFile('0_feedback.tpl');
+    $form_name->load('COMMENT_FORM_NAME');
+    $form_name = $form_name->display ();
+
+    if ( isset ( $_SESSION['user_name'] ) ) {
+        $form_name = kill_replacements ( $_SESSION['user_name'], TRUE );
+        $form_name .= '<input type="hidden" name="name" id="name" value="1">';
+    }
+
+    // Get Comments Captcha Template
+    $form_spam = new template();
+    $form_spam->setFile('0_feedback.tpl');
+    $form_spam->load('COMMENT_CAPTCHA');
+    $form_spam->tag('captcha_url', FS2_ROOT_PATH . 'resources/captcha/captcha.php?i='.generate_pwd(8) );
+    $form_spam = $form_spam->display ();
+
+    // Get Comments Form Name Template
+    $form_spam_text = new template();
+    $form_spam_text->setFile('0_feedback.tpl');
+    $form_spam_text->load('COMMENT_CAPTCHA_TEXT');
+    $form_spam_text = $form_spam_text->display ();
+
+    if (
+                    $config_arr['com_antispam'] == 0 ||
+                    ( $config_arr['com_antispam'] == 1 && $_SESSION['user_id'] ) ||
+                    ( $config_arr['com_antispam'] == 3 && is_in_staff ( $_SESSION['user_id'] ) )
+            )
+    {
+        $form_spam = '';
+        $form_spam_text ='';
+    }
+
+    //Textarea
+    $template_textarea = create_textarea('text', '', $editor_config['textarea_width'], $editor_config['textarea_height'],
+                                         'text', false, $editor_config['smilies'], $editor_config['bold'], $editor_config['italic'],
+                                         $editor_config['underline'], $editor_config['strike'], $editor_config['center'],
+                                         $editor_config['font'], $editor_config['color'], $editor_config['size'], $editor_config['img'],
+                                         $editor_config['cimg'], $editor_config['url'], $editor_config['home'], $editor_config['email'],
+                                         $editor_config['code'], $editor_config['quote'], $editor_config['noparse']);
+
+    // Get Comment Form Template
+    $template = new template();
+    $template->setFile('0_feedback.tpl');
+    $template->load('COMMENT_FORM');
+
+    $template->tag('content_id', '1');
+    $template->tag('content_type', 'general');
+    $template->tag('name_input', $form_name);
+    $template->tag('textarea', $template_textarea);
+    $template->tag('html', $html_active);
+    $template->tag('fs_code', $fs_active);
+    $template->tag('captcha', $form_spam);
+    $template->tag('captcha_text',$form_spam_text);
+
+    $template = $template->display ();
+    $formular_template = $template;
+
+
+
+    if ( true )
+    {
+        $comment_form_template = $formular_template;
+
+        // Get Comments Body Template
+        $template = new template();
+        $template->setFile('0_feedback.tpl');
+        $template->load('COMMENT_BODY');
+
+        $template->tag('news', '' );
+        $template->tag('comments', '');
+        $template->tag('comment_form', $comment_form_template );
+
+        $template = $template->display ();
+        //$template = $message_template . $template;
+    }
+
+  }//if note form
+
+?>
