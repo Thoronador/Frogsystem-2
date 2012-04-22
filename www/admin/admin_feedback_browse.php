@@ -29,6 +29,41 @@
 */
 
 
+  //feedback-related functions
+  require_once(FS2_ROOT_PATH.'includes/feedbackfunctions.php');
+
+/******************************
+ * add note via admin CP page *
+ ******************************/
+
+  if (isset($_POST['add_note']) && isset($_POST['issue_id'])
+      && isset($_POST['note_title']) && isset($_POST['note_text']))
+  {
+    //security stuff
+    $_POST['issue_id'] = intval($_POST['issue_id']);
+    $_POST['note_title'] = savesql(trim($_POST['note_title']));
+    $_POST['note_text'] = savesql(trim($_POST['note_text']));
+    if ($_POST['note_text']!='')
+    {
+      //get additional data
+      $ip = savesql($_SERVER['REMOTE_ADDR']);
+      $note_date = time();
+      //save note
+      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
+                 .'SET issue_id='.$_POST['issue_id'].", note_poster='".savesql($_SESSION['user_name'])
+                 ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
+                 ."', note_date='".$note_date."', note_title='".$_POST['note_title']
+                 ."', note_text='".$_POST['note_text']."', is_starter=0", $db);
+      //put system message
+      systext('Deine Notiz wurde gespeichert.', $TEXT['admin']->get('info'),
+              false, $TEXT['admin']->get('icon_save_add'));
+    }//if text is not empty
+    else
+    {
+      //not all required fields filled
+      systext('Du musst auch einen Text eingeben, wenn er gespeichert werden soll!');
+    }
+  }//if add note
 
 /**********************
  * list of all issues *
@@ -93,23 +128,7 @@
         }
         echo '</td>
                 <td class="configthin"><a href="?go=feedback_browse&amp;details='.$row['issue_id'].'">Details ansehen</a></td>
-                <td class="configthin">';
-        switch ($row['status'])
-        {
-          case 0:
-               echo 'Offen';
-               break;
-          case 1:
-               echo 'Erledigt';
-               break;
-          case 2:
-               echo 'Wird nicht behoben'; //"won't fix", that is
-               break;
-          default:
-               echo 'unbekannt';
-               break;
-        }//swi
-        echo '</td>
+                <td class="configthin">'.feedbackStatusToString($row['status'], true).'</td>
               </tr>';
       }//while
       echo '</table>';
@@ -186,23 +205,7 @@
           echo 'Allgemeines';
         }
         echo '</td>
-                <td class="config">Status: ';
-        switch ($row['status'])
-        {
-          case 0:
-               echo 'Offen';
-               break;
-          case 1:
-               echo 'Erledigt';
-               break;
-          case 2:
-               echo 'Wird nicht behoben'; //"won't fix", that is
-               break;
-          default:
-               echo 'unbekannt';
-               break;
-        }//swi
-        echo '</td>
+                <td class="config">Status: '.feedbackStatusToString($row['status'], true).'</td>
               </tr>
             </table>';
 
@@ -230,11 +233,39 @@
               </tr>
               <tr><td colspan="2"><hr width="80%"></td></tr>';
         }//while
-        echo '</table><br><br><a href="?go=feedback_browse">Zur&uuml;ck zur &Uuml;bersicht</a>';
+        echo '</table><br><br>';
+
+        //form to add notes
+        echo '<form method="post" action="?go=feedback_browse&amp;details='.$_GET['details'].'">
+                <input type="hidden" name="issue_id" value="'.$_GET['details'].'">
+                <input type="hidden" name="add_note" value="1">
+                <table>
+                  <tr>
+                    <td class="config" colspan="2"><b>Notiz hinzuf&uuml;gen</b></td>
+                  </tr>
+                  <tr>
+                    <td class="config"><b>Titel:</b></td>
+                    <td class="config">
+                      <input class="text" type="text" maxlength="100" size="30" name="note_title">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="config"><b>Text:</b></td>
+                    <td class="config">
+                      <textarea class="nomonospace" style="width:355px; height:120px" name="note_text" cols="50" rows="7"></textarea>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td class="config">
+                      <input class="button" type="submit" value="Abschicken">
+                    </td>
+                  </tr>
+                </table>
+              </form>';
+        //link back to list
+        echo '<br><br><a href="?go=feedback_browse">Zur&uuml;ck zur &Uuml;bersicht</a>';
       }//else
-
     }//else
-
   }//else branch (show details)
-
 ?>

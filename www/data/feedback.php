@@ -92,7 +92,7 @@
         $did_mail = false;
       }
 
-      
+
       //generate forward message
       if ($did_mail)
       {
@@ -202,7 +202,7 @@
     //check GET parameters
     if (!isset($_GET['id']))
     {
-      $_GET['id'] = 1;
+      $_GET['id'] = 0;
       $_GET['type'] = 'general';
     }
     $_GET['id'] = intval($_GET['id']);
@@ -232,24 +232,22 @@
     $template->tag('captcha_text',$form_spam_text);
 
     $template = $template->display ();
-    $formular_template = $template;
+    $comment_form_template = $template;
 
 
     if ( true )
     {
-        $comment_form_template = $formular_template;
+      // Get Comments Body Template
+      $template = new template();
+      $template->setFile('0_feedback.tpl');
+      $template->load('COMMENT_BODY');
 
-        // Get Comments Body Template
-        $template = new template();
-        $template->setFile('0_feedback.tpl');
-        $template->load('COMMENT_BODY');
+      $template->tag('news', '' );
+      $template->tag('comments', '');
+      $template->tag('comment_form', $comment_form_template );
 
-        $template->tag('news', '' );
-        $template->tag('comments', '');
-        $template->tag('comment_form', $comment_form_template );
-
-        $template = $template->display ();
-        //$template = $message_template . $template;
+      $template = $template->display ();
+      //$template = $message_template . $template;
     }
 
   }//if note form

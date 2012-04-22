@@ -32,7 +32,7 @@
 
   /* returns the ID of the user that created the specified content, if any.
      If no user is found, the function returns zero.
-     
+
      parameters:
          content_type - specifies the content's type (either 'article' or 'dl')
          content_id   - internal ID of the related content
@@ -66,22 +66,36 @@
     //must be general stuff or something like that
     return 0;
   }//func
+
+  //constants for status code limits
+  define('feedbackStatusMin', 0);
+  define('feedbackStatusMax', 2);
+
+  /* returns a string indicating the meaning of the status value
   
-  /* returns a string indicating the meaning of the status value */
-  function feedbackStatusToString($status)
+     parameters:
+         status     - (int)  the status code
+         withColour - (bool) if true, the string is enclosed in HTML tags to
+                             get a appropriate colour for the status
+  */
+  function feedbackStatusToString($status, $withColour = false)
   {
     switch ($status)
     {
       case 0:
+           if ($withColour) return '<font color="#ff0000">Offen</font>';
            return 'Offen';
            break;
       case 1:
-           return 'Erledigt';
-           break;
-      case 2:
+           if ($withColour) return '<font color="#ff8000">Wird nicht behoben</font>';
            return 'Wird nicht behoben'; //"won't fix", that is
            break;
+      case 2:
+           if ($withColour) return '<font color="#008000">Erledigt</font>';
+           return 'Erledigt';
+           break;
       default:
+           if ($withColour) return '<font color="#c000c0">unbekannt</font>';
            return 'unbekannt';
            break;
     }//swi
