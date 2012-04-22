@@ -52,7 +52,7 @@ if (mysql_num_rows($index) > 0)
         $dl_arr[viewer_link] = "javascript:popUp('".$dl_arr[viewer_link]."','popupviewer','".$screen_config_arr['show_size_x']."','".$screen_config_arr['show_size_y']."');";
     }
     $dl_arr[dl_thumb] = image_url("images/downloads/", $dl_arr[dl_id]."_s");
-        
+
     // Sonstige Daten ermitteln
     $dl_arr[dl_date] = date_loc ( $global_config_arr['date'], $dl_arr[dl_date] );
     $dl_arr[dl_text] = fscode($dl_arr[dl_text]);
@@ -86,7 +86,7 @@ if (mysql_num_rows($index) > 0)
       $messages_template .= "<br>";
     $messages_template .= $phrases[dl_not_save_as];
 
-      
+
     // Files auslesen
     if ( $index = mysql_query("select * from ".$global_config_arr[pref]."dl_files where dl_id = $dl_arr[dl_id] $dl_use", $db ) ) {
         $stats_arr[number] = mysql_num_rows($index);
@@ -187,15 +187,15 @@ if (mysql_num_rows($index) > 0)
         $template = $template->display ();
         $navi_lines .= str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $cat['level']) . $template;
     }
-    
+
     // Get Navigation Template
     $template = new template();
     $template->setFile("0_downloads.tpl");
     $template->load("NAVIGATION_BODY");
     $template->tag("lines", $navi_lines );
     $navi = $template->display ();
-    
-    
+
+
 
     // Get Body Template
     $template = new template();
@@ -219,6 +219,7 @@ if (mysql_num_rows($index) > 0)
     $template->tag("files", $files );
     $template->tag("statistics", $stats );
     $template->tag("messages", $messages_template );
+    $template->tag('download_id', $_GET['id']); //replacement for dl ID in feedback link
 
     $template = $template->display ();
 } else {

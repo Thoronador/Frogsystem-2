@@ -143,7 +143,7 @@
         {
           echo 'Download #'.$row['content_id'];
           $sub_query = mysql_query('SELECT dl_id, dl_name '
-                                  .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id=',$row['content_id'], $db);
+                                  .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$row['content_id'], $db);
           if ($sub = mysql_fetch_assoc($sub_query))
           {
             echo ' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
