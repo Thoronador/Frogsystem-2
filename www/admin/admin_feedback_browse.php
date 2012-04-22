@@ -65,6 +65,38 @@
     }
   }//if add note
 
+
+/*******************************
+ * status change for one issue *
+ *******************************/
+
+  if (isset($_POST['change_status']) && isset($_POST['issue_id'])
+      && isset($_POST['new_status']))
+  {
+    //security stuff
+    $_POST['issue_id'] = intval($_POST['issue_id']);
+    $_POST['new_status'] = intval($_POST['new_status']);
+    if ($_POST['new_status']>=feedbackStatusMin && $_POST['new_status']<=feedbackStatusMax)
+    {
+      //get additional data
+      $ip = savesql($_SERVER['REMOTE_ADDR']);
+      $note_date = time();
+      //save note
+      mysql_query('UPDATE `'.$global_config_arr['pref'].'feedback_issues` '
+                 .'SET status='.$_POST['new_status'].' WHERE issue_id='.$_POST['issue_id']
+                 .' LIMIT 1', $db);
+      //put system message
+      systext('Der Status wurde aktualisiert.', $TEXT['admin']->get('info'),
+              false, $TEXT['admin']->get('icon_save_add'));
+    }//if acceptable status value
+    else
+    {
+      //not an allowed status value
+      systext('Der ausgew&auml;hlte Statuswert ist nicht zul&auml;ssig und wurde deshalb nicht gespeichert!',
+              $TEXT['admin']->get('error'), true, $TEXT['admin']->get('icon_save_error'));
+    }
+  }//if add note
+
 /**********************
  * list of all issues *
  **********************/
@@ -80,7 +112,7 @@
     }
     else
     {
-      echo '<table border="0" cellpadding="2" cellspacing="0" width="600">
+      echo '<table border="0" cellpadding="2" cellspacing="2" width="600">
               <tr>
                 <td class="config"><b>#</b></td>
                 <td class="config"><b>betrifft</b></td>
@@ -90,8 +122,8 @@
       while ($row = mysql_fetch_assoc($query))
       {
         echo '<tr>
-                <td class="configthin">'.$row['issue_id'].'</td>
-                <td class="configthin">';
+                <td class="configthin" style="border: 1px solid #000000;"><b>'.$row['issue_id'].'</b></td>
+                <td class="configthin" style="border: 1px solid #000000;">';
         //check type
         if ($row['content_type']=='article')
         {
@@ -127,8 +159,8 @@
           echo 'Allgemeines';
         }
         echo '</td>
-                <td class="configthin"><a href="?go=feedback_browse&amp;details='.$row['issue_id'].'">Details ansehen</a></td>
-                <td class="configthin">'.feedbackStatusToString($row['status'], true).'</td>
+                <td class="configthin" style="border: 1px solid #000000;"><a href="?go=feedback_browse&amp;details='.$row['issue_id'].'">Details ansehen</a></td>
+                <td class="configthin" style="border: 1px solid #000000;">'.feedbackStatusToString($row['status'], true).'</td>
               </tr>';
       }//while
       echo '</table>';
@@ -205,7 +237,7 @@
           echo 'Allgemeines';
         }
         echo '</td>
-                <td class="config">Status: '.feedbackStatusToString($row['status'], true).'</td>
+                <td class="config">Status: '.feedbackStatusToString($issue['status'], true).'</td>
               </tr>
             </table>';
 
@@ -263,6 +295,25 @@
                   </tr>
                 </table>
               </form>';
+
+        //status selection/change form
+        echo '<form method="post" action="?go=feedback_browse&amp;details='.$_GET['details'].'">
+                <input type="hidden" name="issue_id" value="'.$_GET['details'].'">
+                <input type="hidden" name="change_status" value="1">
+                <b>Status &auml;ndern:</b><br>
+                <select name="new_status">
+                  ';
+        for ($i=feedbackStatusMin; $i<=feedbackStatusMax; $i=$i+1)
+        {
+          echo '  <option value="'.$i.'"';
+          if ($i == $issue['status']) echo ' selected';
+          echo '>'.feedbackStatusToString($i).'</option>';
+        }//for
+                  echo '
+                </select>
+                <input class="button" type="submit" value="&Auml;ndern">
+              </form>';
+
         //link back to list
         echo '<br><br><a href="?go=feedback_browse">Zur&uuml;ck zur &Uuml;bersicht</a>';
       }//else

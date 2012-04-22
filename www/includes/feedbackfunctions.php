@@ -69,10 +69,10 @@
 
   //constants for status code limits
   define('feedbackStatusMin', 0);
-  define('feedbackStatusMax', 2);
+  define('feedbackStatusMax', 3);
 
   /* returns a string indicating the meaning of the status value
-  
+
      parameters:
          status     - (int)  the status code
          withColour - (bool) if true, the string is enclosed in HTML tags to
@@ -91,6 +91,10 @@
            return 'Wird nicht behoben'; //"won't fix", that is
            break;
       case 2:
+           if ($withColour) return '<font color="#70A010">In Bearbeitung</font>';
+           return 'In Bearbeitung';
+           break;
+      case 3:
            if ($withColour) return '<font color="#008000">Erledigt</font>';
            return 'Erledigt';
            break;
