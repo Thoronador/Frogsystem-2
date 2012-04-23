@@ -1,5 +1,4 @@
 <?php
-
   settype ($_SESSION['user_id'], 'integer');
 
   //news comment configuration - we use that until we have a separate feedback config
@@ -57,10 +56,10 @@
                              .'WHERE user_id = \''.$user_id."' LIMIT 1", $db );
         if($row = mysql_fetch_assoc($result))
         {
-          $to = stripslashes($row['user_email']);
+          $to = stripslashes($row['user_mail']);
           $site = $global_config_arr['virtualhost'];
           $subject = 'Neue Meldung auf '.$site;
-          $text = 'Hallo '.$row['user_name']."\n\n"
+          $text = 'Hallo '.$row['user_name']."!\n\n"
                  .'Ein Benutzer hat eine neue Meldung zu ';
           switch ($_POST['content_type'])
           {
