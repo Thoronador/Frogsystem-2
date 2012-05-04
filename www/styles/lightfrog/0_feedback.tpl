@@ -16,7 +16,7 @@
 
 <!--section-start::LINKS_LINE--><li><a href="{..url..}" target="{..target..}">{..title..}</a></li><!--section-end::LINKS_LINE-->
 
-<!--section-start::LINKS_BODY--><b>Weiterführende Links:</b>
+<!--section-start::LINKS_BODY--><b>Weiterf&uuml;hrende Links:</b>
 <ul>
   {..links..}
 </ul>
@@ -86,7 +86,7 @@
       </td>
       <td>
         <input class="small input input_highlight" name="spam" size="30" maxlength="10">
-        <span class="small">Bitte die Rechenaufgabe lösen!</span>
+        <span class="small">Bitte die Rechenaufgabe l&ouml;sen!</span>
         <a class="small" href="#captcha_note">(Hinweis)</a>
       </td>
     </tr><!--section-end::COMMENT_CAPTCHA-->
@@ -95,7 +95,7 @@
       <td></td>
       <td>
         <p class="small" id="captcha_note">
-          <b>Hinweis:</b> Die Rechenaufgabe verhindert, dass Spam-Bots auf dieser Seite Werbung als Kommentar einstellen können. Um die Abfrage zu umgehen, kannst du dich <a href="?go=register">registrieren</a>.
+          <b>Hinweis:</b> Die Rechenaufgabe verhindert, dass Spam-Bots auf dieser Seite Werbung als Kommentar einstellen k&ouml;nnen. Um die Abfrage zu umgehen, kannst du dich <a href="?go=register">registrieren</a>.
         </p>
       </td>
     </tr>
@@ -160,46 +160,3 @@
 {..comments..}
 {..comment_form..}
 <!--section-end::COMMENT_BODY-->
-
-<!--section-start::SEARCH--><b class="atleft">News-Suche</b>
-<a href="?go=news_search" class="small atright">(Neue Suche)</a>
-<br><br>
-
-<fieldset>
-  <legend style="color:#000000;"><b>News aus dem...</b></legend>
-  <form method="get">
-    <input type="hidden" name="go" value="news_search">
-    <select class="input" name="month">
-      <option value="1">Januar</option>
-      <option value="2">Februar</option>
-      <option value="3">März</option>
-      <option value="4">April</option>
-      <option value="5">Mai</option>
-      <option value="6">Juni</option>
-      <option value="7">Juli</option>
-      <option value="8">August</option>
-      <option value="9">September</option>
-      <option value="10">Oktober</option>
-      <option value="11">November</option>
-      <option value="12">Dezember</option>
-    </select>
-    <select class="input" name="year">
-      {..years..}
-    </select>
-    <input class="pointer" type="submit" value="Anzeigen">
-  </form>
-</fieldset>
-
-<br><br>
-
-<fieldset>
-  <legend style="color:#000000;"><b>Nach News mit dem Schlüsselwort...</b></legend>
-  <form method="get" onSubmit="return checkNewsSearchForm()">
-    <input type="hidden" name="go" value="news_search">
-    <input class="input input_highlight" id="news_search_keyword" name="keyword" size="30" maxlength="100" value="{..keyword..}">
-    <input class="pointer" type="submit" value="Suchen">
-  </form>
-</fieldset>
-
-<br><br>
-<!--section-end::SEARCH-->
