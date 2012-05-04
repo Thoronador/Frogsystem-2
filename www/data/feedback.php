@@ -1,6 +1,4 @@
 <?php
-  settype ($_SESSION['user_id'], 'integer');
-
   //news comment configuration - we use that until we have a separate feedback config
   $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'news_config', $db);
   $config_arr = mysql_fetch_assoc($index);
@@ -16,11 +14,23 @@
   if (isset($_POST['add_note']))
   {
 
+    // Anti-Spam-Captcha
+    if ($config_arr['com_antispam']==1 && $_SESSION['user_id'])
+    {
+      $anti_spam = check_captcha ($_POST['spam'], 0);
+    }
+    else
+    {
+      $anti_spam = check_captcha ($_POST['spam'], $config_arr['com_antispam']);
+    }
+
+    //content check
     if ((trim($_POST['name']) != '' || $_SESSION['user_id'])
          && trim($_POST['title']) != ''
          && trim($_POST['text']) != ''
          && trim($_POST['content_type']) != ''
-         && trim($_POST['content_id']) != '')
+         && trim($_POST['content_id']) != ''
+         && $anti_spam == true)
     {
 
       // security functions
@@ -29,6 +39,7 @@
       $_POST['title'] = savesql(trim($_POST['title']));
       $_POST['content_type'] = savesql(trim($_POST['content_type']));
       $_POST['content_id'] = intval($_POST['content_id']);
+      settype ($_SESSION['user_id'], 'integer');
       //get current time and IP
       $note_date = time();
       $ip = savesql($_SERVER['REMOTE_ADDR']);
@@ -105,7 +116,14 @@
     }//if required fields are set
     else
     {
-      $template = sys_message('R&uuml;ckmeldung wurde nicht hinzugef&uuml;gt', 'Es sind nicht alle notwendigen Felder ausgef&uuml;llt!' );
+      if ($anti_spam!==true)
+      {
+        $template = sys_message('R&uuml;ckmeldung wurde nicht hinzugef&uuml;gt', $phrases['comment_spam']);
+      }
+      else
+      {
+        $template = sys_message('R&uuml;ckmeldung wurde nicht hinzugef&uuml;gt', 'Es sind nicht alle notwendigen Felder ausgef&uuml;llt!');
+      }
     }//else (not all required fields are set)
 
 
