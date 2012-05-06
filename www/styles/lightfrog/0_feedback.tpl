@@ -1,85 +1,3 @@
-<!--section-start::APPLET_LINE--><span class="small">{..date..} - </span><a class="small" href="#news_{..news_id..}">{..title..}</a><br><!--section-end::APPLET_LINE-->
-
-<!--section-start::APPLET_BODY--><table style="margin-left:-2px; width:100%;" cellpadding="2" cellspacing="0">
-  <tr valign="top">
-    <td width="50%">
-      <b>Aktuelle News:</b><br>
-      {..news_lines..}
-    </td>
-    <td width="50%">
-      <b>Downloads:</b><br>
-      {..download_lines..}
-    </td>
-  </tr>
-</table>
-<!--section-end::APPLET_BODY-->
-
-<!--section-start::LINKS_LINE--><li><a href="{..url..}" target="{..target..}">{..title..}</a></li><!--section-end::LINKS_LINE-->
-
-<!--section-start::LINKS_BODY--><b>Weiterf&uuml;hrende Links:</b>
-<ul>
-  {..links..}
-</ul>
-<!--section-end::LINKS_BODY-->
-
-<!--section-start::NEWS_BODY--><table width="100%" cellpadding="0" cellspacing="0">
-  <tr>
-    <td>
-      <b class="atleft" id="news_{..news_id..}">{..titel..}</b>
-      <span class="small atright">
-        ({..cat_name..})
-      </span><br>
-      <span class="small">von <a href="{..user_url..}">{..user_name..}</a>, am {..date..}</span>
-
-      {..text..}
-      <div>
-        {..related_links..}
-        <span class="small atright">
-          <a href="{..comments_url..}">
-             Kommentare ({..comments_number..})
-           </a>
-        </span>
-      </div>
-
-    </td>
-  </tr>
-</table>
-<br><!--section-end::NEWS_BODY-->
-
-<!--section-start::BODY-->{..headlines..}
-<br>
-{..news..}<!--section-end::BODY-->
-
-<!--section-start::COMMENT_USER--><a style="font-size:120%;" href="{..url..}">
-  {..name..}
-</a><br>
-{..rank..}
-<a href="{..url..}">
-  {..user_image..}
-</a>
-
-
-<!--section-end::COMMENT_USER-->
-
-<!--section-start::COMMMENT_ENTRY--><table align="center" class="comment_table" cellpadding="0" cellspacing="0">
-  <tr>
-    <td class="comment_td comment_left" style="border-left:1px solid #A5ACB2;">
-      {..user..}
-    </td>
-    <td class="comment_td">
-      <div class="comment_top">
-        <span class="atleft">
-          <b>{..titel..}</b>
-        </span>
-        <span class="small atright">
-          {..date..}
-        </span>
-      </div>
-      {..text..}
-    </td>
-  </tr>
-</table><!--section-end::COMMMENT_ENTRY-->
-
 <!--section-start::COMMENT_CAPTCHA-->    <tr>
       <td>
         <img src="{..captcha_url..}" alt="CAPTCHA">
@@ -106,7 +24,7 @@
 <a class="small" href="?go=login">anmelden?</a><!--section-end::COMMENT_FORM_NAME-->
 
 <!--section-start::COMMENT_FORM--><p>
-  <b>R&uuml;chmeldung hinzuf&uuml;gen</b>
+  <b>{..feedback_title..}</b>
 </p>
 
 <form action="" method="post" onSubmit="return checkCommentForm()">
@@ -156,7 +74,6 @@
 </form>
 <!--section-end::COMMENT_FORM-->
 
-<!--section-start::COMMENT_BODY-->{..news..}
-{..comments..}
+<!--section-start::COMMENT_BODY-->{..comments..}
 {..comment_form..}
 <!--section-end::COMMENT_BODY-->

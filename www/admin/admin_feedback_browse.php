@@ -124,40 +124,7 @@
         echo '<tr>
                 <td class="configthin" style="border: 1px solid #000000;"><b>'.$row['issue_id'].'</b></td>
                 <td class="configthin" style="border: 1px solid #000000;">';
-        //check type
-        if ($row['content_type']=='article')
-        {
-          echo 'Artikel #'.$row['content_id'];
-          $sub_query = mysql_query('SELECT article_id, article_url, article_title '
-                                  .'FROM '.$global_config_arr['pref'].'articles WHERE article_id='.$row['content_id'], $db);
-          if ($sub = mysql_fetch_assoc($sub_query))
-          {
-            echo ' <a href="../?go='.$sub['article_url'].'" target=_blank">&quot;'.$sub['article_title'].'&quot;</a>';
-          }
-          else
-          {
-            echo '(unbekannt/gel&ouml;scht)';
-          }
-        }
-        else if ($row['content_type']=='download' || $row['content_type']=='dl')
-        {
-          echo 'Download #'.$row['content_id'];
-          $sub_query = mysql_query('SELECT dl_id, dl_name '
-                                  .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$row['content_id'], $db);
-          if ($sub = mysql_fetch_assoc($sub_query))
-          {
-            echo ' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
-          }
-          else
-          {
-            echo '(unbekannt/gel&ouml;scht)';
-          }
-        }
-        else
-        {
-          //general site feedback
-          echo 'Allgemeines';
-        }
+        echo getFeedbackTitle($row['content_type'], $row['content_id'], true);
         echo '</td>
                 <td class="configthin" style="border: 1px solid #000000;"><a href="?go=feedback_browse&amp;details='.$row['issue_id'].'">Details ansehen</a></td>
                 <td class="configthin" style="border: 1px solid #000000;">'.feedbackStatusToString($row['status'], true).'</td>

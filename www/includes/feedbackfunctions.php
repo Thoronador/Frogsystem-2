@@ -67,6 +67,58 @@
     return 0;
   }//func
 
+  /* returns a line containing the title of the specified content, or a generic
+     line instead, if no matching content. The line already contains HTML code.
+
+     parameters:
+         content_type - specifies the content's type (either 'article' or 'dl')
+         content_id   - internal ID of the related content
+         acp_style    - if evaluates to true, returns text for use in admin CP
+                        script. Otherwise the title for use with the feedback
+                        form is returned.
+  */
+  function getFeedbackTitle($content_type, $content_id, $acp_style=false)
+  {
+    global $global_config_arr;
+    global $db;
+
+    $content_id = intval($content_id);
+    if ($content_type==='article')
+    {
+      $query = mysql_query('SELECT article_id, article_url, article_title '
+                          .'FROM '.$global_config_arr['pref'].'articles WHERE article_id='.$content_id, $db);
+      if ($res = mysql_fetch_assoc($query))
+      {
+        if ($acp_style) return 'Artikel #'.$content_id.' <a href="../?go='.$res['article_url'].'" target=_blank">&quot;'.$res['article_title'].'&quot;</a>';
+        return 'R&uuml;ckmeldung zu Artikel &quot;'.htmlentities($res['article_title']).'&quot; hinzuf&uuml;gen';
+      }
+      else
+      {
+        //invalid or deleted article
+        if ($acp_style) return 'Artikel #'.$content_id.' (unbekannt/gel&ouml;scht)';
+        return 'Allgemeine R&uuml;ckmeldung zur Seite hinzuf&uuml;gen';
+      }
+    }//article
+    else if (($content_type==='dl') || ($content_type==='download'))
+    {
+      $query = mysql_query('SELECT dl_id, dl_name '
+                          .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$content_id, $db);
+      if ($sub = mysql_fetch_assoc($query))
+      {
+        if ($acp_style) echo 'Download #'.$row['content_id'].' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
+        return 'R&uuml;ckmeldung zu Download &quot;'.htmlentities($sub['dl_name']).'&quot; hinzuf&uuml;gen';
+      }
+      else
+      {
+        if ($acp_style) echo 'Download #'.$row['content_id'].'(unbekannt/gel&ouml;scht)';
+        return 'Allgemeine R&uuml;ckmeldung zur Seite hinzuf&uuml;gen';
+      }
+    }
+    //must be general stuff or something like that
+    if ($acp_style) return 'Allgemeines';
+    return 'Allgemeine R&uuml;ckmeldung zur Seite hinzuf&uuml;gen';
+  }//func
+
   //constants for status code limits
   define('feedbackStatusMin', 0);
   define('feedbackStatusMax', 3);

@@ -199,10 +199,10 @@
     $form_spam_text = $form_spam_text->display ();
 
     if (
-                    $config_arr['com_antispam'] == 0 ||
-                    ( $config_arr['com_antispam'] == 1 && $_SESSION['user_id'] ) ||
-                    ( $config_arr['com_antispam'] == 3 && is_in_staff ( $_SESSION['user_id'] ) )
-            )
+        $config_arr['com_antispam'] == 0 ||
+        ( $config_arr['com_antispam'] == 1 && $_SESSION['user_id'] ) ||
+        ( $config_arr['com_antispam'] == 3 && is_in_staff ( $_SESSION['user_id'] ) )
+       )
     {
         $form_spam = '';
         $form_spam_text ='';
@@ -233,6 +233,8 @@
       $_GET['type'] = 'general';
     }
 
+    //feedback-related functions
+    require_once(FS2_ROOT_PATH.'includes/feedbackfunctions.php');
 
     // Get Comment Form Template
     $template = new template();
@@ -241,6 +243,7 @@
 
     $template->tag('content_id', $_GET['id']);
     $template->tag('content_type', $_GET['type']);
+    $template->tag('feedback_title', getFeedbackTitle($_GET['type'], $_GET['id'], false));
     $template->tag('name_input', $form_name);
     $template->tag('textarea', $template_textarea);
     $template->tag('html', $html_active);
@@ -259,7 +262,6 @@
       $template->setFile('0_feedback.tpl');
       $template->load('COMMENT_BODY');
 
-      $template->tag('news', '' );
       $template->tag('comments', '');
       $template->tag('comment_form', $comment_form_template );
 
