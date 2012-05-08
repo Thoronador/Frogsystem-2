@@ -31,6 +31,9 @@ INSERT INTO `fs2_admin_groups` (`group_id`, `group_title`, `menu_id`, `group_pos
 VALUES (29 , 'Feedback', 'interactive', 3);
 
 -- admin CP entry (might need to be modified)
-
+---- entry for feedback stuff itselt
 INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`)
 VALUES ('feedback_browse', 29, 'Liste der R&uuml;ckmeldungen', 'R&uuml;ckmeldungen', 'admin_feedback_browse.php', 1, 0);
+---- entry for feedback template
+INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`)
+VALUES ('tpl_feedback', 22, 'Feedback bearbeiten', 'Feedback', 'admin_template_feedback.php', 21, 0);
