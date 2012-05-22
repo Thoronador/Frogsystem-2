@@ -43,6 +43,7 @@ if ($_POST['wallpaper_id'] AND $_POST['sended'] == "edit" AND $_POST[size][0] AN
             else
             {
                 $filesname = "sizeimg_$i";
+                $_POST['size'][$i] = savesql($_POST['size'][$i]);
                 if (isset($_FILES[$filesname]) && $_POST[wpnew][$i]==1 && $_POST[size][$i]!="")
                 {
                     $upload = upload_img($_FILES[$filesname], "images/wallpaper/", $_POST['oldname']."_".$_POST['size'][$i]."a", $config_arr[wp_size]*1024, $config_arr[wp_x], $config_arr[wp_y]);
@@ -59,6 +60,7 @@ if ($_POST['wallpaper_id'] AND $_POST['sended'] == "edit" AND $_POST[size][0] AN
                 }
                 elseif ($_POST[wpnew][$i]==0)
                 {
+                    $_POST['size_id'][$i] = intval($_POST['size_id'][$i]);
                     $index = mysql_query("SELECT size FROM ".$global_config_arr[pref]."wallpaper_sizes WHERE size_id = '".$_POST[size_id][$i]."'", $db);
                     $size_name = mysql_result($index, "size");
 
