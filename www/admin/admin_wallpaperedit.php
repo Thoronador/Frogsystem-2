@@ -18,7 +18,10 @@ if ($_POST['wallpaper_id'] AND $_POST['sended'] == "edit" AND $_POST[size][0] AN
     if (count($_POST[size]) == count(array_unique($_POST[size])) AND (mysql_num_rows($index)==0 OR $_POST[wallpaper_name] == $_POST[oldname]))
     {
     //IF Beginn
-    
+
+    $_POST['catid'] = intval($_POST['catid']);
+    $_POST['wallpaper_id'] = intval($_POST['wallpaper_id']);
+
     $update = "UPDATE ".$global_config_arr[pref]."wallpaper
                SET wallpaper_name = '$_POST[wallpaper_name]',
                    wallpaper_title  = '$_POST[wallpaper_title]',
@@ -99,6 +102,8 @@ if ($_POST['wallpaper_id'] AND $_POST['sended'] == "edit" AND $_POST[size][0] AN
 elseif ($_POST['wallpaper_id'] AND $_POST['sended'] == "delete")
 {
 
+    $_POST['wallpaper_id'] = intval($_POST['wallpaper_id']);
+
     $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."wallpaper WHERE wallpaper_id = '$_POST[wallpaper_id]'", $db);
     $wp_del_array = mysql_fetch_assoc($index);
     mysql_query("DELETE FROM ".$global_config_arr[pref]."wallpaper WHERE wallpaper_id = '$_POST[wallpaper_id]'", $db);
@@ -120,6 +125,8 @@ elseif ($_POST['wallpaper_id'] AND $_POST['sended'] == "delete")
 
 elseif ($_POST['wallpaper_id'] AND $_POST['wp_action'])
 {
+
+  $_POST['wallpaper_id'] = intval($_POST['wallpaper_id']);
 
 ////////////////////////////
 /// Wallpaper bearbeiten ///
