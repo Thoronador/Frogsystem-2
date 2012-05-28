@@ -105,12 +105,12 @@
                           .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$content_id, $db);
       if ($sub = mysql_fetch_assoc($query))
       {
-        if ($acp_style) echo 'Download #'.$row['content_id'].' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
+        if ($acp_style) return 'Download #'.$content_id.' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
         return 'R&uuml;ckmeldung zu Download &quot;'.htmlentities($sub['dl_name']).'&quot; hinzuf&uuml;gen';
       }
       else
       {
-        if ($acp_style) echo 'Download #'.$row['content_id'].'(unbekannt/gel&ouml;scht)';
+        if ($acp_style) return 'Download #'.$content_id.' (unbekannt/gel&ouml;scht)';
         return 'Allgemeine R&uuml;ckmeldung zur Seite hinzuf&uuml;gen';
       }
     }
