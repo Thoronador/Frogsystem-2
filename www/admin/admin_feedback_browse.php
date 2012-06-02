@@ -51,7 +51,7 @@
       //save note
       mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
                  .'SET issue_id='.$_POST['issue_id'].", note_poster='".savesql($_SESSION['user_name'])
-                 ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
+                 ."', note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip='".$ip
                  ."', note_date='".$note_date."', note_title='".$_POST['note_title']
                  ."', note_text='".$_POST['note_text']."', is_starter=0", $db);
       //put system message
@@ -88,7 +88,7 @@
       $note_text = savesql('*** Neuer Status: '.feedbackStatusToString($_POST['new_status']).' ***');
       mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
                  .'SET issue_id='.$_POST['issue_id'].", note_poster='".savesql($_SESSION['user_name'])
-                 ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
+                 ."', note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip='".$ip
                  ."', note_date='".time()."', note_title='Status aktualisiert', note_text='".$note_text
                  ."', is_starter=0", $db);
       //put system message
@@ -110,14 +110,32 @@
   if (!isset($_GET['details']))
   {
     // list all issues
-    $query = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues', $db);
-
-    if (mysql_num_rows($query)<=0)
+    if (isset($_GET['status']))
     {
-      echo 'Es sind keine R&uuml;ckmeldungen verf&uuml;gbar!';
+      $where_clause = ' WHERE status='.intval($_GET['status']);
     }
     else
     {
+      $where_clause = '';
+    }
+
+    $query = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues'.$where_clause, $db);
+
+    if (mysql_num_rows($query)<=0)
+    {
+      if ($where_clause==='')
+      {
+        echo 'Es sind keine R&uuml;ckmeldungen verf&uuml;gbar!';
+      }
+      else
+      {
+        echo 'Es sind keine R&uuml;ckmeldungen mit den entsprechenden Kriterien verf&uuml;gbar!<br>'
+            .'<br><a href="?go=feedback_browse"><b>&rArr;</b> Alle verf&uuml;gbaren R&uuml;ckmeldungen anzeigen</a>';
+      }
+    }
+    else
+    {
+      $stat_array = array(0 => 0, 1 => 0, 2 => 0, 3 => 0);
       echo '<table border="0" cellpadding="2" cellspacing="2" width="600">
               <tr>
                 <td class="config"><b>#</b></td>
@@ -135,8 +153,31 @@
                 <td class="configthin" style="border: 1px solid #000000;"><a href="?go=feedback_browse&amp;details='.$row['issue_id'].'">Details ansehen</a></td>
                 <td class="configthin" style="border: 1px solid #000000;">'.feedbackStatusToString($row['status'], true).'</td>
               </tr>';
+        //count status
+        $stat_array[$row['status']] = $stat_array[$row['status']]+1;
       }//while
       echo '</table>';
+
+      //status summary - only when no specific status is requested
+      if (!isset($_GET['status']))
+      {
+        //Status "list"
+        echo '<br><br><table border="0" cellpadding="2" cellspacing="2" width="600">
+               <tr>
+                 <td colspan="4" align="center" class="config"><b>Anzahl der R&uuml;ckmeldungen nach Status</b></td>
+               </tr>
+               <tr>';
+        for ($i = 0; $i<4; $i = $i+1)
+        {
+          echo '<td class="configthin"><a href="?go=feedback_browse&amp;status='.$i.'">'.feedbackStatusToString($i)
+               .': '.$stat_array[$i].'</a></td>';
+        } //foreach
+        echo "</tr>\n</table>";
+      } //if not status-specific
+      else
+      {
+        echo '<br><br><a href="?go=feedback_browse"><b>&rArr;</b> Alle verf&uuml;gbaren R&uuml;ckmeldungen anzeigen</a>';
+      } //else branch (status-specific list)
     }//else branch (more than zero rows in result)
   }//if get->details not set
 
