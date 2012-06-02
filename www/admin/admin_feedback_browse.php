@@ -80,11 +80,17 @@
     {
       //get additional data
       $ip = savesql($_SERVER['REMOTE_ADDR']);
-      $note_date = time();
-      //save note
+      //update status
       mysql_query('UPDATE `'.$global_config_arr['pref'].'feedback_issues` '
                  .'SET status='.$_POST['new_status'].' WHERE issue_id='.$_POST['issue_id']
                  .' LIMIT 1', $db);
+      //insert system-generated note about status change
+      $note_text = savesql('*** Neuer Status: '.feedbackStatusToString($_POST['new_status']).' ***');
+      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
+                 .'SET issue_id='.$_POST['issue_id'].", note_poster='".savesql($_SESSION['user_name'])
+                 ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
+                 ."', note_date='".time()."', note_title='Status aktualisiert', note_text='".$note_text
+                 ."', is_starter=0", $db);
       //put system message
       systext('Der Status wurde aktualisiert.', $TEXT['admin']->get('info'),
               false, $TEXT['admin']->get('icon_save_add'));
