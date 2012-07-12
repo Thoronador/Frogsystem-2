@@ -1,0 +1,16 @@
+#@admin/admin_table_admin
+pageinfo_title:      Backup database
+
+table_engine:        Engine
+do_backup:           Create backup
+no_tables_selected:  No (valid) tables have been selected for the backup!
+tables_selected:     Backup tables
+limitations_note:    Note: Due to the limited execution time and memory available to PHP, backing up very large databases may not be possible. If your database is very large you might need to backup directly from your SQL server via command line, or ask your server admin to do it for you, if you do not have the required privileges.
+with_drop:           Add &quot;Drop Table&quot; command to SQL file?
+filename:            File name
+yes:                 Yes
+no:                  No
+name_not_acceptable: The given file name is invalid!
+file_exists:         The given file already exists! Please choose a different file name.
+backup_success:      Backup has been successful!
+file_is_at:          The backup file is located at:
