@@ -363,3 +363,5 @@ page_title_article_preview:     Article preview
 # Datenbank
 page_title_table_admin:         Tables
 page_link_table_admin:          Tables
+page_title_db_backup:           Create backup
+page_link_db_backup:            Create backup
