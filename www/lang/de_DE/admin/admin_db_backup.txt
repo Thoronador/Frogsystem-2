@@ -1,0 +1,16 @@
+#@admin/admin_table_admin
+pageinfo_title:      Datenbank sichern
+
+table_engine:        Engine
+do_backup:           Backup erstellen
+no_tables_selected:  Es wurden keine (g&uuml;ltigen) Tabellen f&uuml;r das Backup ausgew&auml;hlt!
+tables_selected:     Zum Backup ausgew&auml;hlte Tabellen
+limitations_note:    Hinweis: Aufgrund der begrenzten Ausf&uuml;hrungszeit und der Speicherbegrenzung f&uuml;r PHP kann es vorkommen, dass ein Backup gro&szlig;er Tabellen nicht m&ouml;glich ist. Wenn die Datenbank sehr gro&szlig; ist, ist es evtl. erforderlich, das Backup direkt vom SQL-Server aus via Befehlszeile zu erstellen bzw. den Serveradministrator darum zu bitten, sofern dir die n&ouml;tigen Recht dazu fehlen.
+with_drop:           &quot;Drop Table&quot;-Befehl hinzuf&uuml;gen?
+filename:            Dateiname
+yes:                 Ja
+no:                  Nein
+name_not_acceptable: Der angegebene Dateiname ist nicht zul&auml;ssig!
+file_exists:         Die angegebene Datei existiert bereits! W&auml;hle bitte einen anderen Dateinamen.
+backup_success:      Das Backup war erfolgreich!
+file_is_at:          Die Backupdatei findet sich an folgendem Ort:
