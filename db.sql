@@ -157,7 +157,8 @@ INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_file`, `page_pos`, `pag
 ('timedpic_add', 'gallery_preview', 'admin_randompic_time_add.php', 3, 0),
 ('timedpic_edit', 'gallery_preview', 'admin_randompic_time.php', 4, 0),
 ('statgfx', 'popup', 'admin_statgfx.php', 0, 0),
-('table_admin', 'db', 'admin_table_admin.php', 1, 0);
+('table_admin', 'db', 'admin_table_admin.php', 1, 0),
+('db_backup', 'db', 'admin_db_backup.php', 2, 0);
 
 -- --------------------------------------------------------
 
