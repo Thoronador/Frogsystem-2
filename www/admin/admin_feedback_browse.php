@@ -119,7 +119,7 @@
       $where_clause = '';
     }
 
-    $query = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues'.$where_clause, $db);
+    $query = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues'.$where_clause.' ORDER BY issue_id DESC', $db);
 
     if (mysql_num_rows($query)<=0)
     {
