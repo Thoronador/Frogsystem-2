@@ -68,7 +68,7 @@ $TEMPLATE_EDIT[] = array (
         array ( tag => "next_image_link", text => $TEXT['template']->get("general_popupviewer_next_image_link") ),
     )
 );
-    
+
 $TEMPLATE_EDIT[] = array (
     name => "ANNOUNCEMENT",
     title => $admin_phrases[template][announcement][title],
@@ -79,12 +79,12 @@ $TEMPLATE_EDIT[] = array (
         array ( tag => "announcement_text", text => $admin_phrases[template][announcement][help_1] ),
     )
 );
-        
+
 $TEMPLATE_EDIT[] = array (
     name => "STATISTICS",
     title => $TEXT['template']->get("general_statistics_title"),
     description => $TEXT['template']->get("general_statistics_desc"),
-    rows => 20,
+    rows => 30,
     cols => 66,
     help => array (
         array ( tag => "visits", text => $TEXT['template']->get("general_statistics_visits") ),
@@ -98,6 +98,12 @@ $TEMPLATE_EDIT[] = array (
         array ( tag => "num_news", text => $TEXT['template']->get("general_statistics_num_news") ),
         array ( tag => "num_comments", text => $TEXT['template']->get("general_statistics_num_comments") ),
         array ( tag => "num_articles", text => $TEXT['template']->get("general_statistics_num_articles") ),
+
+        //TODO: localize the texts in the following four lines
+        array ( 'tag' => 'files', 'text' => 'Anzahl der Dateien im Downloadbereich' ),
+        array ( 'tag' => 'filesize', 'text' => 'Gesamtgr&ouml;&szlig;e der Downloads' ),
+        array ( 'tag' => 'loads', 'text' => 'Anzahl der heruntergeladenen Dateien' ),
+        array ( 'tag' => 'traffic', 'text' => 'Downloadtraffic' ),
     )
 );
 

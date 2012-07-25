@@ -15,20 +15,20 @@
 
 <!--section-start::MAINPAGE--><body>
   <div id="main">
-    
+
     <div id="header">
       <h1 id="title">&nbsp;Frogsystem 2 (Alix 5)</h1>
-    </div> 
+    </div>
 
     <div id="menu_left">
     $NAV(left.nav)<br>
     $APP(mini-search.php)
     </div>
-    
+
     <div id="menu_right">
       $APP(user-menu.php)
       $APP(preview-image.php)
-      $APP(shop-system.php)      
+      $APP(shop-system.php)
       $APP(poll-system.php)
       $APP(affiliates.php)
       $APP(mini-statistics.php)
@@ -67,15 +67,15 @@
           {..prev_image_link..}
         </td>
         <td width="20%" align="center">
-          <a href="javascript:self.close()"><img src="$VAR(style_icons)close.gif" alt="Fenster schließen" title="Fenster schließen"></a>   
+          <a href="javascript:self.close()"><img src="$VAR(style_icons)close.gif" alt="Fenster schließen" title="Fenster schließen"></a>
         </td>
         <td width="40%" align="left">
            {..next_image_link..}
         </td>
       </tr>
-    </table>    
+    </table>
   </div>
-  
+
 </body>
 <!--section-end::POPUPVIEWER-->
 
@@ -94,16 +94,21 @@
   - <b>{..hits..}</b> Hits<br>
   - <b>{..hits_today..}</b> Hits heute
 </p>
-<p class="small">  
+<p class="small">
   - <b>{..visitors_online..}</b> Besucher online<br>
   - <b>{..registered_online..}</b> registrierte <br>
   - <b>{..guests_online..}</b> Gäste
 </p>
-<p class="small">  
+<p class="small">
   - <b>{..num_users..}</b> registrierte User<br>
   - <b>{..num_news..}</b> News<br>
   - <b>{..num_comments..}</b> Kommentare<br>
   - <b>{..num_articles..}</b> Artikel
 </p>
+<p class="small">
+  - <b>{..files..}</b> Files<br>
+  - <b>{..filesize..}</b> gesamt<br>
+  - <b>{..loads..}</b> Downloads<br>
+  - <b>{..traffic..}</b> Traffic
+</p>
 <!--section-end::STATISTICS-->
-

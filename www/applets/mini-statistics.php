@@ -58,6 +58,27 @@ $index = mysql_query ( "
 $useronline_arr['guests'] = mysql_result ( $index, 0, "guests" );
 
 
+//Number of available files
+$index = mysql_query('SELECT COUNT(file_id) AS files FROM `'.$global_config_arr['pref'].'dl_files`', $db);
+$files = mysql_fetch_assoc($index);
+$files = $files['files'];
+
+//total size of all downloads
+$index = mysql_query('SELECT SUM(file_size) AS totalsize FROM `'.$global_config_arr['pref'].'dl_files`', $db);
+$totalsize = mysql_fetch_assoc($index);
+$totalsize = getsize($totalsize['totalsize']);
+
+//Number of downloaded files
+$index = mysql_query('SELECT SUM(file_count) AS totalloads FROM `'.$global_config_arr['pref'].'dl_files`', $db);
+$loads = mysql_fetch_assoc($index);
+$loads = $loads['totalloads'];
+
+//traffic
+$index = mysql_query('SELECT SUM(file_count*file_size) AS traffic FROM `'.$global_config_arr['pref'].'dl_files`', $db);
+$traffic = mysql_fetch_assoc($index);
+$traffic = getsize($traffic['traffic']);
+
+
 // Create Template
 $template = new template();
 
@@ -76,6 +97,12 @@ $template->tag("num_users", point_number ( $counter_arr['user'] ) );
 $template->tag("num_news", point_number ( $counter_arr['news'] ) );
 $template->tag("num_comments", point_number ( $counter_arr['comments'] ) );
 $template->tag("num_articles", point_number ( $counter_arr['artikel'] ) );
+
+$template->tag('files', $files);
+$template->tag('filesize', $totalsize);
+$template->tag('loads', $loads);
+$template->tag('traffic', $traffic);
+
 
 $template = $template->display();
 ?>
