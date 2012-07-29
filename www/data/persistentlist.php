@@ -2,6 +2,7 @@
 /*
     Frogsystem Persistent Worlds script
     Copyright (C) 2005-2007  Stefan Bollmann
+    Copyright (C) 2012  Thoronador (adjustments for alix5)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,76 +28,73 @@
     as well as that of the covered work.
 */
 
-switch ($sort)
+if (!isset($_GET['sort'])) $_GET['sort'] = 'name';
+switch ($_GET['sort'])
 {
-	case 'setting':
-	$orderrule = 'persistent_setting';
-	break;
-	case 'genre':
-	$orderrule = 'persistent_genre';
-	break;
-	case 'spiel':
-	$orderrule = 'persistent_spiel';
-	break;
-	case 'anmeldung':
-	$orderrule = 'persistent_anmeldung';
-	break;
-	case 'spieler':
-	$orderrule = 'persistent_maxzahl';
-	break;
-	case 'level':
-	$orderrule = 'persistent_maxlevel';
-	break;
-	default:
-	$orderrule = 'persistent_name';
-	break;
-}
-$index = mysql_query("select * from fsplus_persistent order by $orderrule", $db);
+  case 'setting':
+       $orderrule = 'persistent_setting';
+       break;
+  case 'genre':
+       $orderrule = 'persistent_genre';
+       break;
+  case 'spiel':
+	   $orderrule = 'persistent_spiel';
+       break;
+  case 'anmeldung':
+       $orderrule = 'persistent_anmeldung';
+       break;
+  case 'spieler':
+       $orderrule = 'persistent_maxzahl';
+       break;
+  case 'level':
+       $orderrule = 'persistent_maxlevel';
+       break;
+  default:
+       $orderrule = 'persistent_name';
+       break;
+}//swi
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` ORDER BY '.$orderrule, $db);
+$persistent_list = '';
 while ($persistent_arr = mysql_fetch_assoc($index))
 {
     $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
-	switch ($persistent_arr['persistent_spiel'])
-	{
-		case 1:
-		$persistent_arr['persistent_spiel'] = 'NwN';
-		break;
-		case 2:
-		$persistent_arr['persistent_spiel'] = 'NwN 2';
-		break;
-	}
-/*
-	echo'
-		<form action="'.$PHP_SELF.'" enctype="multipart/form-data" method="post">
-        	<input type="hidden" value="'.$persistent_arr[persistent_link].'" name="go">
-		</form>
-		';
-*/
-    $index2 = mysql_query("select template_code from fs_template where template_name = 'persistent_eintrag'", $db);
-    $persistent = stripslashes(mysql_result($index2, 0, 'template_code'));
-    $persistent = str_replace('{link}', $persistent_arr['persistent_link'], $persistent);
-    $persistent = str_replace('{name}', $persistent_arr['persistent_name'], $persistent);
-    $persistent = str_replace('{setting}', $persistent_arr['persistent_setting'], $persistent);
-    $persistent = str_replace('{genre}', $persistent_arr['persistent_genre'], $persistent);
-    $persistent = str_replace('{spiel}', $persistent_arr['persistent_spiel'], $persistent);
-    $persistent = str_replace('{dlsvu}', $persistent_arr['persistent_dlsvu'], $persistent);
-    $persistent = str_replace('{dlhdu}', $persistent_arr['persistent_dlhdu'], $persistent);
-    $persistent = str_replace('{dlcep}', $persistent_arr['persistent_dlcep'], $persistent);
-    $persistent = str_replace('{anmeldung}', $persistent_arr['persistent_anmeldung'], $persistent);
-    $persistent = str_replace('{maxplayer}', $persistent_arr['persistent_maxzahl'], $persistent);
-    $persistent = str_replace('{maxlevel}', $persistent_arr['persistent_maxlevel'], $persistent);
+    switch ($persistent_arr['persistent_spiel'])
+    {
+      case 1:
+           $persistent_arr['persistent_spiel'] = 'NwN';
+           break;
+      case 2:
+           $persistent_arr['persistent_spiel'] = 'NwN 2';
+           break;
+    }//swi
 
-    $persistent_list .= $persistent;
+    $template = new template();
+    $template->setFile('0_persistent_worlds.tpl');
+    $template->load('list_entry');
+
+    $template->tag('link', $persistent_arr['persistent_link']);
+    $template->tag('name', $persistent_arr['persistent_name']);
+    $template->tag('setting', $persistent_arr['persistent_setting']);
+    $template->tag('genre', $persistent_arr['persistent_genre']);
+    $template->tag('spiel', $persistent_arr['persistent_spiel']);
+    $template->tag('dlsvu', $persistent_arr['persistent_dlsvu']);
+    $template->tag('dlhdu', $persistent_arr['persistent_dlhdu']);
+    $template->tag('dlcep', $persistent_arr['persistent_dlcep']);
+    $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
+    $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
+    $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
+
+    $persistent_list .= $template->display();
 }
 unset($persistent_arr);
 
-$index = mysql_query("select template_code from fs_template where template_name = 'persistent_main_body'", $db);
-$template = stripslashes(mysql_result($index, 0, 'template_code'));
-$template = str_replace('{text}', $persistent_list, $template);
+$template = new template();
+$template->setFile('0_persistent_worlds.tpl');
+$template->load('main_body');
+$template->tag('text', $persistent_list);
 
 unset($persistent_list);
 
-echo $template;
-
+$template = $template->display();
 ?>
-<br><br>

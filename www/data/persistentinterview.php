@@ -1,7 +1,8 @@
 <?php
 /*
-    Frogsystem Persistent Worlds script
+    Frogsystem Persistent Worlds Script
     Copyright (C) 2005-2007  Stefan Bollmann
+    Copyright (C) 2012  Thoronador (adjustments for alix5)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,65 +28,64 @@
     as well as that of the covered work.
 */
 
-$index = mysql_query("select * from fsplus_persisinterview where persisinterview_link = '$pw'", $db);
-$persisinterview_arr = mysql_fetch_assoc($index);
+  $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persisinterview` WHERE persisinterview_link = \''.$_GET['pw']."' LIMIT 1", $db);
+  $persisinterview_arr = mysql_fetch_assoc($index);
 
-// User auslesen
-$index2 = mysql_query("select user_name from fs_user where user_id = $persisinterview_arr[persisinterview_posterid]", $db);
-$news_arr['user_name'] = mysql_result($index2, 0, 'user_name');
-$news_arr['user_url'] = "?go=profil&amp;userid=$persisinterview_arr[persisinterview_posterid]";
+  // User auslesen
+  $index2 = mysql_query('SELECT user_name FROM `'.$global_config_arr['pref'].'user` WHERE user_id = '.$persisinterview_arr['persisinterview_posterid'].' LIMIT 1', $db);
+  $news_arr['user_name'] = mysql_result($index2, 0, 'user_name');
+  $news_arr['user_url'] = '?go=profil&amp;userid='.$persisinterview_arr['persisinterview_posterid'];
 
-    $persisinterview_arr['persisinterview_antwort01'] = fscode($persisinterview_arr['persisinterview_antwort01'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort02'] = fscode($persisinterview_arr['persisinterview_antwort02'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort03'] = fscode($persisinterview_arr['persisinterview_antwort03'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort04'] = fscode($persisinterview_arr['persisinterview_antwort04'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort05'] = fscode($persisinterview_arr['persisinterview_antwort05'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort06'] = fscode($persisinterview_arr['persisinterview_antwort06'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort07'] = fscode($persisinterview_arr['persisinterview_antwort07'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort08'] = fscode($persisinterview_arr['persisinterview_antwort08'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort09'] = fscode($persisinterview_arr['persisinterview_antwort09'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort10'] = fscode($persisinterview_arr['persisinterview_antwort10'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort11'] = fscode($persisinterview_arr['persisinterview_antwort11'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort12'] = fscode($persisinterview_arr['persisinterview_antwort12'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-    $persisinterview_arr['persisinterview_antwort13'] = fscode($persisinterview_arr['persisinterview_antwort13'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort01'] = fscode($persisinterview_arr['persisinterview_antwort01'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort02'] = fscode($persisinterview_arr['persisinterview_antwort02'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort03'] = fscode($persisinterview_arr['persisinterview_antwort03'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort04'] = fscode($persisinterview_arr['persisinterview_antwort04'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort05'] = fscode($persisinterview_arr['persisinterview_antwort05'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort06'] = fscode($persisinterview_arr['persisinterview_antwort06'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort07'] = fscode($persisinterview_arr['persisinterview_antwort07'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort08'] = fscode($persisinterview_arr['persisinterview_antwort08'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort09'] = fscode($persisinterview_arr['persisinterview_antwort09'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort10'] = fscode($persisinterview_arr['persisinterview_antwort10'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort11'] = fscode($persisinterview_arr['persisinterview_antwort11'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort12'] = fscode($persisinterview_arr['persisinterview_antwort12'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+  $persisinterview_arr['persisinterview_antwort13'] = fscode($persisinterview_arr['persisinterview_antwort13'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
 
-	switch ($persisinterview_arr['persisinterview_spiel'])
-	{
-		case 1:
-		$persisinterview_arr['persisinterview_spiel'] = 'Neverwinter Nights';
-		break;
-		case 2:
-		$persisinterview_arr['persisinterview_spiel'] = 'Neverwinter Nights 2';
-		break;
-	}
+  switch ($persisinterview_arr['persisinterview_spiel'])
+  {
+    case 1:
+         $persisinterview_arr['persisinterview_spiel'] = 'Neverwinter Nights';
+         break;
+    case 2:
+         $persisinterview_arr['persisinterview_spiel'] = 'Neverwinter Nights 2';
+         break;
+  }//swi
 
-    $index2 = mysql_query("select template_code from fs_template where template_name = 'persisinterview_detail_body'", $db);
-    $persisinterview = stripslashes(mysql_result($index2, 0, 'template_code'));
-    $persisinterview = str_replace('{name}', $persisinterview_arr['persisinterview_name'], $persisinterview);
-    $persisinterview = str_replace('{url}', $persisinterview_arr['persisinterview_url'], $persisinterview);
-    $persisinterview = str_replace('{spiel}', $persisinterview_arr['persisinterview_spiel'], $persisinterview);
-    $persisinterview = str_replace('{antwort01}', $persisinterview_arr['persisinterview_antwort01'], $persisinterview);
-    $persisinterview = str_replace('{antwort02}', $persisinterview_arr['persisinterview_antwort02'], $persisinterview);
-    $persisinterview = str_replace('{antwort03}', $persisinterview_arr['persisinterview_antwort03'], $persisinterview);
-    $persisinterview = str_replace('{antwort04}', $persisinterview_arr['persisinterview_antwort04'], $persisinterview);
-    $persisinterview = str_replace('{antwort05}', $persisinterview_arr['persisinterview_antwort05'], $persisinterview);
-    $persisinterview = str_replace('{antwort06}', $persisinterview_arr['persisinterview_antwort06'], $persisinterview);
-    $persisinterview = str_replace('{antwort07}', $persisinterview_arr['persisinterview_antwort07'], $persisinterview);
-    $persisinterview = str_replace('{antwort08}', $persisinterview_arr['persisinterview_antwort08'], $persisinterview);
-    $persisinterview = str_replace('{antwort09}', $persisinterview_arr['persisinterview_antwort09'], $persisinterview);
-    $persisinterview = str_replace('{antwort10}', $persisinterview_arr['persisinterview_antwort10'], $persisinterview);
-    $persisinterview = str_replace('{antwort11}', $persisinterview_arr['persisinterview_antwort11'], $persisinterview);
-    $persisinterview = str_replace('{antwort12}', $persisinterview_arr['persisinterview_antwort12'], $persisinterview);
-    $persisinterview = str_replace('{antwort13}', $persisinterview_arr['persisinterview_antwort13'], $persisinterview);
-    $persisinterview = str_replace('{link}', $persisinterview_arr['persisinterview_link'], $persisinterview);
-    $persisinterview = str_replace('{autor}', $news_arr['user_name'], $persisinterview);
-    $persisinterview = str_replace('{autor_profilurl}', $news_arr['user_url'], $persisinterview);
+  $template = new template();
+  $template->setFile('0_persistent_worlds.tpl');
+  $template->load('interview_detail_body');
 
-    $persisinterview_list .= $persisinterview;
+  //$index2 = mysql_query("select template_code from fs_template where template_name = 'persisinterview_detail_body'", $db);
 
-$pwid = $persisinterview_arr['persisinterview_id'];
-unset($persisinterview_arr);
+  $template->tag('name', $persisinterview_arr['persisinterview_name']);
+  $template->tag('url', $persisinterview_arr['persisinterview_url']);
+  $template->tag('spiel', $persisinterview_arr['persisinterview_spiel']);
+  $template->tag('antwort01', $persisinterview_arr['persisinterview_antwort01']);
+  $template->tag('antwort02', $persisinterview_arr['persisinterview_antwort02']);
+  $template->tag('antwort03', $persisinterview_arr['persisinterview_antwort03']);
+  $template->tag('antwort04', $persisinterview_arr['persisinterview_antwort04']);
+  $template->tag('antwort05', $persisinterview_arr['persisinterview_antwort05']);
+  $template->tag('antwort06', $persisinterview_arr['persisinterview_antwort06']);
+  $template->tag('antwort07', $persisinterview_arr['persisinterview_antwort07']);
+  $template->tag('antwort08', $persisinterview_arr['persisinterview_antwort08']);
+  $template->tag('antwort09', $persisinterview_arr['persisinterview_antwort09']);
+  $template->tag('antwort10', $persisinterview_arr['persisinterview_antwort10']);
+  $template->tag('antwort11', $persisinterview_arr['persisinterview_antwort11']);
+  $template->tag('antwort12', $persisinterview_arr['persisinterview_antwort12']);
+  $template->tag('antwort13', $persisinterview_arr['persisinterview_antwort13']);
+  $template->tag('link', $persisinterview_arr['persisinterview_link']);
+  $template->tag('autor', $news_arr['user_name']);
+  $template->tag('autor_profilurl', $news_arr['user_url']);
+  unset($persisinterview_arr);
 
-echo $persisinterview;
-
+  $template = $template->display();
 ?>

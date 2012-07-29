@@ -2,6 +2,7 @@
 /*
     Frogsystem Persistent Worlds script
     Copyright (C) 2005-2007  Stefan Bollmann
+    Copyright (C) 2012  Thoronador (adjustments for alix5)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,78 +28,70 @@
     as well as that of the covered work.
 */
 
-$index = mysql_query("select * from fsplus_persistent where persistent_link = '$pw'", $db);
-$persistent_arr = mysql_fetch_assoc($index);
+  $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_link = \''.savesql($_GET['pw'])."'", $db);
+  $persistent_arr = mysql_fetch_assoc($index);
 
-/////   NEU ANFANG   /////
+  // Kommentare
+  $pw_arr['comment_url'] = '?go=pwcomments&amp;pw='.$_GET['pw'];
 
-	// Kommentare
-	$pw_arr['comment_url'] = "?go=pwcomments&amp;pw=$pw";
+  // Kommentare lesen
+  $index_pwcomms = mysql_query('SELECT persistent_comment_id FROM `'.$global_config_arr['pref'].'persistent_comments` WHERE persistent_link=\''.$persistent_arr['persistent_link']."'", $db);
+  $pw_arr['kommentare'] = mysql_num_rows($index_pwcomms);
 
-	// Kommentare lesen
-    $index_pwcomms = mysql_query("select persistent_comment_id from fsplus_persistent_comments where persistent_link = '$persistent_arr[persistent_link]'", $db);
-	$pw_arr['kommentare'] = mysql_num_rows($index_pwcomms);
+  // User auslesen
+  $index2 = mysql_query('SELECT user_name FROM `'.$global_config_arr['pref'].'user` WHERE user_id = '.$persistent_arr['persistent_posterid'].' LIMIT 1', $db);
+  $news_arr['user_name'] = mysql_result($index2, 0, 'user_name');
+  $news_arr['user_url'] = '?go=profil&amp;userid='.$persistent_arr['persistent_posterid'];
 
-	// User auslesen
-    $index2 = mysql_query("select user_name from fs_user where user_id = $persistent_arr[persistent_posterid]", $db);
-    $news_arr['user_name'] = mysql_result($index2, 0, 'user_name');
-    $news_arr['user_url'] = "?go=profil&amp;userid=$persistent_arr[persistent_posterid]";
+  //FS-Codes ersetzen
+  $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1);
+  $persistent_arr['persistent_handycap'] = fscode($persistent_arr['persistent_handycap'], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1);
 
-/////   NEU ENDE   /////
+  switch ($persistent_arr['persistent_spiel'])
+  {
+    case 1:
+         $persistent_arr['persistent_spiel'] = 'NwN';
+         break;
+    case 2:
+         $persistent_arr['persistent_spiel'] = 'NwN 2';
+         break;
+  }
 
+  $template = new template();
+  $template->setFile('0_persistent_worlds.tpl');
+  $template->load('detail_body');
 
-    $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1);
-	$persistent_arr['persistent_handycap'] = fscode($persistent_arr['persistent_handycap'], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1);
+  $template->tag('name', $persistent_arr['persistent_name']);
+  $template->tag('url', $persistent_arr['persistent_url']);
+  $template->tag('text', $persistent_arr['persistent_text']);
+  $template->tag('spiel', $persistent_arr['persistent_spiel']);
+  $template->tag('setting', $persistent_arr['persistent_setting']);
+  $template->tag('genre', $persistent_arr['persistent_genre']);
+  $template->tag('pvp', $persistent_arr['persistent_pvp']);
+  $template->tag('termine', $persistent_arr['persistent_termine']);
+  $template->tag('dlsize', $persistent_arr['persistent_dlsize']);
+  $template->tag('dlsvu', $persistent_arr['persistent_dlsvu']);
+  $template->tag('dlhdu', $persistent_arr['persistent_dlhdu']);
+  $template->tag('dlcep', $persistent_arr['persistent_dlcep']);
+  $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
+  $template->tag('handycap', $persistent_arr['persistent_handycap']);
+  $template->tag('dungeonmaster', $persistent_arr['persistent_dm']);
+  $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
+  $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
+  $template->tag('expcap', $persistent_arr['persistent_expcap']);
+  $template->tag('fights', $persistent_arr['persistent_fights']);
+  $template->tag('traps', $persistent_arr['persistent_traps']);
+  $template->tag('items', $persistent_arr['persistent_items']);
+  if ($persistent_arr['persistent_interview'] != NULL)
+    $template->tag('interview', '<a href='.$persistent_arr['persistent_interview'].'>zum Interview</a>');
+  else
+    $template->tag('interview', '');
+  $template->tag('link', $persistent_arr['persistent_link']);
+  $template->tag('kommentar_url', $pw_arr['comment_url']);
+  $template->tag('kommentar_anzahl', $pw_arr['kommentare']);
+  $template->tag('autor', $news_arr['user_name']);
+  $template->tag('autor_profilurl', $news_arr['user_url']);
+  unset($persistent_arr);
 
-	switch ($persistent_arr['persistent_spiel'])
-	{
-		case 1:
-		$persistent_arr['persistent_spiel'] = 'NwN';
-		break;
-		case 2:
-		$persistent_arr['persistent_spiel'] = 'NwN 2';
-		break;
-	}
-
-    $index2 = mysql_query("select template_code from fs_template where template_name = 'persistent_detail_body'", $db);
-    $persistent = stripslashes(mysql_result($index2, 0, 'template_code'));
-    $persistent = str_replace('{name}', $persistent_arr['persistent_name'], $persistent);
-    $persistent = str_replace('{url}', $persistent_arr['persistent_url'], $persistent);
-    $persistent = str_replace('{text}', $persistent_arr['persistent_text'], $persistent);
-    $persistent = str_replace('{spiel}', $persistent_arr['persistent_spiel'], $persistent);
-    $persistent = str_replace('{setting}', $persistent_arr['persistent_setting'], $persistent);
-    $persistent = str_replace('{genre}', $persistent_arr['persistent_genre'], $persistent);
-    $persistent = str_replace('{pvp}', $persistent_arr['persistent_pvp'], $persistent);
-    $persistent = str_replace('{termine}', $persistent_arr['persistent_termine'], $persistent);
-    $persistent = str_replace('{dlsize}', $persistent_arr['persistent_dlsize'], $persistent);
-    $persistent = str_replace('{dlsvu}', $persistent_arr['persistent_dlsvu'], $persistent);
-    $persistent = str_replace('{dlhdu}', $persistent_arr['persistent_dlhdu'], $persistent);
-    $persistent = str_replace('{dlcep}', $persistent_arr['persistent_dlcep'], $persistent);
-    $persistent = str_replace('{anmeldung}', $persistent_arr['persistent_anmeldung'], $persistent);
-    $persistent = str_replace('{handycap}', $persistent_arr['persistent_handycap'], $persistent);
-    $persistent = str_replace('{dungeonmaster}', $persistent_arr['persistent_dm'], $persistent);
-    $persistent = str_replace('{maxplayer}', $persistent_arr['persistent_maxzahl'], $persistent);
-    $persistent = str_replace('{maxlevel}', $persistent_arr['persistent_maxlevel'], $persistent);
-    $persistent = str_replace('{expcap}', $persistent_arr['persistent_expcap'], $persistent);
-    $persistent = str_replace('{fights}', $persistent_arr['persistent_fights'], $persistent);
-    $persistent = str_replace('{traps}', $persistent_arr['persistent_traps'], $persistent);
-    $persistent = str_replace('{items}', $persistent_arr['persistent_items'], $persistent);
-	if ($persistent_arr['persistent_interview'] != NULL)
-    	$persistent = str_replace('{interview}', '<a href='.$persistent_arr['persistent_interview'].'>zum Interview</a>', $persistent);
-	else
-		$persistent = str_replace('{interview}', '', $persistent);
-    $persistent = str_replace('{link}', $persistent_arr['persistent_link'], $persistent);
-    $persistent = str_replace('{kommentar_url}', $pw_arr['comment_url'], $persistent);
-    $persistent = str_replace('{kommentar_anzahl}', $pw_arr['kommentare'], $persistent);
-    $persistent = str_replace('{autor}', $news_arr['user_name'], $persistent);
-    $persistent = str_replace('{autor_profilurl}', $news_arr['user_url'], $persistent);
-
-    $persistent_list .= $persistent;
-
-$pwid = $persistent_arr['persistent_id'];
-unset($persistent_arr);
-
-echo $persistent;
-
+  $template = $template->display();
 ?>
-<br><br>
