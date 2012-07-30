@@ -18,6 +18,7 @@
   <tr><td colspan="7"><br></td></tr>
   {..text..}
 </table>
+</p>
 <!--section-end::main_body-->
 
 <!--section-start::list_entry-->
@@ -118,10 +119,10 @@
     </tr>
     <tr>
       <td align="left" valign="top">
-        notwendige Erweiterungen:
+        Notwendige Erweiterungen:
       </td>
       <td align="left" valign="top">
-        {..dlsvu..} {..dlhdu..} {..dlcep..}
+        {..dlsvu..} {..dlhdu..} {..dlcep..} {..dlmotb..}
       </td>
     </tr>
     <tr>
@@ -354,3 +355,303 @@
   </table>
 </p>
 <!--section-end::interview_detail_body-->
+
+
+
+<!--section-start::form_add_body-->
+<div align="center"><h2>Persistente Welt hinzuf&uuml;gen</h2></div>
+<p>
+
+<style type="text/css">
+<!--
+.Stil1 {color: #FF0000}
+-->
+</style>
+
+<form action="?go=persistentadd" enctype="multipart/form-data" method="post">
+  <input type="hidden" value="persistentadd" name="go">
+  <input type="hidden" value="{..session_id..}" name="PHPSESSID">
+  <input type="hidden" value="{..user_id..}" name="posterid">
+  <table border="0" cellpadding="4" cellspacing="0" width="100%">
+    <tr>
+      <td valign="top">
+        Server-Name:<span class="Stil1">*</span><br>
+        <font class="font-10">Name der persistenten Welt.</font>
+      </td>
+      <td valign="top">
+        <input class="text" name="name" size="51" maxlength="150">
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        URL:<span class="Stil1">*</span><br>
+        <font class="font-10">Link zur persistenten Welt.</font>
+      </td>
+      <td valign="top">
+        <input class="text" name="url" value="http://" size="51" maxlength="255">
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Weltenbeschreibung:<span class="Stil1">*</span><br>
+        <font class="font-10">Kurze Weltenbeschreibung. Was ist das Besondere
+		an dieser Welt, was unterscheidet sie von anderen? Bei eigenem Setting
+		bitte hier auch dessen Grundlagen kurz auff&uuml;hren. Irgendwelche Handwerker-,
+		Gilden-, Sterbesysteme etc.?<br>
+		Bitte keine Romane.<br>
+		Kein HTML erlaubt! Bitte <a href="?go=fscode" target="_blank">FS-Code</a> benutzen.</font>
+      </td>
+      <td valign="top">
+        <textarea class="text" name="text" rows="15" cols="40"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        F&uuml;r welches Spiel:<span class="Stil1">*</span><br>
+        <font class="font-10">NwN oder NwN2.</font>
+      </td>
+      <td valign="top">
+        <table width="100%">
+		  <tr>
+		    <td width="50%"><input type="radio" name="spiel" value="1">NWN</td>
+			<td width="50%"><input type="radio" name="spiel" value="2">NWN 2</td>
+		  </tr>
+		</table>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Setting:<span class="Stil1">*</span><br>
+        <font class="font-10">In welches Setting ist die persistente Welt eingebettet?</font>
+      </td>
+      <td valign="top">
+        <select name="setting" size="1">
+		  {..settings..}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Genre:<span class="Stil1">*</span><br>
+        <font class="font-10">In welches Spiel-Genre ist die Welt einzuordnen?</font>
+      </td>
+      <td valign="top">
+        <select name="genre" size="1">
+          {..genres..}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        PvP:<br>
+        <font class="font-10">Sind K&auml;mpfe Player vs. Player m&ouml;glich?</font>
+      </td>
+      <td valign="top">
+        <select name="pvp" size="1">
+		  <option>ja</option>
+		  <option>nach Absprache</option>
+		  <option>nein</option>
+		  <option>speziell</option>
+		  <option>k.A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Online-Zeiten:<br>
+        <font class="font-10">Wie oft ist der Server online?</font>
+      </td>
+      <td valign="top">
+        <select name="termine" size="1">
+		  <option>st‰ndig</option>
+		  <option>regelm‰ﬂig</option>
+		  <option>unregelm‰ﬂig</option>
+		  <option>k. A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Downloads:<br>
+        <font class="font-10">Gr&ouml;&szlig;e der f&uuml;r den Server notwendigen Downloads. (HakPaks, Portraits, Musik, etc.)</font>
+      </td>
+      <td valign="top">
+        <table width="100%">
+          <tr>
+		    <td width="50%"><input type="radio" name="dlsize" value="0 bis 25 MB"> 0 bis 25 MB</td>
+			<td width="50%"><input type="radio" name="dlsize" value="26 bis 50 MB"> 26 bis 50 MB</td>
+          </tr>
+          <tr>
+		    <td width="50%"><input type="radio" name="dlsize" value="51 bis 100 MB"> 51 bis 100 MB</td>
+			<td width="50%"><input type="radio" name="dlsize" value="100 bis 250 MB"> 100 bis 250 MB</td>
+          </tr>
+          <tr>
+		    <td width="50%"><input type="radio" name="dlsize" value="251 bis 500 MB"> 251 bis 500 MB</td>
+			<td width="50%"><input type="radio" name="dlsize" value="mehr als 500 MB"> mehr als 500 MB</td>
+          </tr>
+		</table>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Notwendige Erweiterungen:<br>
+        <font class="font-10">Was werden f&uuml;r Erweiterungen ben&ouml;tigt?</font>
+      </td>
+      <td valign="top">
+        <table width="100%">
+          <tr>
+            <td width="50%"><input type="checkbox" name="dlsvu" value="Schatten von Undernzit">SvU</td>
+            <td width="50%"><input type="checkbox" name="dlhdu" value="Horden des Unterreichs">HdU</td>
+          </tr>
+          <tr>
+            <td width="50%"><input type="checkbox" name="dlcep" value="Community Expansion Pack">CEP</td>
+            <td width="50%"><input type="checkbox" name="dlmotb" value="Mask of the Betrayer">MotB</td>
+          </tr>
+		</table>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Anmeldung ab:<br>
+        <font class="font-10">Ab welchem Level ist eine Charakter-Anmeldung erforderlich?</font>
+      </td>
+      <td valign="top">
+        <select name="anmeldung" size="1">
+		  <option>von Anfang an</option>
+		  <option>Level 1</option>
+		  <option>Level 2</option>
+		  <option>Level 3</option>
+		  <option>Level 4</option>
+		  <option>Level 5</option>
+		  <option>&gt; Level 5</option>
+		  <option>speziell</option>
+		  <option>nie</option>
+		  <option>k. A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Einschr&auml;nkungen:<br>
+        <font class="font-10">Rassen, Klassen, Gesinnungen etc., die nicht m&ouml;glich sind.</font>
+      </td>
+      <td valign="top">
+        <textarea name="handycap" rows="3" cols="40"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Anzahl der Spielleiter:<br>
+        <font class="font-10">Maximale Anzahl der die Spieler betreuenden Spielleiter.</font>
+      </td>
+      <td valign="top">
+        <select name="dm" size="1">
+		  <option>1</option>
+		  <option>2</option>
+		  <option>3</option>
+		  <option>4</option>
+		  <option>5</option>
+		  <option>6</option>
+		  <option>7</option>
+		  <option>8</option>
+		  <option>9</option>
+		  <option>10</option>
+		  <option>&gt; 10</option>
+		  <option>k. A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Maximale Spieleranzahl:<br>
+        <font class="font-10">Anzahl der maximalen gleichzeitig auf dem Server Spielenden.</font>
+      </td>
+      <td valign="top">
+        <input class="text" name="maxzahl" size="4" maxlength="4">
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        H&ouml;chstes erreichbares Level:<br>
+        <font class="font-10">Welches maximale Level kann ein Spieler erreichen?</font>
+      </td>
+      <td valign="top">
+        <input class="text" name="maxlevel" size="2" maxlength="50">
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Erfahrungspunkte- Begrenzung:<br>
+        <font class="font-10">Gibt es eine Begrenzung der pro Woche (Tag, Monat...) zu bekommenden Erfahrungspunkte?</font>
+      </td>
+      <td valign="top">
+        <select name="expcap" size="1">
+		  <option>ja</option>
+		  <option>nein</option>
+		  <option>speziell</option>
+		  <option>k. A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        K&auml;mpfe:<br>
+        <font class="font-10">Schwierigkeitsgrad der K&auml;mpfe.</font>
+      </td>
+      <td valign="top">
+        <select name="fights" size="1">
+		  <option>keine</option>
+		  <option>leicht</option>
+		  <option>mittel</option>
+		  <option>schwer</option>
+		  <option>uneinheitlich</option>
+		  <option>k.A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Fallen:<br>
+        <font class="font-10">Schwierigkeitsgrad der Fallen.</font>
+      </td>
+      <td valign="top">
+        <select name="traps" size="1">
+		  <option>keine</option>
+		  <option>leicht</option>
+		  <option>mittel</option>
+		  <option>schwer</option>
+		  <option>uneinheitlich</option>
+		  <option>k.A.</option>
+		</select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        Items:<br>
+        <font class="font-10">H&auml;ufigkeit besonderer, hochwertiger oder magischer Items.</font>
+      </td>
+      <td valign="top">
+        <select name="items" size="1">
+		  <option>keine</option>
+		  <option>selten</option>
+		  <option>normal</option>
+		  <option>oft</option>
+		  <option>uneinheitlich</option>
+		  <option>k.A.</option>
+		</select>
+      </td>
+    </tr>
+	<tr>
+	  <td valign="top" colspan="2">
+	    <span class="Stil1">*</span>Pflichtfelder
+	  </td>
+	</tr>
+    <tr>
+      <td align="center" colspan="2">
+        <input class="button" type="submit" value="Hinzuf&uuml;gen">
+      </td>
+    </tr>
+  </table>
+</form>
+</p>
+<!--section-end::form_add_body-->

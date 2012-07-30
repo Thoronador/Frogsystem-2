@@ -73,6 +73,7 @@
   $template->tag('dlsvu', $persistent_arr['persistent_dlsvu']);
   $template->tag('dlhdu', $persistent_arr['persistent_dlhdu']);
   $template->tag('dlcep', $persistent_arr['persistent_dlcep']);
+  $template->tag('dlmotb', $persistent_arr['persistent_dlmotb']);
   $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
   $template->tag('handycap', $persistent_arr['persistent_handycap']);
   $template->tag('dungeonmaster', $persistent_arr['persistent_dm']);
