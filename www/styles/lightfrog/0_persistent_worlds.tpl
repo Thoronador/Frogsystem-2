@@ -38,7 +38,7 @@
     <td class="small" width="15%" valign="top" align="left">{..setting..}</td>
     <td class="small" width="15%" valign="top" align="left">{..genre..}</td>
     <td class="small" width="5%" valign="top" align="left">{..spiel..}</td>
-    <td class="small" width="20%" valign="top" align="left">{..dlsvu..} {..dlhdu..} {..dlcep..}</td>
+    <td class="small" width="20%" valign="top" align="left">{..dlsvu..} {..dlhdu..} {..dlcep..} {..dlmotb..}</td>
     <td class="small" width="15%" valign="top" align="left">{..anmeldung..}</td>
     <td class="small" width="15%" valign="top" align="left">{..maxplayer..}</td>
     <td class="small" width="15%" valign="top" align="left">{..maxlevel..}</td>
@@ -376,7 +376,7 @@
     <tr>
       <td valign="top">
         Server-Name:<span class="Stil1">*</span><br>
-        <font class="font-10">Name der persistenten Welt.</font>
+        <font class="small">Name der persistenten Welt.</font>
       </td>
       <td valign="top">
         <input class="text" name="name" size="51" maxlength="150">
@@ -385,7 +385,7 @@
     <tr>
       <td valign="top">
         URL:<span class="Stil1">*</span><br>
-        <font class="font-10">Link zur persistenten Welt.</font>
+        <font class="small">Link zur persistenten Welt.</font>
       </td>
       <td valign="top">
         <input class="text" name="url" value="http://" size="51" maxlength="255">
@@ -394,7 +394,7 @@
     <tr>
       <td valign="top">
         Weltenbeschreibung:<span class="Stil1">*</span><br>
-        <font class="font-10">Kurze Weltenbeschreibung. Was ist das Besondere
+        <font class="small">Kurze Weltenbeschreibung. Was ist das Besondere
 		an dieser Welt, was unterscheidet sie von anderen? Bei eigenem Setting
 		bitte hier auch dessen Grundlagen kurz auff&uuml;hren. Irgendwelche Handwerker-,
 		Gilden-, Sterbesysteme etc.?<br>
@@ -408,7 +408,7 @@
     <tr>
       <td valign="top">
         F&uuml;r welches Spiel:<span class="Stil1">*</span><br>
-        <font class="font-10">NwN oder NwN2.</font>
+        <font class="small">NwN oder NwN2.</font>
       </td>
       <td valign="top">
         <table width="100%">
@@ -422,7 +422,7 @@
     <tr>
       <td valign="top">
         Setting:<span class="Stil1">*</span><br>
-        <font class="font-10">In welches Setting ist die persistente Welt eingebettet?</font>
+        <font class="small">In welches Setting ist die persistente Welt eingebettet?</font>
       </td>
       <td valign="top">
         <select name="setting" size="1">
@@ -433,7 +433,7 @@
     <tr>
       <td valign="top">
         Genre:<span class="Stil1">*</span><br>
-        <font class="font-10">In welches Spiel-Genre ist die Welt einzuordnen?</font>
+        <font class="small">In welches Spiel-Genre ist die Welt einzuordnen?</font>
       </td>
       <td valign="top">
         <select name="genre" size="1">
@@ -444,7 +444,7 @@
     <tr>
       <td valign="top">
         PvP:<br>
-        <font class="font-10">Sind K&auml;mpfe Player vs. Player m&ouml;glich?</font>
+        <font class="small">Sind K&auml;mpfe Player vs. Player m&ouml;glich?</font>
       </td>
       <td valign="top">
         <select name="pvp" size="1">
@@ -459,7 +459,7 @@
     <tr>
       <td valign="top">
         Online-Zeiten:<br>
-        <font class="font-10">Wie oft ist der Server online?</font>
+        <font class="small">Wie oft ist der Server online?</font>
       </td>
       <td valign="top">
         <select name="termine" size="1">
@@ -473,21 +473,21 @@
     <tr>
       <td valign="top">
         Downloads:<br>
-        <font class="font-10">Gr&ouml;&szlig;e der f&uuml;r den Server notwendigen Downloads. (HakPaks, Portraits, Musik, etc.)</font>
+        <font class="small">Gr&ouml;&szlig;e der f&uuml;r den Server notwendigen Downloads. (HakPaks, Portraits, Musik, etc.)</font>
       </td>
       <td valign="top">
         <table width="100%">
           <tr>
-		    <td width="50%"><input type="radio" name="dlsize" value="0 bis 25 MB"> 0 bis 25 MB</td>
-			<td width="50%"><input type="radio" name="dlsize" value="26 bis 50 MB"> 26 bis 50 MB</td>
+		    <td width="50%"><input type="radio" name="dlsize" value="25"> 0 bis 25 MB</td>
+			<td width="50%"><input type="radio" name="dlsize" value="50"> 26 bis 50 MB</td>
           </tr>
           <tr>
-		    <td width="50%"><input type="radio" name="dlsize" value="51 bis 100 MB"> 51 bis 100 MB</td>
-			<td width="50%"><input type="radio" name="dlsize" value="101 bis 250 MB"> 101 bis 250 MB</td>
+		    <td width="50%"><input type="radio" name="dlsize" value="100"> 51 bis 100 MB</td>
+			<td width="50%"><input type="radio" name="dlsize" value="250"> 101 bis 250 MB</td>
           </tr>
           <tr>
-		    <td width="50%"><input type="radio" name="dlsize" value="251 bis 500 MB"> 251 bis 500 MB</td>
-			<td width="50%"><input type="radio" name="dlsize" value="mehr als 500 MB"> mehr als 500 MB</td>
+		    <td width="50%"><input type="radio" name="dlsize" value="500"> 251 bis 500 MB</td>
+			<td width="50%"><input type="radio" name="dlsize" value="501"> mehr als 500 MB</td>
           </tr>
 		</table>
       </td>
@@ -495,17 +495,17 @@
     <tr>
       <td valign="top">
         Notwendige Erweiterungen:<br>
-        <font class="font-10">Was werden f&uuml;r Erweiterungen ben&ouml;tigt?</font>
+        <font class="small">Was werden f&uuml;r Erweiterungen ben&ouml;tigt?</font>
       </td>
       <td valign="top">
         <table width="100%">
           <tr>
-            <td width="50%"><input type="checkbox" name="dlsvu" value="Schatten von Undernzit">SvU</td>
-            <td width="50%"><input type="checkbox" name="dlhdu" value="Horden des Unterreichs">HdU</td>
+            <td width="50%"><input type="checkbox" name="dlsvu" value="1">SvU</td>
+            <td width="50%"><input type="checkbox" name="dlhdu" value="1">HdU</td>
           </tr>
           <tr>
-            <td width="50%"><input type="checkbox" name="dlcep" value="Community Expansion Pack">CEP</td>
-            <td width="50%"><input type="checkbox" name="dlmotb" value="Mask of the Betrayer">MotB</td>
+            <td width="50%"><input type="checkbox" name="dlcep" value="1">CEP</td>
+            <td width="50%"><input type="checkbox" name="dlmotb" value="1">MotB</td>
           </tr>
 		</table>
       </td>
@@ -513,7 +513,7 @@
     <tr>
       <td valign="top">
         Anmeldung ab:<br>
-        <font class="font-10">Ab welchem Level ist eine Charakter-Anmeldung erforderlich?</font>
+        <font class="small">Ab welchem Level ist eine Charakter-Anmeldung erforderlich?</font>
       </td>
       <td valign="top">
         <select name="anmeldung" size="1">
@@ -533,7 +533,7 @@
     <tr>
       <td valign="top">
         Einschr&auml;nkungen:<br>
-        <font class="font-10">Rassen, Klassen, Gesinnungen etc., die nicht m&ouml;glich sind.</font>
+        <font class="small">Rassen, Klassen, Gesinnungen etc., die nicht m&ouml;glich sind.</font>
       </td>
       <td valign="top">
         <textarea name="handycap" rows="3" cols="40"></textarea>
@@ -542,29 +542,29 @@
     <tr>
       <td valign="top">
         Anzahl der Spielleiter:<br>
-        <font class="font-10">Maximale Anzahl der die Spieler betreuenden Spielleiter.</font>
+        <font class="small">Maximale Anzahl der die Spieler betreuenden Spielleiter.</font>
       </td>
       <td valign="top">
         <select name="dm" size="1">
-		  <option>1</option>
-		  <option>2</option>
-		  <option>3</option>
-		  <option>4</option>
-		  <option>5</option>
-		  <option>6</option>
-		  <option>7</option>
-		  <option>8</option>
-		  <option>9</option>
-		  <option>10</option>
-		  <option>&gt; 10</option>
-		  <option>k. A.</option>
+		  <option value="1">1</option>
+		  <option value="2">2</option>
+		  <option value="3">3</option>
+		  <option value="4">4</option>
+		  <option value="5">5</option>
+		  <option value="6">6</option>
+		  <option value="7">7</option>
+		  <option value="8">8</option>
+		  <option value="9">9</option>
+		  <option value="10">10</option>
+		  <option value="11">&gt; 10</option>
+		  <option value="-1">k. A.</option>
 		</select>
       </td>
     </tr>
     <tr>
       <td valign="top">
         Maximale Spieleranzahl:<br>
-        <font class="font-10">Anzahl der maximalen gleichzeitig auf dem Server Spielenden.</font>
+        <font class="small">Anzahl der maximalen gleichzeitig auf dem Server Spielenden.</font>
       </td>
       <td valign="top">
         <input class="text" name="maxzahl" size="4" maxlength="4">
@@ -573,7 +573,7 @@
     <tr>
       <td valign="top">
         H&ouml;chstes erreichbares Level:<br>
-        <font class="font-10">Welches maximale Level kann ein Spieler erreichen?</font>
+        <font class="small">Welches maximale Level kann ein Spieler erreichen?</font>
       </td>
       <td valign="top">
         <input class="text" name="maxlevel" size="2" maxlength="50">
@@ -582,7 +582,7 @@
     <tr>
       <td valign="top">
         Erfahrungspunkte- Begrenzung:<br>
-        <font class="font-10">Gibt es eine Begrenzung der pro Woche (Tag, Monat...) zu bekommenden Erfahrungspunkte?</font>
+        <font class="small">Gibt es eine Begrenzung der pro Woche (Tag, Monat...) zu bekommenden Erfahrungspunkte?</font>
       </td>
       <td valign="top">
         <select name="expcap" size="1">
@@ -596,48 +596,48 @@
     <tr>
       <td valign="top">
         K&auml;mpfe:<br>
-        <font class="font-10">Schwierigkeitsgrad der K&auml;mpfe.</font>
+        <font class="small">Schwierigkeitsgrad der K&auml;mpfe.</font>
       </td>
       <td valign="top">
         <select name="fights" size="1">
-		  <option>keine</option>
-		  <option>leicht</option>
-		  <option>mittel</option>
-		  <option>schwer</option>
-		  <option>uneinheitlich</option>
-		  <option>k.A.</option>
+		  <option value="0">keine</option>
+		  <option value="1">leicht</option>
+		  <option value="2">mittel</option>
+		  <option value="3">schwer</option>
+		  <option value="4">uneinheitlich</option>
+		  <option value="-1">k.A.</option>
 		</select>
       </td>
     </tr>
     <tr>
       <td valign="top">
         Fallen:<br>
-        <font class="font-10">Schwierigkeitsgrad der Fallen.</font>
+        <font class="small">Schwierigkeitsgrad der Fallen.</font>
       </td>
       <td valign="top">
         <select name="traps" size="1">
-		  <option>keine</option>
-		  <option>leicht</option>
-		  <option>mittel</option>
-		  <option>schwer</option>
-		  <option>uneinheitlich</option>
-		  <option>k.A.</option>
+		  <option value="0">keine</option>
+		  <option value="1">leicht</option>
+		  <option value="2">mittel</option>
+		  <option value="3">schwer</option>
+		  <option value="4">uneinheitlich</option>
+		  <option value="-1">k.A.</option>
 		</select>
       </td>
     </tr>
     <tr>
       <td valign="top">
         Items:<br>
-        <font class="font-10">H&auml;ufigkeit besonderer, hochwertiger oder magischer Items.</font>
+        <font class="small">H&auml;ufigkeit besonderer, hochwertiger oder magischer Items.</font>
       </td>
       <td valign="top">
         <select name="items" size="1">
-		  <option>keine</option>
-		  <option>selten</option>
-		  <option>normal</option>
-		  <option>oft</option>
-		  <option>uneinheitlich</option>
-		  <option>k.A.</option>
+		  <option value="0">keine</option>
+		  <option value="1">selten</option>
+		  <option value="2">normal</option>
+		  <option value="3">oft</option>
+		  <option value="4">uneinheitlich</option>
+		  <option value="-1">k.A.</option>
 		</select>
       </td>
     </tr>
@@ -668,7 +668,7 @@
       <tr>
         <td class="config" valign="top" width="30%">
           Welten-Name:<br>
-          <font class="font-10">Name der persistenten Welt. Kommt auch in den Hotlink</font>
+          <font class="small">Name der persistenten Welt. Kommt auch in den Hotlink</font>
         </td>
         <td class="config" valign="top" width="70%">
           <input class="text" name="name" size="50" value="{..name..}" maxlength="150">
@@ -677,7 +677,7 @@
       <tr>
         <td class="config" valign="top">
           URL:<br>
-          <font class="font-10">Link zur persistenten Welt</font>
+          <font class="small">Link zur persistenten Welt</font>
         </td>
         <td class="config" valign="top">
           <input class="text" name="url" size="50" value="{..url..}" maxlength="255">
@@ -686,7 +686,7 @@
       <tr>
         <td class="config" valign="top">
           Beschreibung:<br>
-          <font class="font-10">Kurze Beschreibung der Welt</font>
+          <font class="small">Kurze Beschreibung der Welt</font>
         </td>
         <td class="config" valign="top">
           <textarea class="text" name="text" rows="15" cols="38">{..text..}</textarea>
@@ -695,7 +695,7 @@
       <tr>
         <td class="config" valign="top">
           F&uuml;r welches Spiel:<br>
-          <font class="font-10">NWN oder NWN 2</font>
+          <font class="small">NWN oder NWN 2</font>
         </td>
         <td class="config" valign="top">
           <table width="100%">
@@ -713,7 +713,7 @@
       <tr>
         <td class="config" valign="top">
           Setting:<br>
-          <font class="font-10">In welches Setting ist die persistente Welt eingebettet:</font>
+          <font class="small">In welches Setting ist die persistente Welt eingebettet:</font>
         </td>
         <td class="config" valign="top">
           <select name="setting" size="1">
@@ -724,7 +724,7 @@
       <tr>
         <td class="config" valign="top">
           Genre:<br>
-          <font class="font-10">In welchem Spiel-Genre ist die Welt einzuordnen?</font>
+          <font class="small">In welchem Spiel-Genre ist die Welt einzuordnen?</font>
         </td>
         <td class="config" valign="top">
           <select name="genre" size="1">
@@ -735,7 +735,7 @@
       <tr>
         <td class="config" valign="top">
           PvP:<br>
-          <font class="font-10">Sind K&auml;mpfe Player vs. Player m&ouml;glich?</font>
+          <font class="small">Sind K&auml;mpfe Player vs. Player m&ouml;glich?</font>
         </td>
         <td class="config" valign="top">
           <select name="pvp" size="1">
@@ -750,7 +750,7 @@
       <tr>
         <td class="config" valign="top">
           Online-Zeiten:<br>
-          <font class="font-10">Wann bzw. wie oft ist der Server online?</font>
+          <font class="small">Wann bzw. wie oft ist der Server online?</font>
         </td>
         <td class="config" valign="top">
           <select name="termine" size="1">
@@ -765,21 +765,21 @@
       <tr>
         <td class="config" valign="top">
           Downloads:<br>
-          <font class="font-10">Gr&ouml;&szlig;e der f&uuml;r den Server notwendigen Downloads. (HakPaks, Portraits, Musik, etc.)</font>
+          <font class="small">Gr&ouml;&szlig;e der f&uuml;r den Server notwendigen Downloads. (HakPaks, Portraits, Musik, etc.)</font>
         </td>
         <td class="config" valign="top">
           <table width="100%">
 		    <tr>
-			  <td width="50%"><input type="radio" name="dlsize" value="0 bis 25 MB" {..dlsize_0_25_checked..}> 0 bis 25 MB</td>
-			  <td width="50%"><input type="radio" name="dlsize" value="26 bis 50 MB" {..dlsize_26_50_checked..}> 26 bis 50 MB</td>
+			  <td width="50%"><input type="radio" name="dlsize" value="25" {..dlsize_0_25_checked..}> 0 bis 25 MB</td>
+			  <td width="50%"><input type="radio" name="dlsize" value="50" {..dlsize_26_50_checked..}> 26 bis 50 MB</td>
 			</tr>
 			<tr>
-			  <td width="50%"><input type="radio" name="dlsize" value="51 bis 100 MB" {..dlsize_51_100_checked..}> 51 bis 100 MB</td>
-			  <td width="50%"><input type="radio" name="dlsize" value="101 bis 250 MB" {..dlsize_101_250_checked..}> 101 bis 250 MB</td>
+			  <td width="50%"><input type="radio" name="dlsize" value="100" {..dlsize_51_100_checked..}> 51 bis 100 MB</td>
+			  <td width="50%"><input type="radio" name="dlsize" value="250" {..dlsize_101_250_checked..}> 101 bis 250 MB</td>
 			</tr>
 			<tr>
-			  <td width="50%"><input type="radio" name="dlsize" value="251 bis 500 MB" {..dlsize_251_500_checked..}> 251 bis 500 MB</td>
-			  <td width="50%"><input type="radio" name="dlsize" value="mehr als 500 MB" {..dlsize_501_or_more_checked..}> mehr als 500 MB</td>
+			  <td width="50%"><input type="radio" name="dlsize" value="500" {..dlsize_251_500_checked..}> 251 bis 500 MB</td>
+			  <td width="50%"><input type="radio" name="dlsize" value="501" {..dlsize_501_or_more_checked..}> mehr als 500 MB</td>
 			</tr>
 		  </table>
         </td>
@@ -787,17 +787,17 @@
       <tr>
         <td class="config" valign="top">
           Notwendige Erweiterungen:<br>
-          <font class="font-10">Was wird an Programmen ben&ouml;tigt?</font>
+          <font class="small">Was wird an Programmen ben&ouml;tigt?</font>
         </td>
         <td class="config" valign="top">
           <table width="100%">
 		    <tr>
-			  <td width="50%"><input type="checkbox" name="dlsvu" value="Schatten von Undernzit" {..exp_svu_checked..}> SvU</td>
-			  <td width="50%"><input type="checkbox" name="dlhdu" value="Horden des Unterreichs" {..exp_hdu_checked..}> HdU</td>
+			  <td width="50%"><input type="checkbox" name="dlsvu" value="1" {..exp_svu_checked..}> SvU</td>
+			  <td width="50%"><input type="checkbox" name="dlhdu" value="1" {..exp_hdu_checked..}> HdU</td>
 			</tr>
 			<tr>
-			  <td width="50%"><input type="checkbox" name="dlcep" value="Community Expansion Pack" {..exp_cep_checked..}> CEP</td>
-			  <td width="50%"><input type="checkbox" name="dlmotb" value="Mask of the Betrayer" {..exp_motb_checked..}> MotB</td>
+			  <td width="50%"><input type="checkbox" name="dlcep" value="1" {..exp_cep_checked..}> CEP</td>
+			  <td width="50%"><input type="checkbox" name="dlmotb" value="1" {..exp_motb_checked..}> MotB</td>
 			</tr>
 		  </table>
         </td>
@@ -805,7 +805,7 @@
       <tr>
         <td class="config" valign="top">
           Anmeldung ab:<br>
-          <font class="font-10">Ab welchem Level ist eine Anmeldung erforderlich?</font>
+          <font class="small">Ab welchem Level ist eine Anmeldung erforderlich?</font>
         </td>
         <td class="config" valign="top">
           <select name="anmeldung" size="1">
@@ -825,7 +825,7 @@
       <tr>
         <td class="config" valign="top">
           Einschr&auml;nkungen:<br>
-          <font class="font-10">Rassen, Klassen, Gesinnungen etc., die nicht m&ouml;glich sind.</font>
+          <font class="small">Rassen, Klassen, Gesinnungen etc., die nicht m&ouml;glich sind.</font>
         </td>
         <td class="config" valign="top">
           <textarea class="text" name="handycap" rows="6" cols="38">{..handycap..}</textarea>
@@ -834,29 +834,29 @@
       <tr>
         <td class="config" valign="top">
           Anzahl der Spielleiter:<br>
-          <font class="font-10">Maximale Anzahl der die Spieler betreuenden Spielleiter.</font>
+          <font class="small">Maximale Anzahl der die Spieler betreuenden Spielleiter.</font>
         </td>
         <td class="config" valign="top">
           <select name="dm" size="1">
-		    <option {..dm_1_selected..}>1</option>
-			<option {..dm_2_selected..}>2</option>
-			<option {..dm_3_selected..}>3</option>
-			<option {..dm_4_selected..}>4</option>
-			<option {..dm_5_selected..}>5</option>
-			<option {..dm_6_selected..}>6</option>
-			<option {..dm_7_selected..}>7</option>
-			<option {..dm_8_selected..}>8</option>
-			<option {..dm_9_selected..}>9</option>
-			<option {..dm_10_selected..}>10</option>
-			<option {..dm_gt_10_selected..}>&gt; 10</option>
-			<option {..dm_N/A_selected..}>k. A.</option>
+		    <option value="1" {..dm_1_selected..}>1</option>
+			<option value="2" {..dm_2_selected..}>2</option>
+			<option value="3" {..dm_3_selected..}>3</option>
+			<option value="4" {..dm_4_selected..}>4</option>
+			<option value="5" {..dm_5_selected..}>5</option>
+			<option value="6" {..dm_6_selected..}>6</option>
+			<option value="7" {..dm_7_selected..}>7</option>
+			<option value="8" {..dm_8_selected..}>8</option>
+			<option value="9" {..dm_9_selected..}>9</option>
+			<option value="10" {..dm_10_selected..}>10</option>
+			<option value="11" {..dm_gt_10_selected..}>&gt; 10</option>
+			<option value="-1" {..dm_N/A_selected..}>k. A.</option>
           </select>
         </td>
       </tr>
       <tr>
         <td class="config" valign="top">
           Maximale Spieleranzahl:<br>
-          <font class="font-10">Anzahl der m&ouml;glichen maximalen Spieleranzahl auf dem Server.</font>
+          <font class="small">Anzahl der m&ouml;glichen maximalen Spieleranzahl auf dem Server.</font>
         </td>
         <td class="config" valign="top">
           <input class="text" name="maxzahl" value="{..maxzahl..}" size="4" maxlength="4">
@@ -865,7 +865,7 @@
       <tr>
         <td class="config" valign="top">
           H&ouml;chstes erreichbares Level:<br>
-          <font class="font-10">Welches maximale Level kann ein Spieler erreichen?</font>
+          <font class="small">Welches maximale Level kann ein Spieler erreichen?</font>
         </td>
         <td class="config" valign="top">
           <input class="text" name="maxlevel" value="{..maxlevel..}" size="2" maxlength="50">
@@ -874,7 +874,7 @@
       <tr>
         <td class="config" valign="top">
           Erfahrungspunkte-Begrenzung:<br>
-          <font class="font-10">Gibt es eine Begrenzung der zu bekommenden Erfahrungspunkte?</font>
+          <font class="small">Gibt es eine Begrenzung der zu bekommenden Erfahrungspunkte?</font>
         </td>
         <td class="config" valign="top">
           <select name="expcap" size="1">
@@ -888,48 +888,48 @@
       <tr>
         <td class="config" valign="top">
           K&auml;mpfe:<br>
-          <font class="font-10">Schwierigkeitsgrad der K&auml;mpfe.</font>
+          <font class="small">Schwierigkeitsgrad der K&auml;mpfe.</font>
         </td>
         <td class="config" valign="top">
           <select name="fights" size="1">
-		    <option {..fights_none_selected..}>keine</option>
-			<option {..fights_easy_selected..}>leicht</option>
-			<option {..fights_medium_selected..}>mittel</option>
-			<option {..fights_difficult_selected..}>schwer</option>
-			<option {..fights_different_selected..}>uneinheitlich</option>
-			<option {..fights_N/A_selected..}>k.A.</option>
+		    <option value="0" {..fights_none_selected..}>keine</option>
+			<option value="1" {..fights_easy_selected..}>leicht</option>
+			<option value="2" {..fights_medium_selected..}>mittel</option>
+			<option value="3" {..fights_difficult_selected..}>schwer</option>
+			<option value="4" {..fights_different_selected..}>uneinheitlich</option>
+			<option value="-1" {..fights_N/A_selected..}>k.A.</option>
 		  </select>
         </td>
       </tr>
       <tr>
         <td class="config" valign="top">
           Fallen:<br>
-          <font class="font-10">Schwierigkeitsgrad der Fallen.</font>
+          <font class="small">Schwierigkeitsgrad der Fallen.</font>
         </td>
         <td class="config" valign="top">
           <select name="traps" size="1">
-		    <option {..traps_none_selected..}>keine</option>
-			<option {..traps_easy_selected..}>leicht</option>
-			<option {..traps_medium_selected..}>mittel</option>
-			<option {..traps_difficult_selected..}>schwer</option>
-			<option {..traps_different_selected..}>uneinheitlich</option>
-			<option {..traps_N/A_selected..}>k.A.</option>
+		    <option value="0" {..traps_none_selected..}>keine</option>
+			<option value="1" {..traps_easy_selected..}>leicht</option>
+			<option value="2" {..traps_medium_selected..}>mittel</option>
+			<option value="3" {..traps_difficult_selected..}>schwer</option>
+			<option value="4" {..traps_different_selected..}>uneinheitlich</option>
+			<option value="-1" {..traps_N/A_selected..}>k.A.</option>
 		  </select>
         </td>
       </tr>
       <tr>
         <td class="config" valign="top">
           Items:<br>
-          <font class="font-10">H&auml;ufigkeit besonderer/hochwertiger Items.</font>
+          <font class="small">H&auml;ufigkeit besonderer/hochwertiger Items.</font>
         </td>
         <td class="config" valign="top">
           <select name="items" size="1">
-		    <option {..items_none_selected..}>keine</option>
-			<option {..items_rare_selected..}>selten</option>
-			<option {..items_normal_selected..}>normal</option>
-			<option {..items_often_selected..}>oft</option>
-			<option {..items_different_selected..}>uneinheitlich</option>
-			<option {..items_N/A_selected..}>k.A.</option>
+		    <option value="0" {..items_none_selected..}>keine</option>
+			<option value="1" {..items_rare_selected..}>selten</option>
+			<option value="2" {..items_normal_selected..}>normal</option>
+			<option value="3" {..items_often_selected..}>oft</option>
+			<option value="4" {..items_different_selected..}>uneinheitlich</option>
+			<option value="-1" {..items_N/A_selected..}>k.A.</option>
 		  </select>
         </td>
       </tr>

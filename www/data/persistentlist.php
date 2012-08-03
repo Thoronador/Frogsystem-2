@@ -78,9 +78,10 @@ while ($persistent_arr = mysql_fetch_assoc($index))
     $template->tag('setting', $persistent_arr['persistent_setting']);
     $template->tag('genre', $persistent_arr['persistent_genre']);
     $template->tag('spiel', $persistent_arr['persistent_spiel']);
-    $template->tag('dlsvu', $persistent_arr['persistent_dlsvu']);
-    $template->tag('dlhdu', $persistent_arr['persistent_dlhdu']);
-    $template->tag('dlcep', $persistent_arr['persistent_dlcep']);
+    $template->tag('dlsvu', ($persistent_arr['persistent_dlsvu']!=0) ? 'Schatten von Undernzit' : '');
+    $template->tag('dlhdu', ($persistent_arr['persistent_dlhdu']!=0) ? 'Horden des Unterreichs' : '');
+    $template->tag('dlcep', ($persistent_arr['persistent_dlcep']!=0) ? 'Community Expansion Pack' : '');
+    $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
     $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
     $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
     $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);

@@ -28,6 +28,8 @@
     as well as that of the covered work.
 */
 
+  require_once(FS2_ROOT_PATH .'includes/persistentfunctions.php');
+
   $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_link = \''.savesql($_GET['pw'])."'", $db);
   $persistent_arr = mysql_fetch_assoc($index);
 
@@ -63,26 +65,26 @@
 
   $template->tag('name', $persistent_arr['persistent_name']);
   $template->tag('url', $persistent_arr['persistent_url']);
-  $template->tag('text', $persistent_arr['persistent_text']);
+  $template->tag('text', killhtml($persistent_arr['persistent_text']));
   $template->tag('spiel', $persistent_arr['persistent_spiel']);
   $template->tag('setting', $persistent_arr['persistent_setting']);
   $template->tag('genre', $persistent_arr['persistent_genre']);
   $template->tag('pvp', $persistent_arr['persistent_pvp']);
   $template->tag('termine', $persistent_arr['persistent_termine']);
-  $template->tag('dlsize', $persistent_arr['persistent_dlsize']);
-  $template->tag('dlsvu', $persistent_arr['persistent_dlsvu']);
-  $template->tag('dlhdu', $persistent_arr['persistent_dlhdu']);
-  $template->tag('dlcep', $persistent_arr['persistent_dlcep']);
-  $template->tag('dlmotb', $persistent_arr['persistent_dlmotb']);
+  $template->tag('dlsize', getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']));
+  $template->tag('dlsvu', ($persistent_arr['persistent_dlsvu']!=0) ? 'Schatten von Undernzit' : '');
+  $template->tag('dlhdu', ($persistent_arr['persistent_dlhdu']!=0) ? 'Horden des Unterreichs' : '');
+  $template->tag('dlcep', ($persistent_arr['persistent_dlcep']!=0) ? 'Community Expansion Pack' : '');
+  $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
   $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
-  $template->tag('handycap', $persistent_arr['persistent_handycap']);
-  $template->tag('dungeonmaster', $persistent_arr['persistent_dm']);
+  $template->tag('handycap', killhtml($persistent_arr['persistent_handycap']));
+  $template->tag('dungeonmaster', getPersistentDMAsString($persistent_arr['persistent_dm']));
   $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
   $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
   $template->tag('expcap', $persistent_arr['persistent_expcap']);
-  $template->tag('fights', $persistent_arr['persistent_fights']);
-  $template->tag('traps', $persistent_arr['persistent_traps']);
-  $template->tag('items', $persistent_arr['persistent_items']);
+  $template->tag('fights', getPersistentDifficultyAsString($persistent_arr['persistent_fights']));
+  $template->tag('traps',  getPersistentDifficultyAsString($persistent_arr['persistent_traps']));
+  $template->tag('items', getPersistentFrequencyAsString($persistent_arr['persistent_items']));
   if ($persistent_arr['persistent_interview'] != NULL)
     $template->tag('interview', '<a href='.$persistent_arr['persistent_interview'].'>zum Interview</a>');
   else

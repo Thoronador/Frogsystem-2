@@ -28,6 +28,8 @@
     as well as that of the covered work.
 */
 
+require_once(FS2_ROOT_PATH .'includes/persistentfunctions.php');
+
 //////////////////////////////////////////
 //// Persistente Welten aktualisieren ////
 //////////////////////////////////////////
@@ -60,26 +62,27 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
 
       $_POST['name'] = savesql($_POST['name']);
       $_POST['url'] = savesql($_POST['url']);
-      $_POST['text'] = ereg_replace ('&lt;textarea&gt;', '<textarea>', $_POST['text']);
-      $_POST['text'] = ereg_replace ('&lt;/textarea&gt;', '</textarea>', $_POST['text']);
+      $_POST['text'] = str_ireplace ('&lt;textarea&gt;', '<textarea>', $_POST['text']);
+      $_POST['text'] = str_ireplace ('&lt;/textarea&gt;', '</textarea>', $_POST['text']);
       $_POST['text'] = savesql($_POST['text']);
-      $_POST['spiel'] = savesql($_POST['spiel']);
+      $_POST['spiel'] = intval($_POST['spiel']);
       $_POST['setting'] = savesql($_POST['setting']);
       $_POST['genre'] = savesql($_POST['genre']);
       $_POST['termine'] = savesql($_POST['termine']);
-      $_POST['dlsize'] = savesql($_POST['dlsize']);
-      $_POST['dlsvu'] = savesql($_POST['dlsvu']);
-      $_POST['dlhdu'] = savesql($_POST['dlhdu']);
-      $_POST['dlcep'] = savesql($_POST['dlcep']);
+      $_POST['dlsize'] = intval($_POST['dlsize']);
+      $_POST['dlsvu'] = (isset($_POST['dlsvu']) && ($_POST['dlsvu']!=0)) ? 1 : 0;
+      $_POST['dlhdu'] = (isset($_POST['dlhdu']) && ($_POST['dlhdu']!=0)) ? 1 : 0;
+      $_POST['dlcep'] = (isset($_POST['dlcep']) && ($_POST['dlcep']!=0)) ? 1 : 0;
+      $_POST['dlmotb'] = (isset($_POST['dlmotb']) && ($_POST['dlmotb']!=0)) ? 1 : 0;
       $_POST['anmeldung'] = savesql($_POST['anmeldung']);
       $_POST['handycap'] = savesql($_POST['handycap']);
-      $_POST['dm'] = savesql($_POST['dm']);
+      $_POST['dm'] = intval($_POST['dm']);
       $_POST['maxzahl'] = savesql($_POST['maxzahl']);
       $_POST['maxlevel'] = savesql($_POST['maxlevel']);
       $_POST['expcap'] = savesql($_POST['expcap']);
-      $_POST['fights'] = savesql($_POST['fights']);
-      $_POST['traps'] = savesql($_POST['traps']);
-      $_POST['items'] = savesql($_POST['items']);
+      $_POST['fights'] = intval($_POST['fights']);
+      $_POST['traps'] = intval($_POST['traps']);
+      $_POST['items'] = intval($_POST['items']);
       $_POST['pvp'] = savesql($_POST['pvp']);
       $_POST['datum'] = savesql($_POST['datum']);
       $_POST['interview'] = savesql($_POST['interview']);
@@ -99,6 +102,7 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
 					   persistent_dlsvu = '".$_POST['dlsvu']."',
 					   persistent_dlhdu = '".$_POST['dlhdu']."',
 					   persistent_dlcep = '".$_POST['dlcep']."',
+					   persistent_dlmotb = '".$_POST['dlmotb']."',
 					   persistent_anmeldung = '".$_POST['anmeldung']."',
 					   persistent_handycap = '".$_POST['handycap']."',
 					   persistent_dm = '".$_POST['dm']."',
@@ -187,18 +191,19 @@ else
       $template->tag('uptime_N/A_selected', ($persistent_arr['persistent_termine'] == 'k. A.') ? 'selected' : '' );
 
       //download size selection "tags" (conditions)
-      $template->tag('dlsize_0_25_checked', ($persistent_arr['persistent_dlsize'] == '0 bis 25 MB') ? 'checked' : '' );
-      $template->tag('dlsize_26_50_checked', ($persistent_arr['persistent_dlsize'] == '26 bis 50 MB') ? 'checked' : '' );
-      $template->tag('dlsize_51_100_checked', ($persistent_arr['persistent_dlsize'] == '51 bis 100 MB') ? 'checked' : '' );
-      $template->tag('dlsize_101_250_checked', ($persistent_arr['persistent_dlsize'] == '101 bis 250 MB') ? 'checked' : '' );
-      $template->tag('dlsize_251_500_checked', ($persistent_arr['persistent_dlsize'] == '251 bis 500 MB') ? 'checked' : '' );
-      $template->tag('dlsize_501_or_more_checked', ($persistent_arr['persistent_dlsize'] == 'mehr als 500 MB') ? 'checked' : '' );
+      $dl_string = getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']);
+      $template->tag('dlsize_0_25_checked', ($dl_string == '0 bis 25 MB') ? 'checked' : '' );
+      $template->tag('dlsize_26_50_checked', ($dl_string == '26 bis 50 MB') ? 'checked' : '' );
+      $template->tag('dlsize_51_100_checked', ($dl_string == '51 bis 100 MB') ? 'checked' : '' );
+      $template->tag('dlsize_101_250_checked', ($dl_string == '101 bis 250 MB') ? 'checked' : '' );
+      $template->tag('dlsize_251_500_checked', ($dl_string == '251 bis 500 MB') ? 'checked' : '' );
+      $template->tag('dlsize_501_or_more_checked', ($dl_string == 'mehr als 500 MB') ? 'checked' : '' );
 
       //expansion selection "tags" (i.e. condition work-around)
-      $template->tag('exp_svu_checked', ($persistent_arr['persistent_dlsvu'] == 'Schatten von Undernzit') ? 'checked' : '' );
-      $template->tag('exp_hdu_checked', ($persistent_arr['persistent_dlhdu'] == 'Horden des Unterreichs') ? 'checked' : '' );
-      $template->tag('exp_cep_checked', ($persistent_arr['persistent_dlcep'] == 'Community Expansion Pack') ? 'checked' : '' );
-      $template->tag('exp_motb_checked', ($persistent_arr['persistent_dlmotb'] == 'Mask of the Betrayer') ? 'checked' : '' );
+      $template->tag('exp_svu_checked', ($persistent_arr['persistent_dlsvu'] != 0) ? 'checked' : '' );
+      $template->tag('exp_hdu_checked', ($persistent_arr['persistent_dlhdu'] != 0) ? 'checked' : '' );
+      $template->tag('exp_cep_checked', ($persistent_arr['persistent_dlcep'] != 0) ? 'checked' : '' );
+      $template->tag('exp_motb_checked', ($persistent_arr['persistent_dlmotb'] != 0) ? 'checked' : '' );
 
       //character registration selection "tags" (conditions)
       $template->tag('reg_start_selected', ($persistent_arr['persistent_anmeldung'] == 'von Anfang an') ? 'selected' : '' );
@@ -215,18 +220,18 @@ else
       $template->tag('handycap', $persistent_arr['persistent_handycap']);
 
       //DM selection "tags" (conditions)
-      $template->tag('dm_1_selected', ($persistent_arr['persistent_dm'] == '1') ? 'selected' : '' );
-      $template->tag('dm_2_selected', ($persistent_arr['persistent_dm'] == '2') ? 'selected' : '' );
-      $template->tag('dm_3_selected', ($persistent_arr['persistent_dm'] == '3') ? 'selected' : '' );
-      $template->tag('dm_4_selected', ($persistent_arr['persistent_dm'] == '4') ? 'selected' : '' );
-      $template->tag('dm_5_selected', ($persistent_arr['persistent_dm'] == '5') ? 'selected' : '' );
-      $template->tag('dm_6_selected', ($persistent_arr['persistent_dm'] == '6') ? 'selected' : '' );
-      $template->tag('dm_7_selected', ($persistent_arr['persistent_dm'] == '7') ? 'selected' : '' );
-      $template->tag('dm_8_selected', ($persistent_arr['persistent_dm'] == '8') ? 'selected' : '' );
-      $template->tag('dm_9_selected', ($persistent_arr['persistent_dm'] == '9') ? 'selected' : '' );
-      $template->tag('dm_10_selected', ($persistent_arr['persistent_dm'] == '10') ? 'selected' : '' );
-      $template->tag('dm_gt_10_selected', ($persistent_arr['persistent_dm'] == '&gt; 10') ? 'selected' : '' );
-      $template->tag('dm_N/A_selected', ($persistent_arr['persistent_dm'] == 'k. A.') ? 'selected' : '' );
+      $template->tag('dm_1_selected', ($persistent_arr['persistent_dm'] == 1) ? 'selected' : '' );
+      $template->tag('dm_2_selected', ($persistent_arr['persistent_dm'] == 2) ? 'selected' : '' );
+      $template->tag('dm_3_selected', ($persistent_arr['persistent_dm'] == 3) ? 'selected' : '' );
+      $template->tag('dm_4_selected', ($persistent_arr['persistent_dm'] == 4) ? 'selected' : '' );
+      $template->tag('dm_5_selected', ($persistent_arr['persistent_dm'] == 5) ? 'selected' : '' );
+      $template->tag('dm_6_selected', ($persistent_arr['persistent_dm'] == 6) ? 'selected' : '' );
+      $template->tag('dm_7_selected', ($persistent_arr['persistent_dm'] == 7) ? 'selected' : '' );
+      $template->tag('dm_8_selected', ($persistent_arr['persistent_dm'] == 8) ? 'selected' : '' );
+      $template->tag('dm_9_selected', ($persistent_arr['persistent_dm'] == 9) ? 'selected' : '' );
+      $template->tag('dm_10_selected', ($persistent_arr['persistent_dm'] == 10) ? 'selected' : '' );
+      $template->tag('dm_gt_10_selected', ($persistent_arr['persistent_dm'] > 10) ? 'selected' : '' );
+      $template->tag('dm_N/A_selected', ($persistent_arr['persistent_dm'] == -1) ? 'selected' : '' );
 
       $template->tag('maxzahl', $persistent_arr['persistent_maxzahl']);
       $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
@@ -238,29 +243,29 @@ else
       $template->tag('expcap_N/A_selected', ($persistent_arr['persistent_expcap'] == 'k. A.') ? 'selected' : '' );
 
       //fights difficulty selection "tags" (conditions)
-      $template->tag('fights_none_selected', ($persistent_arr['persistent_fights'] == 'keine') ? 'selected' : '' );
-      $template->tag('fights_easy_selected', ($persistent_arr['persistent_fights'] == 'leicht') ? 'selected' : '' );
-      $template->tag('fights_medium_selected', ($persistent_arr['persistent_fights'] == 'mittel') ? 'selected' : '' );
-      $template->tag('fights_difficult_selected', ($persistent_arr['persistent_fights'] == 'schwer') ? 'selected' : '' );
-      $template->tag('fights_different_selected', ($persistent_arr['persistent_fights'] == 'uneinheitlich') ? 'selected' : '' );
-      $template->tag('fights_N/A_selected', ($persistent_arr['persistent_fights'] == 'uneinheitlich') ? 'selected' : '' );
+      $template->tag('fights_none_selected', ($persistent_arr['persistent_fights'] == 0) ? 'selected' : '' );
+      $template->tag('fights_easy_selected', ($persistent_arr['persistent_fights'] == 1) ? 'selected' : '' );
+      $template->tag('fights_medium_selected', ($persistent_arr['persistent_fights'] == 2) ? 'selected' : '' );
+      $template->tag('fights_difficult_selected', ($persistent_arr['persistent_fights'] == 3) ? 'selected' : '' );
+      $template->tag('fights_different_selected', ($persistent_arr['persistent_fights'] == 4) ? 'selected' : '' );
+      $template->tag('fights_N/A_selected', ($persistent_arr['persistent_fights'] == -1) ? 'selected' : '' );
 
       //traps difficulty selection "tags" (conditions... I'm starting to get tired of this!)
-      $template->tag('traps_none_selected', ($persistent_arr['persistent_traps'] == 'keine') ? 'selected' : '' );
-      $template->tag('traps_easy_selected', ($persistent_arr['persistent_traps'] == 'leicht') ? 'selected' : '' );
-      $template->tag('traps_medium_selected', ($persistent_arr['persistent_traps'] == 'mittel') ? 'selected' : '' );
-      $template->tag('traps_difficult_selected', ($persistent_arr['persistent_traps'] == 'schwer') ? 'selected' : '' );
-      $template->tag('traps_different_selected', ($persistent_arr['persistent_traps'] == 'uneinheitlich') ? 'selected' : '' );
-      $template->tag('traps_N/A_selected', ($persistent_arr['persistent_traps'] == 'uneinheitlich') ? 'selected' : '' );
+      $template->tag('traps_none_selected', ($persistent_arr['persistent_traps'] == 0) ? 'selected' : '' );
+      $template->tag('traps_easy_selected', ($persistent_arr['persistent_traps'] == 1) ? 'selected' : '' );
+      $template->tag('traps_medium_selected', ($persistent_arr['persistent_traps'] == 2) ? 'selected' : '' );
+      $template->tag('traps_difficult_selected', ($persistent_arr['persistent_traps'] == 3) ? 'selected' : '' );
+      $template->tag('traps_different_selected', ($persistent_arr['persistent_traps'] == 4) ? 'selected' : '' );
+      $template->tag('traps_N/A_selected', ($persistent_arr['persistent_traps'] == -1) ? 'selected' : '' );
 
       //item frequency selection "tags" (conditions)
-      $template->tag('items_none_selected', ($persistent_arr['persistent_items'] == 'keine') ? 'selected' : '' );
-      $template->tag('items_rare_selected', ($persistent_arr['persistent_items'] == 'selten') ? 'selected' : '' );
-      $template->tag('items_normal_selected', ($persistent_arr['persistent_items'] == 'normal') ? 'selected' : '' );
-      $template->tag('items_often_selected', ($persistent_arr['persistent_items'] == 'oft') ? 'selected' : '' );
-      $template->tag('items_different_selected', ($persistent_arr['persistent_items'] == 'uneinheitlich') ? 'selected' : '' );
-      $template->tag('items_N/A_selected', ($persistent_arr['persistent_items'] == 'k.A.') ? 'selected' : '' );
-      
+      $template->tag('items_none_selected', ($persistent_arr['persistent_items'] == 0) ? 'selected' : '' );
+      $template->tag('items_rare_selected', ($persistent_arr['persistent_items'] == 1) ? 'selected' : '' );
+      $template->tag('items_normal_selected', ($persistent_arr['persistent_items'] == 2) ? 'selected' : '' );
+      $template->tag('items_often_selected', ($persistent_arr['persistent_items'] == 3) ? 'selected' : '' );
+      $template->tag('items_different_selected', ($persistent_arr['persistent_items'] == 4) ? 'selected' : '' );
+      $template->tag('items_N/A_selected', ($persistent_arr['persistent_items'] == -1) ? 'selected' : '' );
+
       $template = $template->display();
     }
     elseif (!isset($_SESSION['user_level']) || ($_SESSION['user_level'] != 'loggedin'))
