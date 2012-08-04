@@ -74,6 +74,7 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
       $_POST['dlhdu'] = (isset($_POST['dlhdu']) && ($_POST['dlhdu']!=0)) ? 1 : 0;
       $_POST['dlcep'] = (isset($_POST['dlcep']) && ($_POST['dlcep']!=0)) ? 1 : 0;
       $_POST['dlmotb'] = (isset($_POST['dlmotb']) && ($_POST['dlmotb']!=0)) ? 1 : 0;
+      $_POST['dlsoz'] = (isset($_POST['dlsoz']) && ($_POST['dlsoz']!=0)) ? 1 : 0;
       $_POST['anmeldung'] = savesql($_POST['anmeldung']);
       $_POST['handycap'] = savesql($_POST['handycap']);
       $_POST['dm'] = intval($_POST['dm']);
@@ -103,6 +104,7 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
 					   persistent_dlhdu = '".$_POST['dlhdu']."',
 					   persistent_dlcep = '".$_POST['dlcep']."',
 					   persistent_dlmotb = '".$_POST['dlmotb']."',
+					   persistent_dlsoz = '".$_POST['dlsoz']."',
 					   persistent_anmeldung = '".$_POST['anmeldung']."',
 					   persistent_handycap = '".$_POST['handycap']."',
 					   persistent_dm = '".$_POST['dm']."',
@@ -204,6 +206,7 @@ else
       $template->tag('exp_hdu_checked', ($persistent_arr['persistent_dlhdu'] != 0) ? 'checked' : '' );
       $template->tag('exp_cep_checked', ($persistent_arr['persistent_dlcep'] != 0) ? 'checked' : '' );
       $template->tag('exp_motb_checked', ($persistent_arr['persistent_dlmotb'] != 0) ? 'checked' : '' );
+      $template->tag('exp_soz_checked', ($persistent_arr['persistent_dlsoz'] != 0) ? 'checked' : '' );
 
       //character registration selection "tags" (conditions)
       $template->tag('reg_start_selected', ($persistent_arr['persistent_anmeldung'] == 'von Anfang an') ? 'selected' : '' );

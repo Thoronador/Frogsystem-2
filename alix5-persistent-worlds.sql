@@ -49,6 +49,7 @@ CREATE TABLE `fs_persistent` (
   `persistent_dlhdu` tinyint NOT NULL,
   `persistent_dlcep` tinyint NOT NULL,
   `persistent_dlmotb` tinyint NOT NULL,
+  `persistent_dlsoz` tinyint NOT NULL,
   `persistent_anmeldung` varchar(200) NOT NULL default '',
   `persistent_handycap` text NOT NULL,
   `persistent_dm` int NOT NULL default '-1',

@@ -38,7 +38,7 @@
     <td class="small" width="15%" valign="top" align="left">{..setting..}</td>
     <td class="small" width="15%" valign="top" align="left">{..genre..}</td>
     <td class="small" width="5%" valign="top" align="left">{..spiel..}</td>
-    <td class="small" width="20%" valign="top" align="left">{..dlsvu..} {..dlhdu..} {..dlcep..} {..dlmotb..}</td>
+    <td class="small" width="20%" valign="top" align="left">{..dlsvu..} {..dlhdu..} {..dlcep..} {..dlmotb..} {..dlsoz..}</td>
     <td class="small" width="15%" valign="top" align="left">{..anmeldung..}</td>
     <td class="small" width="15%" valign="top" align="left">{..maxplayer..}</td>
     <td class="small" width="15%" valign="top" align="left">{..maxlevel..}</td>
@@ -122,7 +122,7 @@
         Notwendige Erweiterungen:
       </td>
       <td align="left" valign="top">
-        {..dlsvu..} {..dlhdu..} {..dlcep..} {..dlmotb..}
+        {..dlsvu..} {..dlhdu..} {..dlcep..} {..dlmotb..} {..dlsoz..}
       </td>
     </tr>
     <tr>
@@ -501,11 +501,15 @@
         <table width="100%">
           <tr>
             <td width="50%"><input type="checkbox" name="dlsvu" value="1">SvU</td>
+            <td width="50%"><input type="checkbox" name="dlmotb" value="1">MotB</td>
+          </tr>
+          <tr>
             <td width="50%"><input type="checkbox" name="dlhdu" value="1">HdU</td>
+            <td width="50%"><input type="checkbox" name="dlsoz" value="1">SoZ</td>
           </tr>
           <tr>
             <td width="50%"><input type="checkbox" name="dlcep" value="1">CEP</td>
-            <td width="50%"><input type="checkbox" name="dlmotb" value="1">MotB</td>
+            <td width="50%">&nbsp;</td>
           </tr>
 		</table>
       </td>
@@ -793,11 +797,15 @@
           <table width="100%">
 		    <tr>
 			  <td width="50%"><input type="checkbox" name="dlsvu" value="1" {..exp_svu_checked..}> SvU</td>
+			  <td width="50%"><input type="checkbox" name="dlmotb" value="1" {..exp_motb_checked..}> MotB</td>
+			</tr>
+			<tr>
 			  <td width="50%"><input type="checkbox" name="dlhdu" value="1" {..exp_hdu_checked..}> HdU</td>
+			  <td width="50%"><input type="checkbox" name="dlsoz" value="1" {..exp_soz_checked..}> SoZ</td>
 			</tr>
 			<tr>
 			  <td width="50%"><input type="checkbox" name="dlcep" value="1" {..exp_cep_checked..}> CEP</td>
-			  <td width="50%"><input type="checkbox" name="dlmotb" value="1" {..exp_motb_checked..}> MotB</td>
+			  <td width="50%">&nbsp;</td>
 			</tr>
 		  </table>
         </td>

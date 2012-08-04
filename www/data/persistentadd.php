@@ -52,6 +52,7 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
     $_POST['dlhdu'] = (isset($_POST['dlhdu']) && ($_POST['dlhdu']!=0)) ? 1 : 0;
     $_POST['dlcep'] = (isset($_POST['dlcep']) && ($_POST['dlcep']!=0)) ? 1 : 0;
     $_POST['dlmotb'] = (isset($_POST['dlmotb']) && ($_POST['dlmotb']!=0)) ? 1 : 0;
+    $_POST['dlsoz'] = (isset($_POST['dlsoz']) && ($_POST['dlsoz']!=0)) ? 1 : 0;
     $_POST['anmeldung'] = savesql($_POST['anmeldung']);
     $_POST['handycap'] = savesql($_POST['handycap']);
     $_POST['dm'] = intval($_POST['dm']);
@@ -74,7 +75,7 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
                       persistent_termine,
                       persistent_dlsize,
                       persistent_dlsvu, persistent_dlhdu, persistent_dlcep,
-                      persistent_dlmotb,
+                      persistent_dlmotb, persistent_dlsoz,
                       persistent_anmeldung, persistent_handycap, persistent_dm,
                       persistent_maxzahl, persistent_maxlevel, persistent_expcap,
                       persistent_fights, persistent_traps, persistent_items,
@@ -86,7 +87,7 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
                          '".$_POST['termine']."',
                          '".$_POST['dlsize']."',
                          '".$_POST['dlsvu']."', '".$_POST['dlhdu']."', '".$_POST['dlcep']."',
-                         '".$_POST['dlmotb']."',
+                         '".$_POST['dlmotb']."', '".$_POST['dlsoz']."',
                          '".$_POST['anmeldung']."', '".$_POST['handycap']."', '".$_POST['dm']."',
                          '".$_POST['maxzahl']."', '".$_POST['maxlevel']."', '".$_POST['expcap']."',
                          '".$_POST['fights']."', '".$_POST['traps']."', '".$_POST['items']."',

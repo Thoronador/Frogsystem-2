@@ -82,6 +82,7 @@ while ($persistent_arr = mysql_fetch_assoc($index))
     $template->tag('dlhdu', ($persistent_arr['persistent_dlhdu']!=0) ? 'Horden des Unterreichs' : '');
     $template->tag('dlcep', ($persistent_arr['persistent_dlcep']!=0) ? 'Community Expansion Pack' : '');
     $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
+    $template->tag('dlsoz', ($persistent_arr['persistent_dlsoz']!=0) ? 'Storm of Zehir' : '');
     $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
     $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
     $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
