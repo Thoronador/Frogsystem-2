@@ -75,7 +75,7 @@ CREATE TABLE `fs_persistent` (
 DROP TABLE IF EXISTS `fs_persistent_comments`;
 CREATE TABLE IF NOT EXISTS `fs_persistent_comments` (
   `persistent_comment_id` mediumint(8) NOT NULL auto_increment,
-  `persistent_link` varchar(150) default NULL,
+  `persistent_id` smallint(6) unsigned NOT NULL,
   `comment_poster` varchar(32) default NULL,
   `comment_poster_id` mediumint(8) default NULL,
   `comment_date` int(11) default NULL,

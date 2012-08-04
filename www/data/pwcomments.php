@@ -2,6 +2,7 @@
 /*
     Frogsystem Persistent Worlds script
     Copyright (C) 2005-2007  Stefan Bollmann
+    Copyright (C) 2012  Thoronador (adjustments for alix5)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,23 +28,35 @@
     as well as that of the covered work.
 */
 
+//Kommentar-Config
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'news_config`', $db);
+$config_arr = mysql_fetch_assoc($index);
+//Editor config
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'editor_config`', $db);
+$editor_config = mysql_fetch_assoc($index);
 
 ///////////////////
 //// Anti-Spam ////
 ///////////////////
-session_start();
-function encrypt($string, $key) {
-$result = '';
-for($i=0; $i<strlen($string); $i++) {
-   $char = substr($string, $i, 1);
-   $keychar = substr($key, ($i % strlen($key))-1, 1);
-   $char = chr(ord($char)+ord($keychar));
-   $result.=$char;
+if ( $config_arr['com_antispam'] == 1 && isset($_SESSION['user_id']) ) {
+    $anti_spam = check_captcha ($_POST['spam'], 0);
+} else {
+    $anti_spam = check_captcha ($_POST['spam'], $config_arr['com_antispam']);
 }
-return base64_encode($result);
+
+$template = ''; //init template
+
+//Daten zu persistenter Welt
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_link = \''.$_GET['pw']."' LIMIT 1", $db);
+$persistent_arr = mysql_fetch_assoc($index);
+
+if ($persistent_arr === false)
+{
+  //no PW with that link name found
+  $template .= sys_message($phrases['sysmessage'], 'Zum angegebenen Link existiert keine Persistente Welt.');
 }
-$sicherheits_eingabe = encrypt($_POST['spam'], '3g9sp3hr45');
-$sicherheits_eingabe = str_replace('=', '', $sicherheits_eingabe);
+else
+{
 
 //////////////////////////////
 //// Kommentar hinzufügen ////
@@ -51,41 +64,41 @@ $sicherheits_eingabe = str_replace('=', '', $sicherheits_eingabe);
 
 if (isset($_POST['addcomment']))
 {
-    if ($pw && ($_POST[name] != "" || $_SESSION["user_id"]) && $_POST[title] != "" && $_POST[text] != ""
-        && (($sicherheits_eingabe == $_SESSION['rechen_captcha_spam'] AND is_numeric($_POST['spam']) == true AND $sicherheits_eingabe == true) OR $_SESSION['user_id']))
+    if (isset($_GET['pw']) && ($_POST['name'] != '' || isset($_SESSION['user_id'])) && $_POST['title'] != '' && $_POST['text'] != ''
+        && (($anti_spam OR isset($_SESSION['user_id'])))
     {
-        // $_POST[pw] = savesql($_POST[pw]);
+        $_GET['pw'] = savesql($_GET['pw']);
         $_POST['name'] = savesql($_POST['name']);
         $_POST['title'] = savesql($_POST['title']);
         $_POST['text'] = savesql($_POST['text']);
         $commentdate = date('U');
 
-        if ($_SESSION['user_id'])
+        if (isset($_SESSION['user_id']))
         {
             $userid = $_SESSION['user_id'];
-            $name = '';
+            $_POST['name'] = '';
         }
         else
         {
             $userid = 0;
         }
 
-        mysql_query("INSERT INTO fsplus_persistent_comments (persistent_link, comment_poster, comment_poster_id, comment_date, comment_title, comment_text)
-                     VALUES ('$pw',
+        mysql_query('INSERT INTO `'.$global_config_arr['pref'].'persistent_comments` (persistent_link, comment_poster, comment_poster_id, comment_date, comment_title, comment_text)
+                     VALUES (\''.$_GET['pw']."',
                              '".$_POST['name']."',
-                             '$userid',
-                             '$commentdate',
+                             '".$userid."',
+                             '".$commentdate."',
                              '".$_POST['title']."',
                              '".$_POST['text']."');", $db);
 
-        mysql_query('update fs_counter set comments=comments+1', $db);
+        mysql_query('UPDATE `'.$global_config_arr['pref'].'counter` SET comments=comments+1', $db);
     }
     else
     {
         $reason = '';
-        if ( !($_POST[name] != '' || $_SESSION['user_id'])
-            || $_POST[title] == ''
-            || $_POST[text] == '')
+        if ( !($_POST['name'] != '' || isset($_SESSION['user_id']))
+            || $_POST['title'] == ''
+            || $_POST['text'] == '')
         {
             $reason = $phrases['comment_empty'];
         }
@@ -94,186 +107,220 @@ if (isset($_POST['addcomment']))
             $reason .= $phrases['comment_spam'];
         }
         sys_message($phrases['comment_not_added'], $reason);
-
     }
 }
 
-unset($_SESSION['rechen_captcha_spam']);
-
-//////////////////////////////
-//// Kommentare ausgeben /////
-//////////////////////////////
+/////////////////////////////
+//Persistente Welt anzeigen//
+/////////////////////////////
 
 
-$index = mysql_query('select * from fs_news_config', $db);
-$config_arr = mysql_fetch_assoc($index);
-$time = time();
-//////////////////////////////////////////////////////// AB HIER PERSISTENTDETAIL-CODE EINFÜGEN //////////////////////////////////////////////////////////////
-//Persistente Welt anzeigen
-$index = mysql_query("select * from fsplus_persistent where persistent_link = '$pw'", $db);
-$persistent_arr = mysql_fetch_assoc($index);
+  // Kommentare
+  $pw_arr['comment_url'] = '?go=pwcomments&amp;pw='.$_GET['pw'];
 
-/////   NEU ANFANG   /////
+  // Kommentaranzahl auslesen
+  $index_pwcomms = mysql_query('SELECT persistent_comment_id FROM `'.$global_config_arr['pref'].'persistent_comments` WHERE persistent_id = \''.$persistent_arr['persistent_id']."'", $db);
+  $pw_arr['kommentare'] = mysql_num_rows($index_pwcomms);
 
-	// Kommentare
-	$pw_arr[comment_url] = "nwn2/?go=pwcomments3&amp;pw=$pw";
+  // User auslesen
+  $index2 = mysql_query('SELECT user_name FROM `'.$global_config_arr['pref'].'user` WHERE user_id = '.$persistent_arr['persistent_posterid'], $db);
+  $news_arr['user_name'] = mysql_result($index2, 0, 'user_name');
+  $news_arr['user_url'] = '?go=user&amp;id='.$persistent_arr['persistent_posterid'];
 
-	// Kommentare lesen
-    $index_pwcomms = mysql_query("select persistent_comment_id from fsplus_persistent_comments where persistent_link = '$persistent_arr[persistent_link]'", $db);
-	$pw_arr[kommentare] = mysql_num_rows($index_pwcomms);
 
-	// User auslesen
-    $index2 = mysql_query("select user_name from fs_user where user_id = $persistent_arr[persistent_posterid]", $db);
-    $news_arr[user_name] = mysql_result($index2, 0, 'user_name');
-    $news_arr[user_url] = "?go=profil&amp;userid=$persistent_arr[persistent_posterid]";
+  $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
-/////   NEU ENDE   /////
+  switch ($persistent_arr['persistent_spiel'])
+  {
+    case 1:
+         $persistent_arr['persistent_spiel'] = 'NwN';
+         break;
+    case 2:
+         $persistent_arr['persistent_spiel'] = 'NwN 2';
+         break;
+  }
 
-    $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  $template = new template();
+  $template->setFile('0_persistent_worlds.tpl');
+  $template->load('detail_body');
 
-	switch ($persistent_arr['persistent_spiel'])
-	{
-		case 1:
-		$persistent_arr['persistent_spiel'] = 'NwN';
-		break;
-		case 2:
-		$persistent_arr['persistent_spiel'] = 'NwN 2';
-		break;
-	}
+  $template->tag('name', $persistent_arr['persistent_name']);
+  $template->tag('url', $persistent_arr['persistent_url']);
+  $template->tag('text', killhtml($persistent_arr['persistent_text']));
+  $template->tag('spiel', $persistent_arr['persistent_spiel']);
+  $template->tag('setting', $persistent_arr['persistent_setting']);
+  $template->tag('genre', $persistent_arr['persistent_genre']);
+  $template->tag('pvp', $persistent_arr['persistent_pvp']);
+  $template->tag('termine', $persistent_arr['persistent_termine']);
+  $template->tag('dlsize', getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']));
+  $template->tag('dlsvu', ($persistent_arr['persistent_dlsvu']!=0) ? 'Schatten von Undernzit' : '');
+  $template->tag('dlhdu', ($persistent_arr['persistent_dlhdu']!=0) ? 'Horden des Unterreichs' : '');
+  $template->tag('dlcep', ($persistent_arr['persistent_dlcep']!=0) ? 'Community Expansion Pack' : '');
+  $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
+  $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
+  $template->tag('handycap', killhtml($persistent_arr['persistent_handycap']));
+  $template->tag('dungeonmaster', getPersistentDMAsString($persistent_arr['persistent_dm']));
+  $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
+  $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
+  $template->tag('expcap', $persistent_arr['persistent_expcap']);
+  $template->tag('fights', getPersistentDifficultyAsString($persistent_arr['persistent_fights']));
+  $template->tag('traps',  getPersistentDifficultyAsString($persistent_arr['persistent_traps']));
+  $template->tag('items', getPersistentFrequencyAsString($persistent_arr['persistent_items']));
+  if ($persistent_arr['persistent_interview'] != NULL)
+    $template->tag('interview', '<a href='.$persistent_arr['persistent_interview'].'>zum Interview</a>');
+  else
+    $template->tag('interview', 'Noch kein Interview vorhanden.');
+  $template->tag('link', $persistent_arr['persistent_link']);
+  $template->tag('kommentar_url', $pw_arr['comment_url']);
+  $template->tag('kommentar_anzahl', $pw_arr['kommentare']);
+  $template->tag('autor', $news_arr['user_name']);
+  $template->tag('autor_profilurl', $news_arr['user_url']);
 
-    $index2 = mysql_query("select template_code from fs_template where template_name = 'persistent_detail_body'", $db);
-    $persistent = stripslashes(mysql_result($index2, 0, "template_code"));
-    $persistent = str_replace("{name}", $persistent_arr[persistent_name], $persistent);
-    $persistent = str_replace("{url}", $persistent_arr[persistent_url], $persistent);
-    $persistent = str_replace("{text}", $persistent_arr[persistent_text], $persistent);
-    $persistent = str_replace("{spiel}", $persistent_arr[persistent_spiel], $persistent);
-    $persistent = str_replace("{setting}", $persistent_arr[persistent_setting], $persistent);
-    $persistent = str_replace("{genre}", $persistent_arr[persistent_genre], $persistent);
-    $persistent = str_replace("{pvp}", $persistent_arr[persistent_pvp], $persistent);
-    $persistent = str_replace("{termine}", $persistent_arr[persistent_termine], $persistent);
-    $persistent = str_replace("{dlsize}", $persistent_arr[persistent_dlsize], $persistent);
-    $persistent = str_replace("{dlsvu}", $persistent_arr[persistent_dlsvu], $persistent);
-    $persistent = str_replace("{dlhdu}", $persistent_arr[persistent_dlhdu], $persistent);
-    $persistent = str_replace("{dlcep}", $persistent_arr[persistent_dlcep], $persistent);
-    $persistent = str_replace("{anmeldung}", $persistent_arr[persistent_anmeldung], $persistent);
-    $persistent = str_replace("{handycap}", $persistent_arr[persistent_handycap], $persistent);
-    $persistent = str_replace("{dungeonmaster}", $persistent_arr[persistent_dm], $persistent);
-    $persistent = str_replace("{maxplayer}", $persistent_arr[persistent_maxzahl], $persistent);
-    $persistent = str_replace("{maxlevel}", $persistent_arr[persistent_maxlevel], $persistent);
-    $persistent = str_replace("{expcap}", $persistent_arr[persistent_expcap], $persistent);
-    $persistent = str_replace("{fights}", $persistent_arr[persistent_fights], $persistent);
-    $persistent = str_replace("{traps}", $persistent_arr[persistent_traps], $persistent);
-    $persistent = str_replace("{items}", $persistent_arr[persistent_items], $persistent);
-	if ($persistent_arr[persistent_interview] != NULL)
-    $persistent = str_replace("{interview}", $persistent_arr[persistent_interview], $persistent);
-	else
-	$persistent = str_replace("{interview}", "Noch kein Interview vorhanden", $persistent);
-    $persistent = str_replace("{link}", $persistent_arr[persistent_link], $persistent);
-    $persistent = str_replace("{kommentar_url}", $pw_arr[comment_url], $persistent);
-    $persistent = str_replace("{kommentar_anzahl}", $pw_arr[kommentare], $persistent);
-    $persistent = str_replace("{autor}", $news_arr[user_name], $persistent);
-    $persistent = str_replace("{autor_profilurl}", $news_arr[user_url], $persistent);
+  $pw_template = $template->display();
 
-    $persistent_list .= $persistent;
+////////////////////////
+// Kommentare erzeugen//
+////////////////////////
 
-unset($persistent_arr);
+  // Text formatieren
+  $html = ($config_arr['html_code']>=3);
+  $fs   = ($config_arr['fs_code']>=3);
+  $para = ($config_arr['para_handling']>=3);
 
-echo $persistent;
-////////////////////////////////////////////////// ENDE PERSISTENTDETAIL-CODE EINFÜGEN //////////////////////////////////////////////////////////////
-// Kommentare erzeugen
-$index = mysql_query("select * from fsplus_persistent_comments where persistent_link = '$pw' order by comment_date asc", $db);
-echo mysql_error();
+  //FScode-Html Anzeige
+  $fs_active = ($fs) ? 'an' : 'aus';
+  $html_active = ($html) ? 'an' : 'aus';
+
+
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_comments` WHERE persistent_id = \''.$persistent_arr['persistent_id']."' ORDER BY comment_date ASC", $db);
+
+$comments = '';
 while ($comment_arr = mysql_fetch_assoc($index))
 {
-    // User auslesen
-    if ($comment_arr[comment_poster_id] != 0)
-    {
-        $index2 = mysql_query("select user_name, is_admin from fs_user where user_id = $comment_arr[comment_poster_id]", $db);
-        $comment_arr[comment_poster] = killhtml(mysql_result($index2, 0, "user_name"));
-        $comment_arr[is_admin] = mysql_result($index2, 0, "is_admin");
-        if (file_exists("images/avatare/".$comment_arr[comment_poster_id].".gif"))
-        {
-            $comment_arr[comment_avatar] = '<div style="width:120px;"><img align="left" src="images/avatare/'.$comment_arr[comment_poster_id].'.gif" alt="'.$comment_arr[comment_poster].'"></div>';
-        }
-        if ($comment_arr[is_admin] == 1)
-        {
-            $comment_arr[comment_poster] = "<b>" . $comment_arr[comment_poster] . "</b>";
-        }
-        $index2 = mysql_query("select template_code from fs_template where template_name = 'news_comment_autor'", $db);
-        $comment_autor = stripslashes(mysql_result($index2, 0, "template_code"));
-        $comment_autor = str_replace("{url}", "?go=profil&amp;userid=".$comment_arr[comment_poster_id], $comment_autor);
-        $comment_autor = str_replace("{name}", $comment_arr[comment_poster], $comment_autor);
-        $comment_arr[comment_poster] = $comment_autor;
-    }
-    else
-    {
-        $comment_arr[comment_avatar] = "";
-        $comment_arr[comment_poster] = killhtml($comment_arr[comment_poster]);
+
+  // User auslesen
+  if ($comment_arr['comment_poster_id'] != 0)
+  {
+    $index2 = mysql_query('SELECT `user_name`, `user_is_admin`, `user_is_staff`, `user_group` FROM `'.$global_config_arr['pref'].'user` WHERE user_id = '.$comment_arr['comment_poster_id'], $db);
+    $comment_arr['comment_poster'] = kill_replacements ( mysql_result($index2, 0, 'user_name' ), TRUE );
+    $comment_arr['user_is_admin'] = mysql_result($index2, 0, 'user_is_admin');
+    $comment_arr['user_is_staff'] = mysql_result($index2, 0, 'user_is_staff');
+    $comment_arr['user_group'] = mysql_result($index2, 0, 'user_group');
+
+    if (image_exists('media/user-images/',$comment_arr['comment_poster_id'])) {
+      $comment_arr['comment_avatar'] = '<img align="left" src="'.image_url('media/user-images/',$comment_arr['comment_poster_id']).'" alt="'.$comment_arr['comment_poster'].'">';
+    } else {
+      $comment_arr['comment_avatar'] = '';
     }
 
-    // Text formatieren
-    if ($config_arr[html_code] < 3)
-    {
-        $comment_arr[comment_text] = killhtml($comment_arr[comment_text]);
-    }
-    if ($config_arr[fs_code] == 3)
-    {
-        $comment_arr[comment_text] = fscode($comment_arr[comment_text], 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0);
-    }
-    else
-    {
-        $comment_arr[comment_text] = fscode($comment_arr[comment_text], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    if ( $comment_arr['user_is_staff'] == 1 || $comment_arr['user_is_admin'] == 1 ) {
+      $comment_arr['comment_poster'] = '<b>' . $comment_arr['comment_poster'] . '</b>';
     }
 
-    $comment_arr[comment_date] = date("d.m.Y" , $comment_arr[comment_date]) . " um " . date("H:i" , $comment_arr[comment_date]);
+    // Benutzer Rang
+    $user_arr['rank_data'] = get_user_rank ( $comment_arr['user_group'], $comment_arr['user_is_admin'] );
+    $comment_arr['user_rank'] = $user_arr['rank_data']['user_group_rank'];
 
-    // Template auslesen und füllen
-    $index2 = mysql_query("select template_code from fs_template where template_name = 'news_comment_body'", $db);
-    $template = stripslashes(mysql_result($index2, 0, "template_code"));
-    $template = str_replace("{titel}", killhtml($comment_arr[comment_title]), $template);
-    $template = str_replace("{datum}", $comment_arr[comment_date], $template);
-    $template = str_replace("{text}", $comment_arr[comment_text], $template);
-    $template = str_replace("{autor}", $comment_arr[comment_poster], $template);
-    $template = str_replace("{autor_avatar}", $comment_arr[comment_avatar], $template);
+    // Get User Template
+    $template = new template();
+    $template->setFile('0_news.tpl');
+    $template->load('COMMENT_USER');
 
-    echo $template;
-}
+    $template->tag('url', '?go=user&amp;id='.$comment_arr['comment_poster_id'] );
+    $template->tag('name', $comment_arr['comment_poster'] );
+    $template->tag('image', $comment_arr['comment_avatar'] );
+    $template->tag('rank', $comment_arr['user_rank'] );
+
+    $template = $template->display ();
+    $comment_arr['comment_poster'] = $template;
+  }
+  else
+  {
+    $comment_arr['comment_avatar'] = '';
+    $comment_arr['comment_poster'] = kill_replacements ( $comment_arr['comment_poster'], TRUE );
+    $comment_arr['user_rank'] = '';
+  }
+
+  if ($fs) {
+    $comment_arr['comment_text'] = fscode( kill_replacements ( $comment_arr['comment_text'] ),$fs,$html,$para, $editor_config['do_bold'], $editor_config['do_italic'], $editor_config['do_underline'], $editor_config['do_strike'], $editor_config['do_center'], $editor_config['do_url'], $editor_config['do_home'], $editor_config['do_email'], $editor_config['do_img'], $editor_config['do_cimg'], $editor_config['do_list'], $editor_config['do_numlist'], $editor_config['do_font'], $editor_config['do_color'], $editor_config['do_size'], $editor_config['do_code'], $editor_config['do_quote'], $editor_config['do_noparse'], $editor_config['do_smilies']);
+  } else {
+    $comment_arr['comment_text'] = fscode( kill_replacements ( $comment_arr['comment_text'] ), $fs, $html, $para);
+  }
+
+  $comment_arr['comment_date'] = date_loc ( $global_config_arr['datetime'] , $comment_arr['comment_date'] );
+  $comment_arr['comment_title'] = kill_replacements( $comment_arr['comment_title'], TRUE );
+
+  // Get Comment Template
+  $template = new template();
+  $template->setFile('0_news.tpl');
+  $template->load('COMMMENT_ENTRY');
+
+  $template->tag('titel', $comment_arr['comment_title'] );
+  $template->tag('date', $comment_arr['comment_date'] );
+  $template->tag('text', $comment_arr['comment_text'] );
+  $template->tag('user', $comment_arr['comment_poster'] );
+  $template->tag('user_image', $comment_arr['comment_avatar'] );
+  $template->tag('user_rank', $comment_arr['user_rank'] );
+
+  $comments .= $template->display();
+}//while
 unset($comment_arr);
 
-// Eingabeformular generieren
-$index = mysql_query("select template_code from fs_template where template_name = 'news_comment_form_name'", $db);
-$form_name = stripslashes(mysql_result($index, 0, "template_code"));
 
-$index = mysql_query("select template_code from fs_template where template_name = 'news_comment_form_spam'", $db);
-$form_spam = stripslashes(mysql_result($index, 0, "template_code"));
+// Get Comments Form Name Template
+$form_name = new template();
+$form_name->setFile('0_news.tpl');
+$form_name->load('COMMENT_FORM_NAME');
+$form_name = $form_name->display ();
 
-$form_spam_text ='<br /><br />
- <table border="0" cellspacing="5" cellpadding="0" width="100%">
-  <tr>
-   <td valign="top" align="left">
-<div id="antispam"><font size="1">* Auf dieser Seite kann jeder einen Kommentar zu einer News abgeben. Leider ist sie dadurch ein beliebtes Ziel von sog. Spam-Bots - speziellen Programmen, die automatisiert und zum Teil massenhaft Links zu anderen Internetseiten platzieren. Um das zu verhindern, müssen nicht registrierte User eine einfache Rechenaufgabe lösen, die für die meisten Spam-Bots aber nicht lösbar ist. Wenn du nicht jedesmal eine solche Aufgabe lösen möchtest, kannst du dich einfach bei uns <a href="?go=register">registrieren</a>.</font></div>
-   </td>
-  </tr>
- </table>';
-
-if (isset($_SESSION[user_name]))
-{
-    $form_name = $_SESSION[user_name];
-    $form_name .= '<input type="hidden" name="name" id="name" value="1">';
-    $form_spam = "";
-    $form_spam_text ="";
+if ( isset ( $_SESSION['user_name'] ) ) {
+  $form_name = kill_replacements ( $_SESSION['user_name'], TRUE );
+  $form_name .= '<input type="hidden" name="name" id="name" value="1">';
 }
 
-$index = mysql_query("select template_code from fs_template where template_name = 'news_comment_form'", $db);
-$template = stripslashes(mysql_result($index, 0, "template_code"));
-$template = str_replace("{newsid}", $pw, $template);
-$template = str_replace("{name_input}", $form_name, $template);
-$template = str_replace("{antispam}", $form_spam, $template);
-$template = str_replace("{antispamtext}", $form_spam_text, $template);
+// Get Comments Captcha Template
+$form_spam = new template();
+$form_spam->setFile('0_news.tpl');
+$form_spam->load('COMMENT_CAPTCHA');
+$form_spam->tag('captcha_url', FS2_ROOT_PATH . 'resources/captcha/captcha.php?i='.generate_pwd(8) );
+$form_spam = $form_spam->display ();
 
-echo $template;
-unset($template);
+// Get Comments Form Name Template
+$form_spam_text = new template();
+$form_spam_text->setFile('0_news.tpl');
+$form_spam_text->load('COMMENT_CAPTCHA_TEXT');
+$form_spam_text = $form_spam_text->display ();
 
-$pw = $_GET[pw];
 
+if (
+      $config_arr['com_antispam'] == 0 ||
+      ( $config_arr['com_antispam'] == 1 && $_SESSION['user_id'] ) ||
+      ( $config_arr['com_antispam'] == 3 && is_in_staff ( $_SESSION['user_id'] ) )
+   )
+{
+  $form_spam = '';
+  $form_spam_text = '';
+}
+
+
+//Textarea
+$template_textarea = create_textarea('text', '', $editor_config['textarea_width'], $editor_config['textarea_height'], 'text', false, $editor_config['smilies'], $editor_config['bold'], $editor_config['italic'], $editor_config['underline'], $editor_config['strike'], $editor_config['center'], $editor_config['font'], $editor_config['color'], $editor_config['size'], $editor_config['img'], $editor_config['cimg'], $editor_config['url'], $editor_config['home'], $editor_config['email'], $editor_config['code'], $editor_config['quote'], $editor_config['noparse']);
+
+// Get Comment Form Template
+$template = new template();
+$template->setFile('0_news.tpl');
+$template->load('COMMENT_FORM');
+
+$template->tag('news_id', $_GET['id'] );
+$template->tag('name_input', $form_name );
+$template->tag('textarea', $template_textarea );
+$template->tag('html', $html_active );
+$template->tag('fs_code', $fs_active );
+$template->tag('captcha', $form_spam );
+$template->tag('captcha_text', $form_spam_text  );
+
+$formular_template = $template->display();
+
+$template = $pw_template . $comments . $formular_template;
+}//else
 ?>
