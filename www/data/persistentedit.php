@@ -58,7 +58,7 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
     }
     else
     {
-      $datum = mktime(0, 0, 0, $_POST['monat'], $_POST['tag'], $_POST['jahr']);
+      $datum = time();
 
       $_POST['name'] = savesql($_POST['name']);
       $_POST['url'] = savesql($_POST['url']);
@@ -66,8 +66,8 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
       $_POST['text'] = str_ireplace ('&lt;/textarea&gt;', '</textarea>', $_POST['text']);
       $_POST['text'] = savesql($_POST['text']);
       $_POST['spiel'] = intval($_POST['spiel']);
-      $_POST['setting'] = savesql($_POST['setting']);
-      $_POST['genre'] = savesql($_POST['genre']);
+      $_POST['setting'] = intval($_POST['setting']);
+      $_POST['genre'] = intval($_POST['genre']);
       $_POST['termine'] = savesql($_POST['termine']);
       $_POST['dlsize'] = intval($_POST['dlsize']);
       $_POST['dlsvu'] = (isset($_POST['dlsvu']) && ($_POST['dlsvu']!=0)) ? 1 : 0;
@@ -85,7 +85,6 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
       $_POST['traps'] = intval($_POST['traps']);
       $_POST['items'] = intval($_POST['items']);
       $_POST['pvp'] = savesql($_POST['pvp']);
-      $_POST['datum'] = savesql($_POST['datum']);
       $_POST['interview'] = savesql($_POST['interview']);
       settype($_POST['posterid'], 'integer');
       $_POST['seitenlink'] = savesql($_POST['seitenlink']);
@@ -96,8 +95,8 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
                        persistent_url  = '".$_POST['url']."',
                        persistent_text = '".$_POST['text']."',
                        persistent_spiel = '".$_POST['spiel']."',
-					   persistent_setting = '".$_POST['setting']."',
-					   persistent_genre = '".$_POST['genre']."',
+					   persistent_setting_id = '".$_POST['setting']."',
+					   persistent_genre_id = '".$_POST['genre']."',
 					   persistent_termine = '".$_POST['termine']."',
 					   persistent_dlsize = '".$_POST['dlsize']."',
 					   persistent_dlsvu = '".$_POST['dlsvu']."',
@@ -115,6 +114,7 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
 					   persistent_traps = '".$_POST['traps']."',
 					   persistent_items = '".$_POST['items']."',
 					   persistent_pvp = '".$_POST['pvp']."'
+					   persistent_datum = '".$datum."'
                    WHERE persistent_id = '".$_POST['editpersistentid']."'";
       mysql_query($update, $db);
       $template = sys_message ( 'Persistente Welt bearbeiten', 'Der Eintrag der persistenten Welt wurde ge&auml;ndert.' );
@@ -157,12 +157,12 @@ else
       $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_setting` ORDER BY setting_name', $db);
       while ($setting_arr = mysql_fetch_assoc($index))
 	  {
-        $sele = ($setting_arr['setting_name'] == $persistent_arr['persistent_setting']) ? ' selected' : '';
-        $settings .= '<option'.$sele.'>'.$setting_arr['setting_name'].'</option>'."\n";
+        $sele = ($setting_arr['setting_id'] == $persistent_arr['persistent_setting_id']) ? ' selected' : '';
+        $settings .= '<option value="'.$setting_arr['setting_id'].'"'.$sele.'>'.$setting_arr['setting_name'].'</option>'."\n";
       }
       if ($settings=='')
       {
-        $settings = '<option selected>k. A.</option>'."\n";
+        $settings = '<option value="-1" selected>k. A.</option>'."\n";
       }
       $template->tag('settings', $settings);
 
@@ -170,12 +170,12 @@ else
       $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_genre` ORDER BY genre_name', $db);
       while ($genre_arr = mysql_fetch_assoc($index))
       {
-        $sele = ($genre_arr['genre_name'] == $persistent_arr['persistent_genre']) ? ' selected' : '';
-        $genres .= '<option'.$sele.'>'.$genre_arr['genre_name'].'</option>'."\n";
+        $sele = ($genre_arr['genre_id'] == $persistent_arr['persistent_genre_id']) ? ' selected' : '';
+        $genres .= '<option value="'.$genre_arr['genre_id'].'"'.$sele.'>'.$genre_arr['genre_name'].'</option>'."\n";
       }
       if ($genres=='')
       {
-        $genres = '<option selected>k. A.</option>'."\n";
+        $genres = '<option value="-1" selected>k. A.</option>'."\n";
       }
       $template->tag('genres', $genres);
 

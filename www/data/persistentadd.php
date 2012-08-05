@@ -44,8 +44,8 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
     $_POST['url'] = savesql($_POST['url']);
     $_POST['text'] = savesql($_POST['text']);
     $_POST['spiel'] = intval($_POST['spiel']);
-    $_POST['setting'] = savesql($_POST['setting']);
-    $_POST['genre'] = savesql($_POST['genre']);
+    $_POST['setting'] = intval($_POST['setting']);
+    $_POST['genre'] = intval($_POST['genre']);
     $_POST['termine'] = savesql($_POST['termine']);
     $_POST['dlsize'] = intval($_POST['dlsize']);
     $_POST['dlsvu'] = (isset($_POST['dlsvu']) && ($_POST['dlsvu']!=0)) ? 1 : 0;
@@ -71,7 +71,7 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
     {
       mysql_query('INSERT INTO `'.$global_config_arr['pref'].'persistent` (persistent_name,
                       persistent_url, persistent_text, persistent_spiel,
-                      persistent_setting, persistent_genre,
+                      persistent_setting_id, persistent_genre_id,
                       persistent_termine,
                       persistent_dlsize,
                       persistent_dlsvu, persistent_dlhdu, persistent_dlcep,
@@ -150,22 +150,22 @@ else
   $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_setting` ORDER BY setting_name', $db);
   while ($setting_arr = mysql_fetch_assoc($index))
   {
-	$settings .= '<option>'.$setting_arr['setting_name'].'</option>'."\n";
+	$settings .= '<option value="'.$setting_arr['setting_id'].'">'.$setting_arr['setting_name'].'</option>'."\n";
   }
   if ($settings=='')
   {
-    $settings = '<option>k. A.</option>'."\n";
+    $settings = '<option value="-1">k. A.</option>'."\n";
   }
 
   $genres = '';
   $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_genre` ORDER BY genre_name', $db);
   while ($genre_arr = mysql_fetch_assoc($index))
   {
-    $genres .= '<option>'.$genre_arr['genre_name'].'</option>'."\n";
+    $genres .= '<option value="'.$genre_arr['genre_id'].'">'.$genre_arr['genre_name'].'</option>'."\n";
   }
   if ($genres=='')
   {
-    $genres = '<option>k. A.</option>'."\n";
+    $genres = '<option value="-1">k. A.</option>'."\n";
   }
 
   $template = new template();

@@ -33,6 +33,30 @@
   $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_link = \''.savesql($_GET['pw'])."'", $db);
   $persistent_arr = mysql_fetch_assoc($index);
 
+  //setting
+  $query = mysql_query('SELECT setting_id, setting_name FROM `'.$global_config_arr['pref'].'persistent_setting`
+                        WHERE setting_id='.$persistent_arr['persistent_setting_id'].' LIMIT 1', $db);
+  if ($row = mysql_fetch_assoc($query))
+  {
+    $persistent_arr['setting_name'] = $row['setting_name'];
+  }
+  else
+  {
+    $persistent_arr['setting_name'] = 'k. A.';
+  }
+
+  //genre
+  $query = mysql_query('SELECT genre_id, genre_name FROM `'.$global_config_arr['pref'].'persistent_genre`
+                        WHERE genre_id='.$persistent_arr['persistent_genre_id'].' LIMIT 1', $db);
+  if ($row = mysql_fetch_assoc($query))
+  {
+    $persistent_arr['genre_name'] = $row['genre_name'];
+  }
+  else
+  {
+    $persistent_arr['genre_name'] = 'k. A.';
+  }
+
   // Kommentare
   $pw_arr['comment_url'] = '?go=pwcomments&amp;pw='.$_GET['pw'];
 
@@ -67,8 +91,8 @@
   $template->tag('url', $persistent_arr['persistent_url']);
   $template->tag('text', killhtml($persistent_arr['persistent_text']));
   $template->tag('spiel', $persistent_arr['persistent_spiel']);
-  $template->tag('setting', $persistent_arr['persistent_setting']);
-  $template->tag('genre', $persistent_arr['persistent_genre']);
+  $template->tag('setting', $persistent_arr['setting_name']);
+  $template->tag('genre', $persistent_arr['genre_name']);
   $template->tag('pvp', $persistent_arr['persistent_pvp']);
   $template->tag('termine', $persistent_arr['persistent_termine']);
   $template->tag('dlsize', getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']));

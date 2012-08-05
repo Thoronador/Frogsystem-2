@@ -32,10 +32,10 @@ if (!isset($_GET['sort'])) $_GET['sort'] = 'name';
 switch ($_GET['sort'])
 {
   case 'setting':
-       $orderrule = 'persistent_setting';
+       $orderrule = 'setting_name';
        break;
   case 'genre':
-       $orderrule = 'persistent_genre';
+       $orderrule = 'genre_name';
        break;
   case 'spiel':
 	   $orderrule = 'persistent_spiel';
@@ -53,7 +53,12 @@ switch ($_GET['sort'])
        $orderrule = 'persistent_name';
        break;
 }//swi
-$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` ORDER BY '.$orderrule, $db);
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` t1
+                      LEFT JOIN `'.$global_config_arr['pref'].'persistent_genre` t2
+                      ON t1.persistent_genre_id=t2.genre_id
+                      LEFT JOIN `'.$global_config_arr['pref'].'persistent_setting` t3
+                      ON t1.persistent_setting_id=t3.setting_id
+                      ORDER BY '.$orderrule, $db);
 $persistent_list = '';
 while ($persistent_arr = mysql_fetch_assoc($index))
 {
@@ -75,8 +80,8 @@ while ($persistent_arr = mysql_fetch_assoc($index))
 
     $template->tag('link', $persistent_arr['persistent_link']);
     $template->tag('name', $persistent_arr['persistent_name']);
-    $template->tag('setting', $persistent_arr['persistent_setting']);
-    $template->tag('genre', $persistent_arr['persistent_genre']);
+    $template->tag('setting', is_null($persistent_arr['setting_name']) ? 'k. A.' : $persistent_arr['setting_name']);
+    $template->tag('genre', is_null($persistent_arr['genre_name']) ? 'k. A.' : $persistent_arr['genre_name']);
     $template->tag('spiel', $persistent_arr['persistent_spiel']);
     $template->tag('dlsvu', ($persistent_arr['persistent_dlsvu']!=0) ? 'Schatten von Undernzit' : '');
     $template->tag('dlhdu', ($persistent_arr['persistent_dlhdu']!=0) ? 'Horden des Unterreichs' : '');
