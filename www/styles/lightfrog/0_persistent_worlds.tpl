@@ -448,11 +448,11 @@
       </td>
       <td valign="top">
         <select name="pvp" size="1">
-		  <option>ja</option>
-		  <option>nach Absprache</option>
-		  <option>nein</option>
-		  <option>speziell</option>
-		  <option>k.A.</option>
+		  <option value="1">ja</option>
+		  <option value="2">nach Absprache</option>
+		  <option value="3">nein</option>
+		  <option value="4">speziell</option>
+		  <option value="-1">k.A.</option>
 		</select>
       </td>
     </tr>
@@ -463,10 +463,10 @@
       </td>
       <td valign="top">
         <select name="termine" size="1">
-		  <option>st‰ndig</option>
-		  <option>regelm‰ﬂig</option>
-		  <option>unregelm‰ﬂig</option>
-		  <option>k. A.</option>
+		  <option value="1">st&auml;ndig</option>
+		  <option value="2">regelm&auml;&szlig;ig</option>
+		  <option value="3">unregelm&auml;&szlig;ig</option>
+		  <option value="-1">k. A.</option>
 		</select>
       </td>
     </tr>
@@ -521,16 +521,16 @@
       </td>
       <td valign="top">
         <select name="anmeldung" size="1">
-		  <option>von Anfang an</option>
-		  <option>Level 1</option>
-		  <option>Level 2</option>
-		  <option>Level 3</option>
-		  <option>Level 4</option>
-		  <option>Level 5</option>
-		  <option>&gt; Level 5</option>
-		  <option>speziell</option>
-		  <option>nie</option>
-		  <option>k. A.</option>
+		  <option value="0">von Anfang an</option>
+		  <option value="1">Level 1</option>
+		  <option value="2">Level 2</option>
+		  <option value="3">Level 3</option>
+		  <option value="4">Level 4</option>
+		  <option value="5">Level 5</option>
+		  <option value="6">&gt; Level 5</option>
+		  <option value="100">speziell</option>
+		  <option value="127">nie</option>
+		  <option value="-1">k. A.</option>
 		</select>
       </td>
     </tr>
@@ -590,10 +590,10 @@
       </td>
       <td valign="top">
         <select name="expcap" size="1">
-		  <option>ja</option>
-		  <option>nein</option>
-		  <option>speziell</option>
-		  <option>k. A.</option>
+		  <option value="1">ja</option>
+		  <option value="0">nein</option>
+		  <option value="2">speziell</option>
+		  <option value="-1">k. A.</option>
 		</select>
       </td>
     </tr>
@@ -743,11 +743,11 @@
         </td>
         <td class="config" valign="top">
           <select name="pvp" size="1">
-		    <option {..pvp_yes_selected..}>ja</option>
-			<option {..pvp_arrange_selected..}>nach Absprache</option>
-			<option {..pvp_no_selected..}>nein</option>
-			<option {..pvp_special_selected..}>speziell</option>
-			<option {..pvp_N/A_selected..}>k.A.</option>
+		    <option value="1" {..pvp_yes_selected..}>ja</option>
+			<option value="2" {..pvp_arrange_selected..}>nach Absprache</option>
+			<option value="3" {..pvp_no_selected..}>nein</option>
+			<option value="4" {..pvp_special_selected..}>speziell</option>
+			<option value="-1" {..pvp_N/A_selected..}>k.A.</option>
 		  </select>
         </td>
       </tr>
@@ -758,11 +758,10 @@
         </td>
         <td class="config" valign="top">
           <select name="termine" size="1">
-            <!-- Do not change umlauts or eszett in the following options to their HTML entities (yet), they are needed this way! -->
-		    <option {..uptime_always_selected..}>st‰ndig</option>
-			<option {..uptime_regular_selected..}>regelm‰ﬂig</option>
-			<option {..uptime_irregular_selected..}>unregelm‰ﬂig</option>
-			<option {..uptime_N/A_selected..}>k. A.</option>
+            <option value="1" {..uptime_always_selected..}>st&auml;ndig</option>
+            <option value="2" {..uptime_regular_selected..}>regelm&auml;&szlig;ig</option>
+            <option value="3" {..uptime_irregular_selected..}>unregelm&auml;&szlig;ig</option>
+            <option value="-1" {..uptime_N/A_selected..}>k. A.</option>
 		  </select>
         </td>
       </tr>
@@ -817,16 +816,16 @@
         </td>
         <td class="config" valign="top">
           <select name="anmeldung" size="1">
-		    <option {..reg_start_selected..}>von Anfang an</option>
-			<option {..reg_lvl1_selected..}>Level 1</option>
-			<option {..reg_lvl2_selected..}>Level 2</option>
-			<option {..reg_lvl3_selected..}>Level 3</option>
-			<option {..reg_lvl4_selected..}>Level 4</option>
-			<option {..reg_lvl5_selected..}>Level 5</option>
-			<option {..reg_gt_lvl5_selected..}>&gt; Level 5</option>
-			<option {..reg_special_selected..}>speziell</option>
-			<option {..reg_never_selected..}>nie</option>
-			<option {..reg_N/A_selected..}>k. A.</option>
+		    <option value="0" {..reg_start_selected..}>von Anfang an</option>
+			<option value="1" {..reg_lvl1_selected..}>Level 1</option>
+			<option value="2" {..reg_lvl2_selected..}>Level 2</option>
+			<option value="3" {..reg_lvl3_selected..}>Level 3</option>
+			<option value="4" {..reg_lvl4_selected..}>Level 4</option>
+			<option value="5" {..reg_lvl5_selected..}>Level 5</option>
+			<option value="6" {..reg_gt_lvl5_selected..}>&gt; Level 5</option>
+			<option value="100" {..reg_special_selected..}>speziell</option>
+			<option value="127" {..reg_never_selected..}>nie</option>
+			<option value="-1" {..reg_N/A_selected..}>k. A.</option>
 		  </select>
         </td>
       </tr>
@@ -886,10 +885,10 @@
         </td>
         <td class="config" valign="top">
           <select name="expcap" size="1">
-		    <option {..expcap_yes_selected..}>ja</option>
-			<option {..expcap_no_selected..}>nein</option>
-			<option {..expcap_special_selected..}>speziell</option>
-			<option {..expcap_N/A_selected..}>k. A.</option>
+		    <option value="1" {..expcap_yes_selected..}>ja</option>
+			<option value="0" {..expcap_no_selected..}>nein</option>
+			<option value="2" {..expcap_special_selected..}>speziell</option>
+			<option value="-1" {..expcap_N/A_selected..}>k. A.</option>
 		  </select>
         </td>
       </tr>

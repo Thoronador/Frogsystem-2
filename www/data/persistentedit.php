@@ -68,23 +68,23 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
       $_POST['spiel'] = intval($_POST['spiel']);
       $_POST['setting'] = intval($_POST['setting']);
       $_POST['genre'] = intval($_POST['genre']);
-      $_POST['termine'] = savesql($_POST['termine']);
+      $_POST['termine'] = intval($_POST['termine']);
       $_POST['dlsize'] = intval($_POST['dlsize']);
       $_POST['dlsvu'] = (isset($_POST['dlsvu']) && ($_POST['dlsvu']!=0)) ? 1 : 0;
       $_POST['dlhdu'] = (isset($_POST['dlhdu']) && ($_POST['dlhdu']!=0)) ? 1 : 0;
       $_POST['dlcep'] = (isset($_POST['dlcep']) && ($_POST['dlcep']!=0)) ? 1 : 0;
       $_POST['dlmotb'] = (isset($_POST['dlmotb']) && ($_POST['dlmotb']!=0)) ? 1 : 0;
       $_POST['dlsoz'] = (isset($_POST['dlsoz']) && ($_POST['dlsoz']!=0)) ? 1 : 0;
-      $_POST['anmeldung'] = savesql($_POST['anmeldung']);
+      $_POST['anmeldung'] = intval($_POST['anmeldung']);
       $_POST['handycap'] = savesql($_POST['handycap']);
       $_POST['dm'] = intval($_POST['dm']);
       $_POST['maxzahl'] = savesql($_POST['maxzahl']);
       $_POST['maxlevel'] = savesql($_POST['maxlevel']);
-      $_POST['expcap'] = savesql($_POST['expcap']);
+      $_POST['expcap'] = intval($_POST['expcap']);
       $_POST['fights'] = intval($_POST['fights']);
       $_POST['traps'] = intval($_POST['traps']);
       $_POST['items'] = intval($_POST['items']);
-      $_POST['pvp'] = savesql($_POST['pvp']);
+      $_POST['pvp'] = intval($_POST['pvp']);
       $_POST['interview'] = savesql($_POST['interview']);
       settype($_POST['posterid'], 'integer');
       $_POST['seitenlink'] = savesql($_POST['seitenlink']);
@@ -180,17 +180,17 @@ else
       $template->tag('genres', $genres);
 
       //PVP selection "tags" (more like conditions in admin template)
-      $template->tag('pvp_yes_selected', ($persistent_arr['persistent_pvp'] == 'ja') ? 'selected' : '' );
-      $template->tag('pvp_arrange_selected', ($persistent_arr['persistent_pvp'] == 'nach Absprache') ? 'selected' : '' );
-      $template->tag('pvp_no_selected', ($persistent_arr['persistent_pvp'] == 'nein') ? 'selected' : '' );
-      $template->tag('pvp_special_selected', ($persistent_arr['persistent_pvp'] == 'speziell') ? 'selected' : '' );
-      $template->tag('pvp_N/A_selected', ($persistent_arr['persistent_pvp'] == 'k.A.') ? 'selected' : '' );
+      $template->tag('pvp_yes_selected', ($persistent_arr['persistent_pvp'] == 1) ? 'selected' : '' );
+      $template->tag('pvp_arrange_selected', ($persistent_arr['persistent_pvp'] == 2) ? 'selected' : '' );
+      $template->tag('pvp_no_selected', ($persistent_arr['persistent_pvp'] == 3) ? 'selected' : '' );
+      $template->tag('pvp_special_selected', ($persistent_arr['persistent_pvp'] == 4) ? 'selected' : '' );
+      $template->tag('pvp_N/A_selected', ($persistent_arr['persistent_pvp'] == -1) ? 'selected' : '' );
 
       //online time selection "tags" (i.e. "conditions")
-      $template->tag('uptime_always_selected', ($persistent_arr['persistent_termine'] == 'ständig') ? 'selected' : '' );
-      $template->tag('uptime_regular_selected', ($persistent_arr['persistent_termine'] == 'regelmäßig') ? 'selected' : '' );
-      $template->tag('uptime_irregular_selected', ($persistent_arr['persistent_termine'] == 'unregelmäßig') ? 'selected' : '' );
-      $template->tag('uptime_N/A_selected', ($persistent_arr['persistent_termine'] == 'k. A.') ? 'selected' : '' );
+      $template->tag('uptime_always_selected', ($persistent_arr['persistent_termine'] == 1) ? 'selected' : '' );
+      $template->tag('uptime_regular_selected', ($persistent_arr['persistent_termine'] == 2) ? 'selected' : '' );
+      $template->tag('uptime_irregular_selected', ($persistent_arr['persistent_termine'] == 3) ? 'selected' : '' );
+      $template->tag('uptime_N/A_selected', ($persistent_arr['persistent_termine'] == -1) ? 'selected' : '' );
 
       //download size selection "tags" (conditions)
       $dl_string = getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']);
@@ -209,16 +209,16 @@ else
       $template->tag('exp_soz_checked', ($persistent_arr['persistent_dlsoz'] != 0) ? 'checked' : '' );
 
       //character registration selection "tags" (conditions)
-      $template->tag('reg_start_selected', ($persistent_arr['persistent_anmeldung'] == 'von Anfang an') ? 'selected' : '' );
-      $template->tag('reg_lvl1_selected', ($persistent_arr['persistent_anmeldung'] == 'Level 1') ? 'selected' : '' );
-      $template->tag('reg_lvl2_selected', ($persistent_arr['persistent_anmeldung'] == 'Level 2') ? 'selected' : '' );
-      $template->tag('reg_lvl3_selected', ($persistent_arr['persistent_anmeldung'] == 'Level 3') ? 'selected' : '' );
-      $template->tag('reg_lvl4_selected', ($persistent_arr['persistent_anmeldung'] == 'Level 4') ? 'selected' : '' );
-      $template->tag('reg_lvl5_selected', ($persistent_arr['persistent_anmeldung'] == 'Level 5') ? 'selected' : '' );
-      $template->tag('reg_gt_lvl5_selected', ($persistent_arr['persistent_anmeldung'] == '&gt; Level 5') ? 'selected' : '' );
-      $template->tag('reg_special_selected', ($persistent_arr['persistent_anmeldung'] == 'speziell') ? 'selected' : '' );
-      $template->tag('reg_never_selected', ($persistent_arr['persistent_anmeldung'] == 'nie') ? 'selected' : '' );
-      $template->tag('reg_N/A_selected', ($persistent_arr['persistent_anmeldung'] == 'k. A.') ? 'selected' : '' );
+      $template->tag('reg_start_selected', ($persistent_arr['persistent_anmeldung'] == 0) ? 'selected' : '' );
+      $template->tag('reg_lvl1_selected', ($persistent_arr['persistent_anmeldung'] == 1) ? 'selected' : '' );
+      $template->tag('reg_lvl2_selected', ($persistent_arr['persistent_anmeldung'] == 2) ? 'selected' : '' );
+      $template->tag('reg_lvl3_selected', ($persistent_arr['persistent_anmeldung'] == 3) ? 'selected' : '' );
+      $template->tag('reg_lvl4_selected', ($persistent_arr['persistent_anmeldung'] == 4) ? 'selected' : '' );
+      $template->tag('reg_lvl5_selected', ($persistent_arr['persistent_anmeldung'] == 5) ? 'selected' : '' );
+      $template->tag('reg_gt_lvl5_selected', ($persistent_arr['persistent_anmeldung'] == 6) ? 'selected' : '' );
+      $template->tag('reg_special_selected', ($persistent_arr['persistent_anmeldung'] == 100) ? 'selected' : '' );
+      $template->tag('reg_never_selected', ($persistent_arr['persistent_anmeldung'] == 127) ? 'selected' : '' );
+      $template->tag('reg_N/A_selected', ($persistent_arr['persistent_anmeldung'] == -1) ? 'selected' : '' );
 
       $template->tag('handycap', $persistent_arr['persistent_handycap']);
 
@@ -240,10 +240,10 @@ else
       $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
 
       //EXP cap selection "tags" (conditions)
-      $template->tag('expcap_yes_selected', ($persistent_arr['persistent_expcap'] == 'ja') ? 'selected' : '' );
-      $template->tag('expcap_no_selected', ($persistent_arr['persistent_expcap'] == 'nein') ? 'selected' : '' );
-      $template->tag('expcap_special_selected', ($persistent_arr['persistent_expcap'] == 'speziell') ? 'selected' : '' );
-      $template->tag('expcap_N/A_selected', ($persistent_arr['persistent_expcap'] == 'k. A.') ? 'selected' : '' );
+      $template->tag('expcap_yes_selected', ($persistent_arr['persistent_expcap'] == 1) ? 'selected' : '' );
+      $template->tag('expcap_no_selected', ($persistent_arr['persistent_expcap'] == 0) ? 'selected' : '' );
+      $template->tag('expcap_special_selected', ($persistent_arr['persistent_expcap'] == 2) ? 'selected' : '' );
+      $template->tag('expcap_N/A_selected', ($persistent_arr['persistent_expcap'] == -1) ? 'selected' : '' );
 
       //fights difficulty selection "tags" (conditions)
       $template->tag('fights_none_selected', ($persistent_arr['persistent_fights'] == 0) ? 'selected' : '' );

@@ -46,23 +46,23 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
     $_POST['spiel'] = intval($_POST['spiel']);
     $_POST['setting'] = intval($_POST['setting']);
     $_POST['genre'] = intval($_POST['genre']);
-    $_POST['termine'] = savesql($_POST['termine']);
+    $_POST['termine'] = intval($_POST['termine']);
     $_POST['dlsize'] = intval($_POST['dlsize']);
     $_POST['dlsvu'] = (isset($_POST['dlsvu']) && ($_POST['dlsvu']!=0)) ? 1 : 0;
     $_POST['dlhdu'] = (isset($_POST['dlhdu']) && ($_POST['dlhdu']!=0)) ? 1 : 0;
     $_POST['dlcep'] = (isset($_POST['dlcep']) && ($_POST['dlcep']!=0)) ? 1 : 0;
     $_POST['dlmotb'] = (isset($_POST['dlmotb']) && ($_POST['dlmotb']!=0)) ? 1 : 0;
     $_POST['dlsoz'] = (isset($_POST['dlsoz']) && ($_POST['dlsoz']!=0)) ? 1 : 0;
-    $_POST['anmeldung'] = savesql($_POST['anmeldung']);
+    $_POST['anmeldung'] = intval($_POST['anmeldung']);
     $_POST['handycap'] = savesql($_POST['handycap']);
     $_POST['dm'] = intval($_POST['dm']);
     $_POST['maxzahl'] = savesql($_POST['maxzahl']);
     $_POST['maxlevel'] = savesql($_POST['maxlevel']);
-    $_POST['expcap'] = savesql($_POST['expcap']);
+    $_POST['expcap'] = intval($_POST['expcap']);
     $_POST['fights'] = intval($_POST['fights']);
     $_POST['traps'] = intval($_POST['traps']);
     $_POST['items'] = intval($_POST['items']);
-    $_POST['pvp'] = savesql($_POST['pvp']);
+    $_POST['pvp'] = intval($_POST['pvp']);
     $_POST['interview'] = savesql($_POST['interview']);
     settype($_POST['posterid'], 'integer');
 

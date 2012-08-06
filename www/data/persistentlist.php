@@ -28,6 +28,8 @@
     as well as that of the covered work.
 */
 
+require_once(FS2_ROOT_PATH .'includes/persistentfunctions.php');
+
 if (!isset($_GET['sort'])) $_GET['sort'] = 'name';
 switch ($_GET['sort'])
 {
@@ -88,7 +90,7 @@ while ($persistent_arr = mysql_fetch_assoc($index))
     $template->tag('dlcep', ($persistent_arr['persistent_dlcep']!=0) ? 'Community Expansion Pack' : '');
     $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
     $template->tag('dlsoz', ($persistent_arr['persistent_dlsoz']!=0) ? 'Storm of Zehir' : '');
-    $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
+    $template->tag('anmeldung', getPersistentRegAsString($persistent_arr['persistent_anmeldung']));
     $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
     $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
 

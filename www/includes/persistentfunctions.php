@@ -71,4 +71,42 @@ function getPersistentFrequencyAsString($diff)
   return 'k. A.';
 }
 
+function getPersistentPvPAsString($pvp)
+{
+  if ($pvp==1) return 'ja';
+  if ($pvp==2) return 'nach Absprache';
+  if ($pvp==3) return 'nein';
+  if ($pvp==4) return 'speziell';
+  return 'k. A.';
+}
+
+function getPersistentUptimeAsString($uptime)
+{
+  if ($uptime==1) return 'st&auml;ndig';
+  if ($uptime==2) return 'regelm&auml;&szlig;ig';
+  if ($uptime==3) return 'unregelm&auml;&szlig;ig';
+  return 'k. A.';
+}
+
+function getPersistentEXPCapAsString($exp)
+{
+  if ($exp==0) return 'nein';
+  if ($exp==1) return 'ja';
+  if ($exp==2) return 'speziell';
+  return 'k. A.';
+}
+
+function getPersistentRegAsString($reg)
+{
+  if ($reg==0) return 'von Anfang an';
+  if ($reg==1) return 'Level 1';
+  if ($reg==2) return 'Level 2';
+  if ($reg==3) return 'Level 3';
+  if ($reg==4) return 'Level 4';
+  if ($reg==5) return 'Level 5';
+  if ($reg==6) return '&gt; Level 5';
+  if ($reg==100) return 'speziell';
+  if ($reg==127) return 'nie';
+  return 'k. A.';
+}
 ?>
