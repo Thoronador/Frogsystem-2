@@ -113,7 +113,7 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
 					   persistent_fights = '".$_POST['fights']."',
 					   persistent_traps = '".$_POST['traps']."',
 					   persistent_items = '".$_POST['items']."',
-					   persistent_pvp = '".$_POST['pvp']."'
+					   persistent_pvp = '".$_POST['pvp']."',
 					   persistent_datum = '".$datum."'
                    WHERE persistent_id = '".$_POST['editpersistentid']."'";
       mysql_query($update, $db);
