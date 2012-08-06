@@ -146,3 +146,22 @@ INSERT INTO `fs_persistent_setting` (`setting_id`, `setting_name`, `setting_date
 (12, 'Vampire', 1137790259),
 (13, 'eigenes Setting', 1137790268),
 (14, 'k. A.', 1137790277);
+
+-- --------------------------------------------------------
+
+--
+-- Daten fuer neue Admin-CP-Gruppe
+--
+
+INSERT INTO `fs_admin_groups` (`group_id`, `group_title`, `menu_id`, `group_pos`)
+VALUES ('30', 'Persistente Welten', 'interactive', '3');
+
+-- --------------------------------------------------------
+
+--
+-- Daten fuer neue Admin-CP-Eintraege
+--
+
+INSERT INTO `fs_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`) VALUES
+('persistentformadd', '30', 'Persistente Welten - Formular &auml;ndern', 'Formular erweitern', 'admin_persistentformadd.php', '3', '0'),
+('persistentformdelete', '30', 'Persistente Welten - Formular &auml;ndern', 'Formular verkleinern', 'admin_persistentformdelete.php', '4', '0');

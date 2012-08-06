@@ -2,6 +2,7 @@
 /*
     Frogsystem Persistent Worlds Scripts
     Copyright (C) 2005-2007  Stefan Bollmann
+    Copyright (C) 2012  Thoronador (adjustments for alix5)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,13 +32,16 @@
 //// Setting löschen ////
 /////////////////////////
 
-if ($_POST[delsetting] != NULL)
+if (isset($_POST['delsetting']))
 {
-    settype($_POST[delsetting], 'integer');
+    settype($_POST['delsetting'], 'integer');
 
-	$index = mysql_query("DELETE FROM fsplus_persistent_setting WHERE setting_id = '$_POST[delsetting]'", $db);
+	//delete setting
+	$index = mysql_query('DELETE FROM `'.$global_config_arr['pref'].'persistent_setting` WHERE setting_id = \''.$_POST['delsetting']."' LIMIT 1", $db);
+    //update related persistent world entries to "N/A"
+    mysql_query('UPDATE `'.$global_config_arr['pref'].'persistent` SET persistent_setting_id=\'-1\' WHERE persistent_setting_id = \''.$_POST['delsetting']."'", $db);
 
-	systext('Setting wurde gelöscht');
+	systext('Setting wurde gel&ouml;scht');
 }
 /*
 else
@@ -45,13 +49,16 @@ else
     systext('Setting konnte nicht gelöscht werden');
 }
 */
-elseif ($_POST[delgenre] != NULL)
+elseif (isset($_POST['delgenre']))
 {
-    settype($_POST[delgenre], 'integer');
+    settype($_POST['delgenre'], 'integer');
 
-	$index = mysql_query("DELETE FROM fsplus_persistent_genre WHERE genre_id = '$_POST[delgenre]'", $db);
+	//delete genre
+	$index = mysql_query('DELETE FROM `'.$global_config_arr['pref'].'persistent_genre` WHERE genre_id = \''.$_POST['delgenre']."' LIMIT 1", $db);
+    //updated related persistent world entries to "N/A"
+    mysql_query('UPDATE `'.$global_config_arr['pref'].'persistent` SET persistent_genre_id=\'-1\' WHERE persistent_genre_id = \''.$_POST['delgenre']."'", $db);
 
-	systext('Genre wurde gelöscht');
+	systext('Genre wurde gel&ouml;scht');
 }
 
 /////////////////////////
@@ -61,7 +68,7 @@ elseif ($_POST[delgenre] != NULL)
 else
 {
     echo'
-                    <form action="'.$PHP_SELF.'" method="post">
+                    <form action="'.$_SERVER['PHP_SELF'].'" method="post">
                         <input type="hidden" value="persistentformdelete" name="go">
                         <input type="hidden" value="'.session_id().'" name="PHPSESSID">
                         <table border="0" cellpadding="2" cellspacing="0" width="600">
@@ -73,24 +80,24 @@ else
                                     erstellt am
                                 </td>
                                 <td class="config" width="20%">
-                                    löschen
+                                    l&ouml;schen
                                 </td>
                             </tr>
     ';
-    $index = mysql_query("select * from fsplus_persistent_setting order by setting_date desc", $db);
+    $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_setting` ORDER BY setting_date DESC', $db);
     while ($setting_arr = mysql_fetch_assoc($index))
     {
-		$setting_arr[setting_date] = date("d.m.Y", $setting_arr[setting_date]);
+		$setting_arr['setting_date'] = date('d.m.Y', $setting_arr['setting_date']);
         echo'
                             <tr>
                                 <td class="configthin">
-                                    '.$setting_arr[setting_name].'
+                                    '.$setting_arr['setting_name'].'
                                 </td>
                                 <td class="configthin">
-                                    '.$setting_arr[setting_date].'
+                                    '.$setting_arr['setting_date'].'
                                 </td>
                                 <td class="config">
-                                    <input type="radio" name="delsetting" value="'.$setting_arr[setting_id].'">
+                                    <input type="radio" name="delsetting" value="'.$setting_arr['setting_id'].'">
                                 </td>
                             </tr>
         ';
@@ -103,7 +110,7 @@ else
                             </tr>
                             <tr>
                                 <td colspan="4" align="center">
-                                    <input class="button" type="submit" value="Löschen">
+                                    <input class="button" type="submit" value="L&ouml;schen">
                                 </td>
                             </tr>
                         </table>
@@ -115,7 +122,7 @@ else
 							</td>
 						</tr>
 					</table>
-                    <form action="'.$PHP_SELF.'" method="post">
+                    <form action="'.$_SERVER['PHP_SELF'].'" method="post">
                         <input type="hidden" value="persistentformdelete" name="go">
                         <input type="hidden" value="'.session_id().'" name="PHPSESSID">
                         <table border="0" cellpadding="2" cellspacing="0" width="600">
@@ -127,24 +134,24 @@ else
                                     erstellt am
                                 </td>
                                 <td class="config" width="20%">
-                                    löschen
+                                    l&ouml;schen
                                 </td>
                             </tr>
     ';
-    $index = mysql_query("select * from fsplus_persistent_genre order by genre_date desc", $db);
+    $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent_genre` ORDER BY genre_date DESC', $db);
     while ($genre_arr = mysql_fetch_assoc($index))
     {
-		$genre_arr[genre_date] = date("d.m.Y", $genre_arr[genre_date]);
+		$genre_arr['genre_date'] = date('d.m.Y', $genre_arr['genre_date']);
         echo'
                             <tr>
                                 <td class="configthin">
-                                    '.$genre_arr[genre_name].'
+                                    '.$genre_arr['genre_name'].'
                                 </td>
                                 <td class="configthin">
-                                    '.$genre_arr[genre_date].'
+                                    '.$genre_arr['genre_date'].'
                                 </td>
                                 <td class="config">
-                                    <input type="radio" name="delgenre" value="'.$genre_arr[genre_id].'">
+                                    <input type="radio" name="delgenre" value="'.$genre_arr['genre_id'].'">
                                 </td>
                             </tr>
         ';
@@ -157,7 +164,7 @@ else
                             </tr>
                             <tr>
                                 <td colspan="4" align="center">
-                                    <input class="button" type="submit" value="Löschen">
+                                    <input class="button" type="submit" value="L&ouml;schen">
                                 </td>
                             </tr>
                         </table>
