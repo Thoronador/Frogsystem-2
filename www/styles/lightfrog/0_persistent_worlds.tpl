@@ -452,7 +452,7 @@
 		  <option value="2">nach Absprache</option>
 		  <option value="3">nein</option>
 		  <option value="4">speziell</option>
-		  <option value="-1">k.A.</option>
+		  <option value="-1" selected>k.A.</option>
 		</select>
       </td>
     </tr>
@@ -466,7 +466,7 @@
 		  <option value="1">st&auml;ndig</option>
 		  <option value="2">regelm&auml;&szlig;ig</option>
 		  <option value="3">unregelm&auml;&szlig;ig</option>
-		  <option value="-1">k. A.</option>
+		  <option value="-1" selected>k. A.</option>
 		</select>
       </td>
     </tr>
@@ -530,7 +530,7 @@
 		  <option value="6">&gt; Level 5</option>
 		  <option value="100">speziell</option>
 		  <option value="127">nie</option>
-		  <option value="-1">k. A.</option>
+		  <option value="-1" selected>k. A.</option>
 		</select>
       </td>
     </tr>
@@ -561,7 +561,7 @@
 		  <option value="9">9</option>
 		  <option value="10">10</option>
 		  <option value="11">&gt; 10</option>
-		  <option value="-1">k. A.</option>
+		  <option value="-1" selected>k. A.</option>
 		</select>
       </td>
     </tr>
@@ -593,7 +593,7 @@
 		  <option value="1">ja</option>
 		  <option value="0">nein</option>
 		  <option value="2">speziell</option>
-		  <option value="-1">k. A.</option>
+		  <option value="-1" selected>k. A.</option>
 		</select>
       </td>
     </tr>
@@ -609,7 +609,7 @@
 		  <option value="2">mittel</option>
 		  <option value="3">schwer</option>
 		  <option value="4">uneinheitlich</option>
-		  <option value="-1">k.A.</option>
+		  <option value="-1" selected>k.A.</option>
 		</select>
       </td>
     </tr>
@@ -625,7 +625,7 @@
 		  <option value="2">mittel</option>
 		  <option value="3">schwer</option>
 		  <option value="4">uneinheitlich</option>
-		  <option value="-1">k.A.</option>
+		  <option value="-1" selected>k.A.</option>
 		</select>
       </td>
     </tr>
@@ -641,7 +641,7 @@
 		  <option value="2">normal</option>
 		  <option value="3">oft</option>
 		  <option value="4">uneinheitlich</option>
-		  <option value="-1">k.A.</option>
+		  <option value="-1" selected>k.A.</option>
 		</select>
       </td>
     </tr>

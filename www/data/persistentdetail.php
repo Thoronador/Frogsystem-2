@@ -70,8 +70,8 @@
   $news_arr['user_url'] = '?go=profil&amp;userid='.$persistent_arr['persistent_posterid'];
 
   //FS-Codes ersetzen
-  $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1);
-  $persistent_arr['persistent_handycap'] = fscode($persistent_arr['persistent_handycap'], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1);
+  $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1);
+  $persistent_arr['persistent_handycap'] = fscode($persistent_arr['persistent_handycap'], 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1);
 
   switch ($persistent_arr['persistent_spiel'])
   {
@@ -89,7 +89,7 @@
 
   $template->tag('name', $persistent_arr['persistent_name']);
   $template->tag('url', $persistent_arr['persistent_url']);
-  $template->tag('text', killhtml($persistent_arr['persistent_text']));
+  $template->tag('text', $persistent_arr['persistent_text']);
   $template->tag('spiel', $persistent_arr['persistent_spiel']);
   $template->tag('setting', $persistent_arr['setting_name']);
   $template->tag('genre', $persistent_arr['genre_name']);
@@ -102,7 +102,7 @@
   $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
   $template->tag('dlsoz', ($persistent_arr['persistent_dlsoz']!=0) ? 'Storm of Zehir' : '');
   $template->tag('anmeldung', getPersistentRegAsString($persistent_arr['persistent_anmeldung']));
-  $template->tag('handycap', killhtml($persistent_arr['persistent_handycap']));
+  $template->tag('handycap', $persistent_arr['persistent_handycap']);
   $template->tag('dungeonmaster', getPersistentDMAsString($persistent_arr['persistent_dm']));
   $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
   $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);

@@ -66,7 +66,8 @@ if (isset($_SESSION['user_level']) && ($_SESSION['user_level'] == 'loggedin') &&
     $_POST['interview'] = savesql($_POST['interview']);
     settype($_POST['posterid'], 'integer');
 
-	$index = mysql_query('SELECT persistent_name FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_name = \''.$_POST['name']."' LIMIT 1");
+	$index = mysql_query('SELECT persistent_name FROM `'.$global_config_arr['pref'].'persistent`
+	                      WHERE persistent_name = \''.$_POST['name']."' OR persistent_link='".savesql($seitenlink)."' LIMIT 1");
     if (mysql_num_rows($index) == 0)
     {
       mysql_query('INSERT INTO `'.$global_config_arr['pref'].'persistent` (persistent_name,

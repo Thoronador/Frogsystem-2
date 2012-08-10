@@ -44,7 +44,7 @@ CREATE TABLE `fs_persistent` (
   `persistent_setting_id` smallint(6) NOT NULL,
   `persistent_genre_id` smallint(6) NOT NULL,
   `persistent_termine` tinyint NOT NULL default '-1',
-  `persistent_dlsize` int NOT NULL default '',
+  `persistent_dlsize` int NOT NULL default '-1',
   `persistent_dlsvu` tinyint NOT NULL,
   `persistent_dlhdu` tinyint NOT NULL,
   `persistent_dlcep` tinyint NOT NULL,
@@ -163,5 +163,6 @@ VALUES ('30', 'Persistente Welten', 'interactive', '3');
 --
 
 INSERT INTO `fs_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`) VALUES
+('persistentadd', '30', 'Persistente Welt hinzuf&uuml;gen', 'Pers. Welt hinzuf&uuml;gen', 'admin_persistentadd.php', '1', '0'),
 ('persistentformadd', '30', 'Persistente Welten - Formular &auml;ndern', 'Formular erweitern', 'admin_persistentformadd.php', '3', '0'),
 ('persistentformdelete', '30', 'Persistente Welten - Formular &auml;ndern', 'Formular verkleinern', 'admin_persistentformdelete.php', '4', '0');
