@@ -28,6 +28,8 @@
     as well as that of the covered work.
 */
 
+  require_once(FS2_ROOT_PATH .'includes/persistentfunctions.php');
+
 //Kommentar-Config
 $index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'news_config`', $db);
 $config_arr = mysql_fetch_assoc($index);
@@ -45,15 +47,16 @@ if ( $config_arr['com_antispam'] == 1 && isset($_SESSION['user_id']) ) {
 }
 
 $template = ''; //init template
+$message_template = ''; //init messaged
 
 //Daten zu persistenter Welt
-$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_link = \''.$_GET['pw']."' LIMIT 1", $db);
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_link = \''.savesql($_GET['pw'])."' LIMIT 1", $db);
 $persistent_arr = mysql_fetch_assoc($index);
 
 if ($persistent_arr === false)
 {
   //no PW with that link name found
-  $template .= sys_message($phrases['sysmessage'], 'Zum angegebenen Link existiert keine Persistente Welt.');
+  $message_template = sys_message($phrases['sysmessage'], 'Zum angegebenen Link existiert keine Persistente Welt.');
 }
 else
 {
@@ -65,7 +68,7 @@ else
 if (isset($_POST['addcomment']))
 {
     if (isset($_GET['pw']) && ($_POST['name'] != '' || isset($_SESSION['user_id'])) && $_POST['title'] != '' && $_POST['text'] != ''
-        && (($anti_spam OR isset($_SESSION['user_id'])))
+        && (($anti_spam OR isset($_SESSION['user_id']))))
     {
         $_GET['pw'] = savesql($_GET['pw']);
         $_POST['name'] = savesql($_POST['name']);
@@ -102,11 +105,11 @@ if (isset($_POST['addcomment']))
         {
             $reason = $phrases['comment_empty'];
         }
-        if ((!($sicherheits_eingabe == $_SESSION['rechen_captcha_spam'] AND is_numeric($_POST['spam']) == true AND $sicherheits_eingabe == true)) AND !($_SESSION['user_id']))
+        if (!($anti_spam == true))
         {
             $reason .= $phrases['comment_spam'];
         }
-        sys_message($phrases['comment_not_added'], $reason);
+        $message_template .= sys_message($phrases['comment_not_added'], $reason);
     }
 }
 
@@ -114,6 +117,29 @@ if (isset($_POST['addcomment']))
 //Persistente Welt anzeigen//
 /////////////////////////////
 
+  //setting
+  $query = mysql_query('SELECT setting_id, setting_name FROM `'.$global_config_arr['pref'].'persistent_setting`
+                        WHERE setting_id='.$persistent_arr['persistent_setting_id'].' LIMIT 1', $db);
+  if ($row = mysql_fetch_assoc($query))
+  {
+    $persistent_arr['setting_name'] = $row['setting_name'];
+  }
+  else
+  {
+    $persistent_arr['setting_name'] = 'k. A.';
+  }
+
+  //genre
+  $query = mysql_query('SELECT genre_id, genre_name FROM `'.$global_config_arr['pref'].'persistent_genre`
+                        WHERE genre_id='.$persistent_arr['persistent_genre_id'].' LIMIT 1', $db);
+  if ($row = mysql_fetch_assoc($query))
+  {
+    $persistent_arr['genre_name'] = $row['genre_name'];
+  }
+  else
+  {
+    $persistent_arr['genre_name'] = 'k. A.';
+  }
 
   // Kommentare
   $pw_arr['comment_url'] = '?go=pwcomments&amp;pw='.$_GET['pw'];
@@ -128,7 +154,8 @@ if (isset($_POST['addcomment']))
   $news_arr['user_url'] = '?go=user&amp;id='.$persistent_arr['persistent_posterid'];
 
 
-  $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  $persistent_arr['persistent_text'] = fscode($persistent_arr['persistent_text'], 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  $persistent_arr['persistent_handycap'] = fscode($persistent_arr['persistent_handycap'], 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1);
 
   switch ($persistent_arr['persistent_spiel'])
   {
@@ -146,23 +173,24 @@ if (isset($_POST['addcomment']))
 
   $template->tag('name', $persistent_arr['persistent_name']);
   $template->tag('url', $persistent_arr['persistent_url']);
-  $template->tag('text', killhtml($persistent_arr['persistent_text']));
+  $template->tag('text', $persistent_arr['persistent_text']);
   $template->tag('spiel', $persistent_arr['persistent_spiel']);
-  $template->tag('setting', $persistent_arr['persistent_setting']);
-  $template->tag('genre', $persistent_arr['persistent_genre']);
-  $template->tag('pvp', $persistent_arr['persistent_pvp']);
-  $template->tag('termine', $persistent_arr['persistent_termine']);
+  $template->tag('setting', $persistent_arr['setting_name']);
+  $template->tag('genre', $persistent_arr['genre_name']);
+  $template->tag('pvp', getPersistentPvPAsString($persistent_arr['persistent_pvp']));
+  $template->tag('termine', getPersistentUptimeAsString($persistent_arr['persistent_termine']));
   $template->tag('dlsize', getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']));
   $template->tag('dlsvu', ($persistent_arr['persistent_dlsvu']!=0) ? 'Schatten von Undernzit' : '');
   $template->tag('dlhdu', ($persistent_arr['persistent_dlhdu']!=0) ? 'Horden des Unterreichs' : '');
   $template->tag('dlcep', ($persistent_arr['persistent_dlcep']!=0) ? 'Community Expansion Pack' : '');
   $template->tag('dlmotb', ($persistent_arr['persistent_dlmotb']!=0) ? 'Mask of the Betrayer' : '');
-  $template->tag('anmeldung', $persistent_arr['persistent_anmeldung']);
-  $template->tag('handycap', killhtml($persistent_arr['persistent_handycap']));
+  $template->tag('dlsoz', ($persistent_arr['persistent_dlsoz']!=0) ? 'Storm of Zehir' : '');
+  $template->tag('anmeldung', getPersistentRegAsString($persistent_arr['persistent_anmeldung']));
+  $template->tag('handycap', $persistent_arr['persistent_handycap']);
   $template->tag('dungeonmaster', getPersistentDMAsString($persistent_arr['persistent_dm']));
   $template->tag('maxplayer', $persistent_arr['persistent_maxzahl']);
   $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
-  $template->tag('expcap', $persistent_arr['persistent_expcap']);
+  $template->tag('expcap', getPersistentEXPCapAsString($persistent_arr['persistent_expcap']));
   $template->tag('fights', getPersistentDifficultyAsString($persistent_arr['persistent_fights']));
   $template->tag('traps',  getPersistentDifficultyAsString($persistent_arr['persistent_traps']));
   $template->tag('items', getPersistentFrequencyAsString($persistent_arr['persistent_items']));
@@ -176,7 +204,7 @@ if (isset($_POST['addcomment']))
   $template->tag('autor', $news_arr['user_name']);
   $template->tag('autor_profilurl', $news_arr['user_url']);
 
-  $pw_template = $template->display();
+  $pw_template = $message_template . $template->display();
 
 ////////////////////////
 // Kommentare erzeugen//

@@ -165,6 +165,7 @@ VALUES ('30', 'Persistente Welten', 'interactive', '3');
 INSERT INTO `fs_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`) VALUES
 ('persistentadd', '30', 'Persistente Welt hinzuf&uuml;gen', 'Pers. Welt hinzuf&uuml;gen', 'admin_persistentadd.php', '1', '0'),
 ('persistentedit', '30', 'Persistente Welt bearbeiten', 'bearbeiten', 'admin_persistentedit.php', '2', '0'),
+('pwcommentedit', '30', 'Kommentare', 'Kommentare', 'admin_pwcommentedit.php', '2', '1'),
 ('persistentformadd', '30', 'Persistente Welten - Formular &auml;ndern', 'Formular erweitern', 'admin_persistentformadd.php', '3', '0'),
 ('persistentformdelete', '30', 'Persistente Welten - Formular &auml;ndern', 'Formular verkleinern', 'admin_persistentformdelete.php', '4', '0'),
 ('persinteredit', '30', 'Interview &Uuml;bersicht', 'Interview &auml;ndern', 'admin_persinteredit.php', '5', '0');

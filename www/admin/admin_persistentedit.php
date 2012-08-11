@@ -562,8 +562,8 @@ elseif (isset($_POST['persistentid']))
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" colspan="2">
-                                    <input class="button" type="submit" value="Absenden">
+                                <td align="center" colspan="4">
+                                    <input class="button" type="submit" value="Kommentar bearbeiten">
                                 </td>
                             </tr>
                         </table>
