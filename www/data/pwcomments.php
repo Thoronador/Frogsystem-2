@@ -40,7 +40,7 @@ $editor_config = mysql_fetch_assoc($index);
 ///////////////////
 //// Anti-Spam ////
 ///////////////////
-if ( $config_arr['com_antispam'] == 1 && isset($_SESSION['user_id']) ) {
+if ( $config_arr['com_antispam'] == 1 && isset($_SESSION['user_id']) && ($_SESSION['user_id']!=0) ) {
     $anti_spam = check_captcha ($_POST['spam'], 0);
 } else {
     $anti_spam = check_captcha ($_POST['spam'], $config_arr['com_antispam']);
@@ -65,18 +65,20 @@ else
 //// Kommentar hinzufügen ////
 //////////////////////////////
 
-if (isset($_POST['addcomment']))
+if (isset($_POST['add_comment']))
 {
-    if (isset($_GET['pw']) && ($_POST['name'] != '' || isset($_SESSION['user_id'])) && $_POST['title'] != '' && $_POST['text'] != ''
-        && (($anti_spam OR isset($_SESSION['user_id']))))
+    if (isset($_POST['id'])
+        && ($_POST['name'] != '' || isset($_SESSION['user_id']))
+        && $_POST['title'] != '' && $_POST['text'] != ''
+        && (($anti_spam==TRUE OR isset($_SESSION['user_id']))))
     {
-        $_GET['pw'] = savesql($_GET['pw']);
+        $_POST['id'] = intval($_POST['id']);
         $_POST['name'] = savesql($_POST['name']);
         $_POST['title'] = savesql($_POST['title']);
         $_POST['text'] = savesql($_POST['text']);
         $commentdate = date('U');
 
-        if (isset($_SESSION['user_id']))
+        if (isset($_SESSION['user_id']) && ($_SESSION['user_id']!=0))
         {
             $userid = $_SESSION['user_id'];
             $_POST['name'] = '';
@@ -86,8 +88,8 @@ if (isset($_POST['addcomment']))
             $userid = 0;
         }
 
-        mysql_query('INSERT INTO `'.$global_config_arr['pref'].'persistent_comments` (persistent_link, comment_poster, comment_poster_id, comment_date, comment_title, comment_text)
-                     VALUES (\''.$_GET['pw']."',
+        mysql_query('INSERT INTO `'.$global_config_arr['pref'].'persistent_comments` (persistent_id, comment_poster, comment_poster_id, comment_date, comment_title, comment_text)
+                     VALUES (\''.$_POST['id']."',
                              '".$_POST['name']."',
                              '".$userid."',
                              '".$commentdate."',
@@ -322,7 +324,7 @@ $form_spam_text = $form_spam_text->display ();
 
 if (
       $config_arr['com_antispam'] == 0 ||
-      ( $config_arr['com_antispam'] == 1 && $_SESSION['user_id'] ) ||
+      ( $config_arr['com_antispam'] == 1 && isset($_SESSION['user_id']) && $_SESSION['user_id']!=0) ||
       ( $config_arr['com_antispam'] == 3 && is_in_staff ( $_SESSION['user_id'] ) )
    )
 {
@@ -339,7 +341,7 @@ $template = new template();
 $template->setFile('0_news.tpl');
 $template->load('COMMENT_FORM');
 
-$template->tag('news_id', $_GET['id'] );
+$template->tag('news_id', $persistent_arr['persistent_id'] );
 $template->tag('name_input', $form_name );
 $template->tag('textarea', $template_textarea );
 $template->tag('html', $html_active );
