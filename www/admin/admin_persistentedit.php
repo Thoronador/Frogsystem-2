@@ -223,6 +223,11 @@ elseif (isset($_POST['persistentid']))
 		$sele = ($genre_arr['genre_id'] == $persistent_arr['persistent_genre_id']) ? ' selected' : '';
         echo '<option value="'.$genre_arr['genre_id'].'"'.$sele.'>'.$genre_arr['genre_name'].'</option>';
 	}
+	$pvp_1_sele = ($persistent_arr['persistent_pvp']==1) ? ' selected' : '';
+	$pvp_2_sele = ($persistent_arr['persistent_pvp']==2) ? ' selected' : '';
+	$pvp_3_sele = ($persistent_arr['persistent_pvp']==3) ? ' selected' : '';
+	$pvp_4_sele = ($persistent_arr['persistent_pvp']==4) ? ' selected' : '';
+	$pvp_neg1_sele = ($persistent_arr['persistent_pvp']<=-1) ? ' selected' : '';
 	echo'
 									</select>
                                 </td>
@@ -234,11 +239,11 @@ elseif (isset($_POST['persistentid']))
                                 </td>
                                 <td class="config" valign="top">
                                 	<select name="pvp" size="1">
-										<option value="1" '.getselected($persistent_arr['persistent_pvp'], 1).'>ja</option>
-										<option value="2" '.getselected($persistent_arr['persistent_pvp'], 2).'>nach Absprache</option>
-										<option value="3" '.getselected($persistent_arr['persistent_pvp'], 3).'>nein</option>
-										<option value="4" '.getselected($persistent_arr['persistent_pvp'], 4).'>speziell</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_pvp'], -1).'>k.A.</option>
+										<option value="1"'.$pvp_1_sele.'>ja</option>
+										<option value="2"'.$pvp_2_sele.'>nach Absprache</option>
+										<option value="3"'.$pvp_3_sele.'>nein</option>
+										<option value="4"'.$pvp_4_sele.'>speziell</option>
+										<option value="-1"'.$pvp_neg1_sele.'>k.A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -247,12 +252,17 @@ elseif (isset($_POST['persistentid']))
                                     Online-Zeiten:<br>
                                     <font class="small">Wann bzw. wie oft ist der Server online?</font>
                                 </td>
-                                <td class="config" valign="top">
+                                <td class="config" valign="top">';
+    $termine_1_sele = ($persistent_arr['persistent_termine']==1) ? ' selected' : '';
+    $termine_2_sele = ($persistent_arr['persistent_termine']==2) ? ' selected' : '';
+    $termine_3_sele = ($persistent_arr['persistent_termine']==3) ? ' selected' : '';
+    $termine_neg1_sele = ($persistent_arr['persistent_termine']<=-1) ? ' selected' : '';
+    echo '
                                 	<select name="termine" size="1">
-										<option value="1" '.getselected($persistent_arr['persistent_termine'], 1).'>st&auml;ndig</option>
-										<option value="2" '.getselected($persistent_arr['persistent_termine'], 2).'>regelm&auml;&szlig;ig</option>
-										<option value="3" '.getselected($persistent_arr['persistent_termine'], 3).'>unregelm&auml;&szlig;ig</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_termine'], -1).'>k. A.</option>
+										<option value="1"'.$termine_1_sele.'>st&auml;ndig</option>
+										<option value="2"'.$termine_2_sele.'>regelm&auml;&szlig;ig</option>
+										<option value="3"'.$termine_3_sele.'>unregelm&auml;&szlig;ig</option>
+										<option value="-1"'.$termine_neg1_sele.'>k. A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -292,16 +302,22 @@ elseif (isset($_POST['persistentid']))
                                 </td>
                                 <td class="config" valign="top">
                                     <table width="100%">
-										<tr>
-											<td width="50%"><input type="checkbox" name="dlsvu" value="1" '.getchecked($persistent_arr['persistent_dlsvu'], 1).'> SvU</td>
-											<td width="50%"><input type="checkbox" name="dlmotb" value="1" '.getchecked($persistent_arr['persistent_dlmotb'], 1).'> MotB</td>
+										<tr>'."\n";
+    $svu_checked = ($persistent_arr['persistent_dlsvu']!=0) ? ' checked' : '';
+    $hdu_checked = ($persistent_arr['persistent_dlhdu']!=0) ? ' checked' : '';
+    $cep_checked = ($persistent_arr['persistent_dlcep']!=0) ? ' checked' : '';
+    $motb_checked = ($persistent_arr['persistent_dlmotb']!=0) ? ' checked' : '';
+    $soz_checked = ($persistent_arr['persistent_dlsoz']!=0) ? ' checked' : '';
+    echo '
+   											<td width="50%"><input type="checkbox" name="dlsvu" value="1"'.$svu_checked.'> SvU</td>
+											<td width="50%"><input type="checkbox" name="dlmotb" value="1"'.$motb_checked.'> MotB</td>
 										</tr>
 										<tr>
-											<td width="50%"><input type="checkbox" name="dlhdu" value="1" '.getchecked($persistent_arr['persistent_dlhdu'], 1).'> HdU</td>
-											<td width="50%"><input type="checkbox" name="dlsoz" value="1" '.getchecked($persistent_arr['persistent_dlsoz'], 1).'> SoZ</td>
+											<td width="50%"><input type="checkbox" name="dlhdu" value="1" '.$hdu_checked.'> HdU</td>
+											<td width="50%"><input type="checkbox" name="dlsoz" value="1" '.$soz_checked.'> SoZ</td>
 										</tr>
 										<tr>
-											<td width="50%"><input type="checkbox" name="dlcep" value="1" '.getchecked($persistent_arr['persistent_dlcep'], 1).'> CEP</td>
+											<td width="50%"><input type="checkbox" name="dlcep" value="1" '.$cep_checked.'> CEP</td>
 											<td width="50%">&nbsp;</td>
 										</tr>
 									</table>
@@ -315,18 +331,27 @@ elseif (isset($_POST['persistentid']))
                                 <td class="config" valign="top">
                                 	<select name="anmeldung" size="1">
 		';
+    $reg_0_selected = ($persistent_arr['persistent_anmeldung']==0) ? ' selected' : '';
+    $reg_1_selected = ($persistent_arr['persistent_anmeldung']==1) ? ' selected' : '';
+    $reg_2_selected = ($persistent_arr['persistent_anmeldung']==2) ? ' selected' : '';
+    $reg_3_selected = ($persistent_arr['persistent_anmeldung']==3) ? ' selected' : '';
+    $reg_4_selected = ($persistent_arr['persistent_anmeldung']==4) ? ' selected' : '';
+    $reg_5_selected = ($persistent_arr['persistent_anmeldung']==5) ? ' selected' : '';
     $reg_gt_5_selected = ((5<$persistent_arr['persistent_anmeldung']) && ($persistent_arr['persistent_anmeldung']<100)) ? ' selected' : '';
+    $reg_special_selected = ($persistent_arr['persistent_anmeldung']==100) ? ' selected' : '';
+    $reg_never_selected = ($persistent_arr['persistent_anmeldung']==127) ? ' selected' : '';
+    $reg_kA_selected = ($persistent_arr['persistent_anmeldung']<=-1) ? ' selected' : '';
 	echo '
-										<option value="0" '.getselected($persistent_arr['persistent_anmeldung'], 0).'>von Anfang an</option>
-										<option value="1" '.getselected($persistent_arr['persistent_anmeldung'], 1).'>Level 1</option>
-										<option value="2" '.getselected($persistent_arr['persistent_anmeldung'], 2).'>Level 2</option>
-										<option value="3" '.getselected($persistent_arr['persistent_anmeldung'], 3).'>Level 3</option>
-										<option value="4" '.getselected($persistent_arr['persistent_anmeldung'], 4).'>Level 4</option>
-										<option value="5" '.getselected($persistent_arr['persistent_anmeldung'], 5).'>Level 5</option>
+										<option value="0"'.$reg_0_selected.'>von Anfang an</option>
+										<option value="1"'.$reg_1_selected.'>Level 1</option>
+										<option value="2"'.$reg_2_selected.'>Level 2</option>
+										<option value="3"'.$reg_3_selected.'>Level 3</option>
+										<option value="4"'.$reg_4_selected.'>Level 4</option>
+										<option value="5"'.$reg_5_selected.'>Level 5</option>
 										<option value="6"'.$reg_gt_5_selected.'>&gt; Level 5</option>
-										<option value="100" '.getselected($persistent_arr['persistent_anmeldung'], 100).'>speziell</option>
-										<option value="127" '.getselected($persistent_arr['persistent_anmeldung'], 127).'>nie</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_anmeldung'], -1).'>k. A.</option>
+										<option value="100"'.$reg_special_selected.'>speziell</option>
+										<option value="127"'.$reg_never_selected.'>nie</option>
+										<option value="-1"'.$reg_kA_selected.'>k. A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -346,20 +371,31 @@ elseif (isset($_POST['persistentid']))
                                 </td>
                                 <td class="config" valign="top">
                                 	<select name="dm" size="1">';
+    $dm_1_selected = ($persistent_arr['persistent_dm']==1) ? ' selected' : '';
+    $dm_2_selected = ($persistent_arr['persistent_dm']==2) ? ' selected' : '';
+    $dm_3_selected = ($persistent_arr['persistent_dm']==3) ? ' selected' : '';
+    $dm_4_selected = ($persistent_arr['persistent_dm']==4) ? ' selected' : '';
+    $dm_5_selected = ($persistent_arr['persistent_dm']==5) ? ' selected' : '';
+    $dm_6_selected = ($persistent_arr['persistent_dm']==6) ? ' selected' : '';
+    $dm_7_selected = ($persistent_arr['persistent_dm']==7) ? ' selected' : '';
+    $dm_8_selected = ($persistent_arr['persistent_dm']==8) ? ' selected' : '';
+    $dm_9_selected = ($persistent_arr['persistent_dm']==9) ? ' selected' : '';
+    $dm_10_selected = ($persistent_arr['persistent_dm']==10) ? ' selected' : '';
     $dm_gt10_selected = ($persistent_arr['persistent_dm']>10) ? ' selected' : '';
+    $dm_kA_selected = ($persistent_arr['persistent_dm']<0) ? ' selected' : '';
 	echo'
-										<option value="1" '.getselected($persistent_arr['persistent_dm'], 1).'>1</option>
-										<option value="2" '.getselected($persistent_arr['persistent_dm'], 2).'>2</option>
-										<option value="3" '.getselected($persistent_arr['persistent_dm'], 3).'>3</option>
-										<option value="4" '.getselected($persistent_arr['persistent_dm'], 4).'>4</option>
-										<option value="5" '.getselected($persistent_arr['persistent_dm'], 5).'>5</option>
-										<option value="6" '.getselected($persistent_arr['persistent_dm'], 6).'>6</option>
-										<option value="7" '.getselected($persistent_arr['persistent_dm'], 7).'>7</option>
-										<option value="8" '.getselected($persistent_arr['persistent_dm'], 8).'>8</option>
-										<option value="9" '.getselected($persistent_arr['persistent_dm'], 9).'>9</option>
-										<option value="10" '.getselected($persistent_arr['persistent_dm'], 10).'>10</option>
+										<option value="1"'.$dm_1_selected.'>1</option>
+										<option value="2"'.$dm_2_selected.'>2</option>
+										<option value="3"'.$dm_3_selected.'>3</option>
+										<option value="4"'.$dm_4_selected.'>4</option>
+										<option value="5"'.$dm_5_selected.'>5</option>
+										<option value="6"'.$dm_6_selected.'>6</option>
+										<option value="7"'.$dm_7_selected.'>7</option>
+										<option value="8"'.$dm_8_selected.'>8</option>
+										<option value="9"'.$dm_9_selected.'>9</option>
+										<option value="10"'.$dm_10_selected.'>10</option>
 										<option value="11"'.$dm_gt10_selected.'>&gt; 10</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_dm'], -1).'>k. A.</option>
+										<option value="-1"'.$dm_kA_selected.'>k. A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -387,11 +423,16 @@ elseif (isset($_POST['persistentid']))
                                     <font class="small">Gibt es eine Begrenzung der zu bekommenden Erfahrungspunkte?</font>
                                 </td>
                                 <td class="config" valign="top">
-                                	<select name="expcap" size="1">
-										<option value="1" '.getselected($persistent_arr['persistent_expcap'], 1).'>ja</option>
-										<option value="0" '.getselected($persistent_arr['persistent_expcap'], 0).'>nein</option>
-										<option value="2" '.getselected($persistent_arr['persistent_expcap'], 2).'>speziell</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_expcap'], -1).'>k. A.</option>
+                                	<select name="expcap" size="1">';
+    $expcap_1_selected = ($persistent_arr['persistent_expcap']==1) ? ' selected' : '';
+    $expcap_2_selected = ($persistent_arr['persistent_expcap']==2) ? ' selected' : '';
+    $expcap_0_selected = ($persistent_arr['persistent_expcap']==0) ? ' selected' : '';
+    $expcap_neg1_selected = (($persistent_arr['persistent_expcap']<=-1) || ($persistent_arr['persistent_expcap']>2)) ? ' selected' : '';
+    echo '
+										<option value="1"'.$expcap_1_selected.'>ja</option>
+										<option value="0"'.$expcap_0_selected.'>nein</option>
+										<option value="2"'.$expcap_2_selected.'>speziell</option>
+										<option value="-1"'.$expcap_neg1_selected.'>k. A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -401,13 +442,20 @@ elseif (isset($_POST['persistentid']))
                                     <font class="small">Schwierigkeitsgrad der K&auml;mpfe.</font>
                                 </td>
                                 <td class="config" valign="top">
-                                	<select name="fights" size="1">
-										<option value="0" '.getselected($persistent_arr['persistent_fights'], 0).'>keine</option>
-										<option value="1" '.getselected($persistent_arr['persistent_fights'], 1).'>leicht</option>
-										<option value="2" '.getselected($persistent_arr['persistent_fights'], 2).'>mittel</option>
-										<option value="3" '.getselected($persistent_arr['persistent_fights'], 3).'>schwer</option>
-										<option value="4" '.getselected($persistent_arr['persistent_fights'], 4).'>uneinheitlich</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_fights'], -1).'>k.A.</option>
+                                	<select name="fights" size="1">';
+    $fights_0_selected = ($persistent_arr['persistent_fights']==0) ? ' selected' : '';
+    $fights_1_selected = ($persistent_arr['persistent_fights']==1) ? ' selected' : '';
+    $fights_2_selected = ($persistent_arr['persistent_fights']==2) ? ' selected' : '';
+    $fights_3_selected = ($persistent_arr['persistent_fights']==3) ? ' selected' : '';
+    $fights_4_selected = ($persistent_arr['persistent_fights']==4) ? ' selected' : '';
+    $fights_kA_selected = (($persistent_arr['persistent_fights']<=-1) || ($persistent_arr['persistent_fights']>4)) ? ' selected' : '';
+    echo '
+										<option value="0"'.$fights_0_selected.'>keine</option>
+										<option value="1"'.$fights_1_selected.'>leicht</option>
+										<option value="2"'.$fights_2_selected.'>mittel</option>
+										<option value="3"'.$fights_3_selected.'>schwer</option>
+										<option value="4"'.$fights_4_selected.'>uneinheitlich</option>
+										<option value="-1" '.$fights_kA_selected.'>k.A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -417,13 +465,20 @@ elseif (isset($_POST['persistentid']))
                                     <font class="small">Schwierigkeitsgrad der Fallen.</font>
                                 </td>
                                 <td class="config" valign="top">
-                                	<select name="traps" size="1">
-										<option value="0" '.getselected($persistent_arr['persistent_traps'], 0).'>keine</option>
-										<option value="1" '.getselected($persistent_arr['persistent_traps'], 1).'>leicht</option>
-										<option value="2" '.getselected($persistent_arr['persistent_traps'], 2).'>mittel</option>
-										<option value="3" '.getselected($persistent_arr['persistent_traps'], 3).'>schwer</option>
-										<option value="4" '.getselected($persistent_arr['persistent_traps'], 4).'>uneinheitlich</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_traps'], -1).'>k.A.</option>
+                                	<select name="traps" size="1">';
+    $traps_0_selected = ($persistent_arr['persistent_traps']==0) ? ' selected' : '';
+    $traps_1_selected = ($persistent_arr['persistent_traps']==1) ? ' selected' : '';
+    $traps_2_selected = ($persistent_arr['persistent_traps']==2) ? ' selected' : '';
+    $traps_3_selected = ($persistent_arr['persistent_traps']==3) ? ' selected' : '';
+    $traps_4_selected = ($persistent_arr['persistent_traps']==4) ? ' selected' : '';
+    $traps_kA_selected = (($persistent_arr['persistent_traps']<=-1) || ($persistent_arr['persistent_traps']>4)) ? ' selected' : '';
+    echo '
+										<option value="0" '.$traps_0_selected.'>keine</option>
+										<option value="1"'.$traps_1_selected.'>leicht</option>
+										<option value="2"'.$traps_2_selected.'>mittel</option>
+										<option value="3"'.$traps_3_selected.'>schwer</option>
+										<option value="4"'.$traps_4_selected.'>uneinheitlich</option>
+										<option value="-1"'.$traps_kA_selected.'>k.A.</option>
 									</select>
                                 </td>
                             </tr>
@@ -433,13 +488,20 @@ elseif (isset($_POST['persistentid']))
                                     <font class="small">H&auml;ufigkeit besonderer/hochwertiger Items.</font>
                                 </td>
                                 <td class="config" valign="top">
-                                	<select name="items" size="1">
-										<option value="0" '.getselected($persistent_arr['persistent_items'], 0).'>keine</option>
-										<option value="1" '.getselected($persistent_arr['persistent_items'], 1).'>selten</option>
-										<option value="2" '.getselected($persistent_arr['persistent_items'], 2).'>normal</option>
-										<option value="3" '.getselected($persistent_arr['persistent_items'], 3).'>oft</option>
-										<option value="4" '.getselected($persistent_arr['persistent_items'], 4).'>uneinheitlich</option>
-										<option value="-1" '.getselected($persistent_arr['persistent_items'], -1).'>k.A.</option>
+                                	<select name="items" size="1">';
+    $items_0_selected = ($persistent_arr['persistent_items']==0) ? ' selected' : '';
+    $items_1_selected = ($persistent_arr['persistent_items']==1) ? ' selected' : '';
+    $items_2_selected = ($persistent_arr['persistent_items']==2) ? ' selected' : '';
+    $items_3_selected = ($persistent_arr['persistent_items']==3) ? ' selected' : '';
+    $items_4_selected = ($persistent_arr['persistent_items']==4) ? ' selected' : '';
+    $items_kA_selected = (($persistent_arr['persistent_items']<=-1) || ($persistent_arr['persistent_items']>4)) ? ' selected' : '';
+    echo '
+										<option value="0" '.$items_0_selected.'>keine</option>
+										<option value="1" '.$items_1_selected.'>selten</option>
+										<option value="2" '.$items_2_selected.'>normal</option>
+										<option value="3" '.$items_3_selected.'>oft</option>
+										<option value="4" '.$items_4_selected.'>uneinheitlich</option>
+										<option value="-1" '.$items_kA_selected.'>k.A.</option>
 									</select>
                                 </td>
                             </tr>

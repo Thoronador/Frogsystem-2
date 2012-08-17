@@ -163,6 +163,7 @@ VALUES ('30', 'Persistente Welten', 'interactive', '3');
 --
 
 INSERT INTO `fs_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`) VALUES
+('tpl_persistent', '22', 'Persistente Welt bearbeiten', 'Persistente Welten', 'admin_template_persistent.php', '27', '0'),
 ('persistentadd', '30', 'Persistente Welt hinzuf&uuml;gen', 'Pers. Welt hinzuf&uuml;gen', 'admin_persistentadd.php', '1', '0'),
 ('persistentedit', '30', 'Persistente Welt bearbeiten', 'bearbeiten', 'admin_persistentedit.php', '2', '0'),
 ('pwcommentedit', '30', 'Kommentare', 'Kommentare', 'admin_pwcommentedit.php', '2', '1'),

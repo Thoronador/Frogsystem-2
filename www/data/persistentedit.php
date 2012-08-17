@@ -184,13 +184,13 @@ else
       $template->tag('pvp_arrange_selected', ($persistent_arr['persistent_pvp'] == 2) ? 'selected' : '' );
       $template->tag('pvp_no_selected', ($persistent_arr['persistent_pvp'] == 3) ? 'selected' : '' );
       $template->tag('pvp_special_selected', ($persistent_arr['persistent_pvp'] == 4) ? 'selected' : '' );
-      $template->tag('pvp_N/A_selected', ($persistent_arr['persistent_pvp'] == -1) ? 'selected' : '' );
+      $template->tag('pvp_N/A_selected', (($persistent_arr['persistent_pvp'] <= -1) || ($persistent_arr['persistent_pvp'] > 4)) ? 'selected' : '' );
 
       //online time selection "tags" (i.e. "conditions")
       $template->tag('uptime_always_selected', ($persistent_arr['persistent_termine'] == 1) ? 'selected' : '' );
       $template->tag('uptime_regular_selected', ($persistent_arr['persistent_termine'] == 2) ? 'selected' : '' );
       $template->tag('uptime_irregular_selected', ($persistent_arr['persistent_termine'] == 3) ? 'selected' : '' );
-      $template->tag('uptime_N/A_selected', ($persistent_arr['persistent_termine'] == -1) ? 'selected' : '' );
+      $template->tag('uptime_N/A_selected', (($persistent_arr['persistent_termine'] <= -1) || ($persistent_arr['persistent_termine'] > 3)) ? 'selected' : '' );
 
       //download size selection "tags" (conditions)
       $dl_string = getPersistentDLSizeAsString($persistent_arr['persistent_dlsize']);
@@ -215,10 +215,10 @@ else
       $template->tag('reg_lvl3_selected', ($persistent_arr['persistent_anmeldung'] == 3) ? 'selected' : '' );
       $template->tag('reg_lvl4_selected', ($persistent_arr['persistent_anmeldung'] == 4) ? 'selected' : '' );
       $template->tag('reg_lvl5_selected', ($persistent_arr['persistent_anmeldung'] == 5) ? 'selected' : '' );
-      $template->tag('reg_gt_lvl5_selected', ($persistent_arr['persistent_anmeldung'] == 6) ? 'selected' : '' );
+      $template->tag('reg_gt_lvl5_selected', (($persistent_arr['persistent_anmeldung'] >= 6) && ($persistent_arr['persistent_anmeldung'] < 100)) ? 'selected' : '' );
       $template->tag('reg_special_selected', ($persistent_arr['persistent_anmeldung'] == 100) ? 'selected' : '' );
       $template->tag('reg_never_selected', ($persistent_arr['persistent_anmeldung'] == 127) ? 'selected' : '' );
-      $template->tag('reg_N/A_selected', ($persistent_arr['persistent_anmeldung'] == -1) ? 'selected' : '' );
+      $template->tag('reg_N/A_selected', ($persistent_arr['persistent_anmeldung'] <= -1) ? 'selected' : '' );
 
       $template->tag('handycap', $persistent_arr['persistent_handycap']);
 
@@ -234,7 +234,7 @@ else
       $template->tag('dm_9_selected', ($persistent_arr['persistent_dm'] == 9) ? 'selected' : '' );
       $template->tag('dm_10_selected', ($persistent_arr['persistent_dm'] == 10) ? 'selected' : '' );
       $template->tag('dm_gt_10_selected', ($persistent_arr['persistent_dm'] > 10) ? 'selected' : '' );
-      $template->tag('dm_N/A_selected', ($persistent_arr['persistent_dm'] == -1) ? 'selected' : '' );
+      $template->tag('dm_N/A_selected', ($persistent_arr['persistent_dm'] <= -1) ? 'selected' : '' );
 
       $template->tag('maxzahl', $persistent_arr['persistent_maxzahl']);
       $template->tag('maxlevel', $persistent_arr['persistent_maxlevel']);
@@ -243,7 +243,7 @@ else
       $template->tag('expcap_yes_selected', ($persistent_arr['persistent_expcap'] == 1) ? 'selected' : '' );
       $template->tag('expcap_no_selected', ($persistent_arr['persistent_expcap'] == 0) ? 'selected' : '' );
       $template->tag('expcap_special_selected', ($persistent_arr['persistent_expcap'] == 2) ? 'selected' : '' );
-      $template->tag('expcap_N/A_selected', ($persistent_arr['persistent_expcap'] == -1) ? 'selected' : '' );
+      $template->tag('expcap_N/A_selected', (($persistent_arr['persistent_expcap'] <= -1) || ($persistent_arr['persistent_expcap'] > 2)) ? 'selected' : '' );
 
       //fights difficulty selection "tags" (conditions)
       $template->tag('fights_none_selected', ($persistent_arr['persistent_fights'] == 0) ? 'selected' : '' );
@@ -251,7 +251,7 @@ else
       $template->tag('fights_medium_selected', ($persistent_arr['persistent_fights'] == 2) ? 'selected' : '' );
       $template->tag('fights_difficult_selected', ($persistent_arr['persistent_fights'] == 3) ? 'selected' : '' );
       $template->tag('fights_different_selected', ($persistent_arr['persistent_fights'] == 4) ? 'selected' : '' );
-      $template->tag('fights_N/A_selected', ($persistent_arr['persistent_fights'] == -1) ? 'selected' : '' );
+      $template->tag('fights_N/A_selected', (($persistent_arr['persistent_fights'] <= -1) || ($persistent_arr['persistent_fights'] > 4)) ? 'selected' : '' );
 
       //traps difficulty selection "tags" (conditions... I'm starting to get tired of this!)
       $template->tag('traps_none_selected', ($persistent_arr['persistent_traps'] == 0) ? 'selected' : '' );
@@ -259,7 +259,7 @@ else
       $template->tag('traps_medium_selected', ($persistent_arr['persistent_traps'] == 2) ? 'selected' : '' );
       $template->tag('traps_difficult_selected', ($persistent_arr['persistent_traps'] == 3) ? 'selected' : '' );
       $template->tag('traps_different_selected', ($persistent_arr['persistent_traps'] == 4) ? 'selected' : '' );
-      $template->tag('traps_N/A_selected', ($persistent_arr['persistent_traps'] == -1) ? 'selected' : '' );
+      $template->tag('traps_N/A_selected', (($persistent_arr['persistent_traps'] <= -1) || ($persistent_arr['persistent_traps'] > 4)) ? 'selected' : '' );
 
       //item frequency selection "tags" (conditions)
       $template->tag('items_none_selected', ($persistent_arr['persistent_items'] == 0) ? 'selected' : '' );
@@ -267,7 +267,7 @@ else
       $template->tag('items_normal_selected', ($persistent_arr['persistent_items'] == 2) ? 'selected' : '' );
       $template->tag('items_often_selected', ($persistent_arr['persistent_items'] == 3) ? 'selected' : '' );
       $template->tag('items_different_selected', ($persistent_arr['persistent_items'] == 4) ? 'selected' : '' );
-      $template->tag('items_N/A_selected', ($persistent_arr['persistent_items'] == -1) ? 'selected' : '' );
+      $template->tag('items_N/A_selected', (($persistent_arr['persistent_items'] <= -1) || ($persistent_arr['persistent_items'] > 4)) ? 'selected' : '' );
 
       $template = $template->display();
     }
