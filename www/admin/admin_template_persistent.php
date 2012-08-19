@@ -81,6 +81,40 @@
   //TODO: insert interwiew list template stuff here
 
   $TEMPLATE_EDIT[] = array (
+    'name' => 'interview_list_entry',
+    'title' => 'Eintrag in der Interviewliste',
+    'description' => 'Ansicht eines Eintrages in der Interviewliste',
+    'rows' => 5,
+    'cols' => 66,
+    'help' => array (
+        array ( 'tag' => 'name', 'text' => 'Name der persistenten Welt' ),
+        array ( 'tag' => 'link', 'text' => 'Linkerweiterung zur Interviewseite der persistenten Welt' ),
+        array ( 'tag' => 'spiel', 'text' => 'Spiel (NWN oder NWN 2)' ),
+        array ( 'tag' => 'username', 'text' => 'Name des Autors des Interviews' )
+    )
+  );
+
+  $TEMPLATE_EDIT[] = array (
+    'name' => 'interview_list_no_entries',
+    'title' => 'Keine Eintr&auml;ge in der Interviewliste',
+    'description' => 'Ansicht der der Interviewlisteneintr&auml;ge, falls keine Interviews vorhanden sind',
+    'rows' => 5,
+    'cols' => 66,
+    'help' => array ()
+  );
+
+  $TEMPLATE_EDIT[] = array (
+    'name' => 'interview_list_body',
+    'title' => 'Interviewliste',
+    'description' => 'Ansicht der kompletten Interviewliste',
+    'rows' => 8,
+    'cols' => 66,
+    'help' => array (
+        array ( 'tag' => 'text', 'text' => 'Liste der Eintr&auml;ge' )
+    )
+  );
+
+  $TEMPLATE_EDIT[] = array (
     'name' => 'interview_detail_body',
     'title' => 'Interview-Body',
     'description' => 'Ansicht eines Interviews',
@@ -105,6 +139,17 @@
         array ( 'tag' => 'antwort11', 'text' => 'Antwort auf die elfte Frage' ),
         array ( 'tag' => 'antwort12', 'text' => 'Antwort auf die zw&ouml;lfte Frage' ),
         array ( 'tag' => 'antwort13', 'text' => 'Antwort auf die dreizehnte Frage' )
+    )
+  );
+  
+  $TEMPLATE_EDIT[] = array (
+    'name' => 'interview_add_form',
+    'title' => 'Interview-Formular',
+    'description' => 'Formular zum Eintragen eines neuen PW-Interviews',
+    'rows' => 25,
+    'cols' => 66,
+    'help' => array (
+        array ( 'tag' => 'session_id', 'text' => 'PHP-Session-ID des Nutzers' )
     )
   );
 
