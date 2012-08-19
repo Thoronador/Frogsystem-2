@@ -2,6 +2,7 @@
 /*
     Frogsystem Persistent Worlds script
     Copyright (C) 2005-2007  Stefan Bollmann
+    Copyright (C) 2012  Thoronador (adjustments for alix5)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,44 +28,54 @@
     as well as that of the covered work.
 */
 
-$index = mysql_query("SELECT * FROM fsplus_persisinterview ORDER BY persisinterview_name", $db);
+$persisinterview_list = '';
+$index = mysql_query('SELECT * FROM `'.$global_config_arr['pref'].'persisinterview` ORDER BY persisinterview_name', $db);
 while ($persisinterview_arr = mysql_fetch_assoc($index))
 {
-    // Username auslesen
+  // Username auslesen
+  $index3 = mysql_query('SELECT user_name FROM `'.$global_config_arr['pref'].'user` WHERE user_id = '.$persisinterview_arr['persisinterview_posterid'], $db);
+  $persisinterview_arr['user_name'] = mysql_result($index3, 0, 'user_name');
 
-    $index3 = mysql_query("select user_name from fs_user where user_id = $persisinterview_arr[persisinterview_posterid]", $db);
-    $persisinterview_arr[user_name] = mysql_result($index3, 0, "user_name");
+  switch ($persisinterview_arr['persisinterview_spiel'])
+  {
+    case 1:
+         $persisinterview_arr['persisinterview_spiel'] = 'Neverwinter Nights';
+         break;
+    case 2:
+         $persisinterview_arr['persisinterview_spiel'] = 'Neverwinter Nights 2';
+         break;
+    default:
+         $persisinterview_arr['persisinterview_spiel'] = '(unbekanntes Spiel)';
+         break;
+  }
 
-	// FrogCode-Ersetzungen anwenden (nicht in der Übersichtsliste notwendig)
-//    $persisinterview_arr[persisinterview_antwort01] = fscode($persisinterview_arr[persisinterview_antwort01], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  $template = new template();
+  $template->setFile('0_persistent_worlds.tpl');
+  $template->load('interview_list_entry');
 
-	switch ($persisinterview_arr[persisinterview_spiel])
-	{
-		case 1:
-		$persisinterview_arr[persisinterview_spiel] = "Neverwinter Nights";
-		break;
-		case 2:
-		$persisinterview_arr[persisinterview_spiel] = "Neverwinter Nights 2";
-		break;
-	}
+  $template->tag('spiel', $persisinterview_arr['persisinterview_spiel']);
+  $template->tag('link', $persisinterview_arr['persisinterview_link']);
+  $template->tag('name', $persisinterview_arr['persisinterview_name']);
+  $template->tag('username', $persisinterview_arr['user_name']);
 
-    $index2 = mysql_query("select template_code from fs_template where template_name = 'persisinterview_eintrag'", $db);
-    $persisinterview = stripslashes(mysql_result($index2, 0, "template_code"));
-    $persisinterview = str_replace("{spiel}", $persisinterview_arr[persisinterview_spiel], $persisinterview);
-    $persisinterview = str_replace("{link}", $persisinterview_arr[persisinterview_link], $persisinterview);
-    $persisinterview = str_replace("{name}", $persisinterview_arr[persisinterview_name], $persisinterview);
-    $persisinterview = str_replace("{username}", $persisinterview_arr[user_name], $persisinterview);
-
-    $persisinterview_list .= $persisinterview;
+  $persisinterview_list .= $template->display();
 }
 unset($persistent_arr);
 
-$index = mysql_query("select template_code from fs_template where template_name = 'persisinterview_main_body'", $db);
-$template = stripslashes(mysql_result($index, 0, "template_code"));
-$template = str_replace("{text}", $persisinterview_list, $template);
+if ($persisinterview_list==='')
+{
+  $template = new template();
+  $template->setFile('0_persistent_worlds.tpl');
+  $template->load('interview_list_no_entries');
+  $persisinterview_list = $template->display();
+}
 
+$template = new template();
+$template->setFile('0_persistent_worlds.tpl');
+$template->load('interview_list_body');
+
+$template->tag('text', $persisinterview_list);
 unset($persisinterview_list);
 
-echo $template;
-
+$template = $template->display();
 ?>
