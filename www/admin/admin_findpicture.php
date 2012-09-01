@@ -9,6 +9,7 @@ define ( FS2_ROOT_PATH, "./../", TRUE );
 require( FS2_ROOT_PATH . "login.inc.php");
 require( FS2_ROOT_PATH . "includes/functions.php");
 require( FS2_ROOT_PATH . "includes/adminfunctions.php");
+require( FS2_ROOT_PATH . "includes/imagefunctions.php");
 
 echo'
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,8 +25,8 @@ echo'
                 <b>BILD AUSWÄHLEN</b>
             </div>
             <div align="center">
-            
-                    <form action="'.$PHP_SELF.'" method="post">
+
+                    <form action="'.$_SERVER['PHP_SELF'].'" method="post">
                     <table border="0" cellpadding="2" cellspacing="0" width="287">
                                 <tr>
                                     <td align="left" class="configthin">
@@ -77,7 +78,7 @@ if (isset($_POST['cat']))
                                              javascript:opener.document.getElementById(\'screen_selectortext\').value=\'Bild ausgew&auml;hlt!\';
                                              javascript:opener.document.getElementById(\'selected_pic\').src=\''.$new_img_path.'\';
                                              self.close();">
-        ';        
+        ';
         echo '
                             </td>';
         $newLineEnd = !(++$i < 2);
