@@ -1,7 +1,7 @@
 <?php
 /*
     This file is part of the Frogsystem Feedback List.
-    Copyright (C) 2012  Thoronador
+    Copyright (C) 2012, 2013  Thoronador
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -274,8 +274,9 @@
           {
             echo '<br><small><a href="../?go=user&amp;id='.$row['note_poster_id'].'" target="_blank">(Profil)</a></small>';
           }
+          $row['note_text'] = fscode( $row['note_text'], false /*all fs*/, false /*html*/, false /*para*/, 1 /*bold*/, 1 /*italic*/, 1 /*do_underline*/, 1 /*do_strike*/, 1 /*center*/, 1 /*url*/, 1 /*home*/, 1 /*email*/, 0 /*img*/, 0 /*cimg*/, 1 /*list*/, 1 /*numlist*/, 1 /*font*/, 1 /*color*/, 1 /*size*/, 1 /*code*/, 1 /*quote*/, 1 /*noparse*/, 1 /*smilies*/);
           echo '<br><br>'.date('d.m.Y, H:i \U\h\r', $row['note_date']).'</td>
-                <td class ="configthin"><b>'.killhtml($row['note_title']).'</b><br><br>'.killhtml($row['note_text']).'</td>
+                <td class ="configthin"><b>'.killhtml($row['note_title']).'</b><br><br>'.$row['note_text'].'</td>
               </tr>
               <tr><td colspan="2"><hr width="80%"></td></tr>';
         }//while
