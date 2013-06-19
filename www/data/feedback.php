@@ -1,4 +1,7 @@
 <?php
+  //pseudo-config: ids of users that should always get notified about new issues
+  $always_notify = array(); //add ids here
+
   //news comment configuration - we use that until we have a separate feedback config
   $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'news_config', $db);
   $config_arr = mysql_fetch_assoc($index);
@@ -102,6 +105,44 @@
         $did_mail = false;
       }
 
+      //mail to all who want mail anyway
+      foreach ($always_notify as $cur_UID)
+      {
+        $cur_UID = intval($cur_UID);
+        if ($cur_UID>0 && $cur_UID!=$user_id)
+        {
+          //now get the mail adress of that user
+          $result = mysql_query('SELECT user_id, user_name, user_mail FROM '.$global_config_arr['pref'].'user '
+                               .'WHERE user_id = \''.$cur_UID."' LIMIT 1", $db );
+          if($row = mysql_fetch_assoc($result))
+          {
+            $to = stripslashes($row['user_mail']);
+            $site = $global_config_arr['virtualhost'];
+            $subject = 'Neue Meldung auf '.$site;
+            $text = 'Hallo '.$row['user_name']."!\n\n"
+                   .'Ein Benutzer hat eine neue Meldung zu ';
+            switch ($_POST['content_type'])
+            {
+              case 'article':
+                   $text .= 'einem Artikel';
+                   break;
+              case 'dl':
+              case 'download':
+                   $text .= 'einem Download';
+                   break;
+              default:
+                   //just in case... should not really get here
+                   $text .= 'einem der Inhalte';
+                   break;
+            }//swi
+            $text .= ' eines anderen Nutzers auf '.$site.' abgegeben.'."\n"
+                    .'Bitte logge dich dort ein und sieh dir die Details dazu an.'."\n\n"
+                    .'Viele Gruesse,'."\n"
+                    .'Das Feedbacksystem';
+            $did_mail = send_mail($to, $subject, $text, 'plain') || $did_mail;
+          }//if $row
+        }//if uid
+      }//foreach
 
       //generate forward message
       if ($did_mail)
