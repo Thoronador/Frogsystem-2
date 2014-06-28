@@ -218,6 +218,7 @@ if ($dl_arr !== false)
     $template->tag('files', $files );
     $template->tag('statistics', $stats );
     $template->tag('messages', $messages_template );
+    $template->tag('download_id', $_GET['id']); //replacement for dl ID in feedback link
     //~ $template->tag('comments_url', url('dlcomments', array('fileid' => $dl_arr['dl_id'])) );
     //get number of comments
     $cc = $FD->sql()->conn()->query('SELECT COUNT(comment_id) AS cc FROM `'.$FD->config('pref')."comments` WHERE content_type='dl' AND content_id='".$dl_arr['dl_id']."'");

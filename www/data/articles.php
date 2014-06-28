@@ -116,6 +116,7 @@ else {
     $article_arr['template']->tag ( 'user_id', $user_arr['user_id'] );
     $article_arr['template']->tag ( 'user_name', $user_arr['user_name'] );
     $article_arr['template']->tag ( 'user_url', $user_arr['user_url'] );
+    $article_arr['template']->tag ( 'article_id', $article_arr['article_id'] ); //ID for feedback link
 
     $article_arr['template'] = $article_arr['template']->display ();
 
