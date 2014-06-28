@@ -1,7 +1,7 @@
 <?php
 /*
     This file is part of the Frogsystem Feedback list.
-    Copyright (C) 2012  Thoronador
+    Copyright (C) 2012, 2014  Thoronador
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@
 */
 
 
-
   /* returns the ID of the user that created the specified content, if any.
      If no user is found, the function returns zero.
 
@@ -39,15 +38,14 @@
   */
   function getFeedbackRelatedUserID($content_type, $content_id)
   {
-    global $global_config_arr;
-    global $db;
+    global $FD;
 
     $content_id = intval($content_id);
     if ($content_type==='article')
     {
-      $result = mysql_query('SELECT article_id, article_user FROM '.$global_config_arr['pref'].'articles '
-                           .'WHERE article_id='.$content_id, $db);
-      if ($row = mysql_fetch_assoc($result))
+      $result = $FD->sql()->conn()->query('SELECT article_id, article_user FROM '.$FD->config('pref').'articles '
+                           .'WHERE article_id='.$content_id);
+      if ($row = $result->fetch(PDO::FETCH_ASSOC))
       {
         return $row['article_user'];
       }
@@ -55,9 +53,9 @@
     }
     else if (($content_type==='dl') || ($content_type==='download'))
     {
-      $result = mysql_query('SELECT dl_id, user_id FROM '.$global_config_arr['pref'].'dl '
-                           .'WHERE dl_id='.$content_id, $db);
-      if ($row = mysql_fetch_assoc($result))
+      $result = $FD->sql()->conn()->query('SELECT dl_id, user_id FROM '.$FD->config('pref').'dl '
+                           .'WHERE dl_id='.$content_id);
+      if ($row = $result->fetch(PDO::FETCH_ASSOC))
       {
         return $row['user_id'];
       }
@@ -66,6 +64,7 @@
     //must be general stuff or something like that
     return 0;
   }//func
+
 
   /* returns a line containing the title of the specified content, or a generic
      line instead, if no matching content. The line already contains HTML code.
@@ -79,17 +78,16 @@
   */
   function getFeedbackTitle($content_type, $content_id, $acp_style=false)
   {
-    global $global_config_arr;
-    global $db;
+    global $FD;
 
     $content_id = intval($content_id);
     if ($content_type==='article')
     {
-      $query = mysql_query('SELECT article_id, article_url, article_title '
-                          .'FROM '.$global_config_arr['pref'].'articles WHERE article_id='.$content_id, $db);
-      if ($res = mysql_fetch_assoc($query))
+      $query = $FD->sql()->conn()->query('SELECT article_id, article_url, article_title '
+                          .'FROM '.$FD->config('pref').'articles WHERE article_id='.$content_id);
+      if ($res = $query->fetch(PDO::FETCH_ASSOC))
       {
-        if ($acp_style) return 'Artikel #'.$content_id.' <a href="../?go='.$res['article_url'].'" target=_blank">&quot;'.$res['article_title'].'&quot;</a>';
+        if ($acp_style) return 'Artikel #'.$content_id.' <a href="../?go='.htmlentities($res['article_url']).'" target=_blank">&quot;'.htmlentities($res['article_title']).'&quot;</a>';
         return 'R&uuml;ckmeldung zu Artikel &quot;'.htmlentities($res['article_title']).'&quot; hinzuf&uuml;gen';
       }
       else
@@ -101,11 +99,11 @@
     }//article
     else if (($content_type==='dl') || ($content_type==='download'))
     {
-      $query = mysql_query('SELECT dl_id, dl_name '
-                          .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$content_id, $db);
-      if ($sub = mysql_fetch_assoc($query))
+      $query = $FD->sql()->conn()->query('SELECT dl_id, dl_name '
+                          .'FROM '.$FD->config('pref').'dl WHERE dl_id='.$content_id);
+      if ($sub = $query->fetch(PDO::FETCH_ASSOC))
       {
-        if ($acp_style) return 'Download #'.$content_id.' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
+        if ($acp_style) return 'Download #'.$content_id.' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.htmlentities($sub['dl_name']).'&quot;</a>';
         return 'R&uuml;ckmeldung zu Download &quot;'.htmlentities($sub['dl_name']).'&quot; hinzuf&uuml;gen';
       }
       else

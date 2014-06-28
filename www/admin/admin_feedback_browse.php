@@ -1,7 +1,7 @@
 <?php
 /*
     This file is part of the Frogsystem Feedback List.
-    Copyright (C) 2012, 2013  Thoronador
+    Copyright (C) 2012, 2013, 2014  Thoronador
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,22 +41,22 @@
   {
     //security stuff
     $_POST['issue_id'] = intval($_POST['issue_id']);
-    $_POST['note_title'] = savesql(trim($_POST['note_title']));
-    $_POST['note_text'] = savesql(trim($_POST['note_text']));
+    $_POST['note_title'] = trim($_POST['note_title']);
+    $_POST['note_text'] = trim($_POST['note_text']);
     if ($_POST['note_text']!='')
     {
       //get additional data
-      $ip = savesql($_SERVER['REMOTE_ADDR']);
       $note_date = time();
       //save note
-      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
-                 .'SET issue_id='.$_POST['issue_id'].", note_poster='".savesql($_SESSION['user_name'])
-                 ."', note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip='".$ip
-                 ."', note_date='".$note_date."', note_title='".$_POST['note_title']
-                 ."', note_text='".$_POST['note_text']."', is_starter=0", $db);
+      $stmt = $FD->sql()->conn()->prepare('INSERT INTO `'.$FD->config('pref').'feedback_notes` '
+                 .'SET issue_id='.$_POST['issue_id'].', note_poster=?'
+                 .", note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip=?"
+                 .", note_date='".$note_date."', note_title=?,"
+                 .', note_text=?, is_starter=0');
+      $stmt->execute(array($_SESSION['user_name'], $_SERVER['REMOTE_ADDR'], $_POST['note_title'], $_POST['note_text']));
       //put system message
-      systext('Deine Notiz wurde gespeichert.', $TEXT['admin']->get('info'),
-              false, $TEXT['admin']->get('icon_save_add'));
+      systext('Deine Notiz wurde gespeichert.', $FD->text('admin', 'info'),
+              false, $FD->text('admin', 'icon_save_add'));
     }//if text is not empty
     else
     {
@@ -79,27 +79,28 @@
     if ($_POST['new_status']>=feedbackStatusMin && $_POST['new_status']<=feedbackStatusMax)
     {
       //get additional data
-      $ip = savesql($_SERVER['REMOTE_ADDR']);
+      $ip = $_SERVER['REMOTE_ADDR'];
       //update status
-      mysql_query('UPDATE `'.$global_config_arr['pref'].'feedback_issues` '
+      $FD->sql()->conn()->query('UPDATE `'.$FD->config('pref').'feedback_issues` '
                  .'SET status='.$_POST['new_status'].' WHERE issue_id='.$_POST['issue_id']
-                 .' LIMIT 1', $db);
+                 .' LIMIT 1');
       //insert system-generated note about status change
-      $note_text = savesql('*** Neuer Status: '.feedbackStatusToString($_POST['new_status']).' ***');
-      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
-                 .'SET issue_id='.$_POST['issue_id'].", note_poster='".savesql($_SESSION['user_name'])
-                 ."', note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip='".$ip
-                 ."', note_date='".time()."', note_title='Status aktualisiert', note_text='".$note_text
-                 ."', is_starter=0", $db);
+      $note_text = '*** Neuer Status: '.feedbackStatusToString($_POST['new_status']).' ***';
+      $stmt = $FD->sql()->conn()->prepare('INSERT INTO `'.$FD->config('pref').'feedback_notes` '
+                 .'SET issue_id='.$_POST['issue_id'].', note_poster=?'
+                 .", note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip=?"
+                 .", note_date='".time()."', note_title='Status aktualisiert', note_text=?"
+                 .', is_starter=0');
+      $stmt->execute(array($_SESSION['user_name'], $ip, $note_text));
       //put system message
-      systext('Der Status wurde aktualisiert.', $TEXT['admin']->get('info'),
-              false, $TEXT['admin']->get('icon_save_add'));
+      systext('Der Status wurde aktualisiert.', $FD->text('admin', 'info'),
+              false, $FD->text('admin', 'icon_save_add'));
     }//if acceptable status value
     else
     {
       //not an allowed status value
       systext('Der ausgew&auml;hlte Statuswert ist nicht zul&auml;ssig und wurde deshalb nicht gespeichert!',
-              $TEXT['admin']->get('error'), true, $TEXT['admin']->get('icon_save_error'));
+              $FD->text('admin', 'error'), true, $FD->text('admin', 'icon_save_error'));
     }
   }//if add note
 
@@ -119,9 +120,10 @@
       $where_clause = '';
     }
 
-    $query = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues'.$where_clause.' ORDER BY issue_id DESC', $db);
+    $query = $FD->sql()->conn()->query('SELECT COUNT(*) FROM '.$FD->config('pref').'feedback_issues'.$where_clause.' ORDER BY issue_id DESC');
+    $num_rows = $query->fetchColumn();
 
-    if (mysql_num_rows($query)<=0)
+    if ($num_rows<=0)
     {
       if ($where_clause==='')
       {
@@ -143,7 +145,8 @@
                 <td class="config"><b>Details</b></td>
                 <td class="config"><b>Status</b></td>
               </tr>';
-      while ($row = mysql_fetch_assoc($query))
+      $query = $FD->sql()->conn()->query('SELECT * FROM '.$FD->config('pref').'feedback_issues'.$where_clause.' ORDER BY issue_id DESC');
+      while ($row = $query->fetch(PDO::FETCH_ASSOC))
       {
         echo '<tr>
                 <td class="configthin" style="border: 1px solid #000000;"><b>'.$row['issue_id'].'</b></td>
@@ -190,20 +193,22 @@
     //show detailed list for one issue
     $_GET['details'] = intval($_GET['details']);
 
-    $result = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'feedback_issues WHERE issue_id='.$_GET['details'], $db);
-    if (mysql_num_rows($result)<=0)
+    $result = $FD->sql()->conn()->query('SELECT COUNT(*) FROM '.$FD->config('pref').'feedback_issues WHERE issue_id='.$_GET['details']);
+    $num_rows = $result->fetchColumn();
+    if ($num_rows<=0)
     {
       echo '<b>Es ist keine R&uuml;ckmeldung mit der angegebenen ID verf&uuml;gbar!</b>'
           .'<br><br><a href="?go=feedback_browse">Zur&uuml;ck zur &Uuml;bersicht</a>';
     }
     else
     {
-      $issue = mysql_fetch_assoc($result);
-      //now get all the notes/comments for that issue
-      $result = mysql_query('SELECT *, IF(note_poster_id <>0, '.$global_config_arr['pref'].'user.user_name, note_poster) AS real_name '
-                           .'FROM '.$global_config_arr['pref'].'feedback_notes '
-                           .'LEFT JOIN '.$global_config_arr['pref'].'user ON note_poster_id=user_id WHERE issue_id='.$_GET['details'], $db);
-      if (mysql_num_rows($result)<=0)
+      $result = $FD->sql()->conn()->query('SELECT * FROM '.$FD->config('pref').'feedback_issues WHERE issue_id='.$_GET['details']);
+      $issue = $result->fetch(PDO::FETCH_ASSOC);
+      //now get number of all the notes/comments for that issue
+      $result = $FD->sql()->conn()->query('SELECT COUNT(*) FROM '.$FD->config('pref').'feedback_notes '
+                           .' WHERE issue_id='.$_GET['details']);
+      $num_rows = $result->fetchColumn();
+      if ($num_rows<=0)
       {
         //should never happen, usually
         echo '<b>Zu dieser R&uuml;ckmeldung sind keine Eintr&auml;ge verf&uuml;gbar.</b>'
@@ -220,11 +225,11 @@
         if ($issue['content_type']=='article')
         {
           echo 'Artikel #'.$issue['content_id'];
-          $sub_query = mysql_query('SELECT article_id, article_url, article_title '
-                                  .'FROM '.$global_config_arr['pref'].'articles WHERE article_id='.$issue['content_id'], $db);
-          if ($sub = mysql_fetch_assoc($sub_query))
+          $sub_query = $FD->sql()->conn()->query('SELECT article_id, article_url, article_title '
+                                  .'FROM '.$FD->config('pref').'articles WHERE article_id='.$issue['content_id']);
+          if ($sub = $sub_query->fetch(PDO::FETCH_ASSOC))
           {
-            echo ' <a href="../?go='.$sub['article_url'].'" target=_blank">&quot;'.$sub['article_title'].'&quot;</a>';
+            echo ' <a href="../?go='.htmlentities($sub['article_url']).'" target=_blank">&quot;'.htmlentities($sub['article_title']).'&quot;</a>';
           }
           else
           {
@@ -234,11 +239,11 @@
         else if ($issue['content_type']=='download' || $issue['content_type']=='dl')
         {
           echo 'Download #'.$issue['content_id'];
-          $sub_query = mysql_query('SELECT dl_id, dl_name '
-                                  .'FROM '.$global_config_arr['pref'].'dl WHERE dl_id='.$issue['content_id'], $db);
-          if ($sub = mysql_fetch_assoc($sub_query))
+          $sub_query = $FD->sql()->conn()->query('SELECT dl_id, dl_name '
+                                  .'FROM '.$FD->sql()->conn()->query.'dl WHERE dl_id='.$issue['content_id']);
+          if ($sub = $sub_query->fetch(PDO::FETCH_ASSOC))
           {
-            echo ' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.$sub['dl_name'].'&quot;</a>';
+            echo ' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.htmlentities($sub['dl_name']).'&quot;</a>';
           }
           else
           {
@@ -262,7 +267,10 @@
                 <td class="config"><b>Nachricht</b></td>
               </tr>
               <tr><td colspan="2"><hr></td></tr>';
-        while ($row = mysql_fetch_assoc($result))
+        $result = $FD->sql()->conn()->query('SELECT *, IF(note_poster_id <>0, '.$FD->config('pref').'user.user_name, note_poster) AS real_name '
+                           .'FROM '.$FD->config('pref').'feedback_notes '
+                           .'LEFT JOIN '.$FD->config('pref').'user ON note_poster_id=user_id WHERE issue_id='.$_GET['details']);
+        while ($row = $result->fetch(POD::FETCH_ASSOC))
         {
           echo '<tr>
                   <td class="configthin">'.$row['real_name'];
