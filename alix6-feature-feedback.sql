@@ -25,15 +25,15 @@ CREATE TABLE `fs2_feedback_notes` (
 ) ENGINE = MYISAM;
 
 
--- new admin CP category (might need to be modified, if you already have a group_id of 29)
+-- new admin CP category (might need to be modified, if you already have a group_id named 'feedback')
 
-INSERT INTO `fs2_admin_groups` (`group_id`, `group_title`, `menu_id`, `group_pos`)
-VALUES (29 , 'Feedback', 'interactive', 3);
+INSERT INTO `fs2_admin_groups` (`group_id`, `menu_id`, `group_pos`)
+VALUES ('feedback' , 'interactive', 3);
 
 -- admin CP entry (might need to be modified)
----- entry for feedback stuff itselt
-INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`)
-VALUES ('feedback_browse', 29, 'Liste der R&uuml;ckmeldungen', 'R&uuml;ckmeldungen', 'admin_feedback_browse.php', 1, 0);
+---- entry for feedback stuff itself
+INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_file`, `page_pos`, `page_int_sub_perm`)
+VALUES ('feedback_browse', 'feedback', 'admin_feedback_browse.php', 1, 0);
 ---- entry for feedback template
-INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_title`, `page_link`, `page_file`, `page_pos`, `page_int_sub_perm`)
-VALUES ('tpl_feedback', 22, 'Feedback bearbeiten', 'Feedback', 'admin_template_feedback.php', 21, 0);
+INSERT INTO `fs2_admin_cp` (`page_id`, `group_id`, `page_file`, `page_pos`, `page_int_sub_perm`)
+VALUES ('tpl_feedback', 'templates', 'admin_template_feedback.php', 29, 0);

@@ -45,6 +45,7 @@ group_aliases:                  Aliases
 group_search:                   Search
 group_fscodes:                  FSCodes
 group_db:                       Database
+group_feedback:                 Feedback
 
 # Startseiten
 page_title_start_general:       General
@@ -312,6 +313,8 @@ page_title_tpl_player:          Edit „Flash-Player“
 page_link_tpl_player:           Flash-Player
 page_title_tpl_topdownloads:    Edit „Top Downloads“
 page_link_tpl_topdownloads:     Top Downloads
+page_title_tpl_feedback:        Edit Feedback
+page_link_tpl_feedback:         Feedback
 
 # Applets
 page_title_applets_add:         add
@@ -367,3 +370,7 @@ page_title_article_preview:     Article preview
 # Datenbank
 page_title_table_admin:         Tables
 page_link_table_admin:          Tables
+
+# Feedback
+page_title_feedback_browse:     List of feedback notes
+page_link_feedback_browse:      Feedback notes

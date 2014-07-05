@@ -49,10 +49,10 @@
       $note_date = time();
       //save note
       $stmt = $FD->sql()->conn()->prepare('INSERT INTO `'.$FD->config('pref').'feedback_notes` '
-                 .'SET issue_id='.$_POST['issue_id'].', note_poster=?'
-                 .", note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip=?"
-                 .", note_date='".$note_date."', note_title=?,"
-                 .', note_text=?, is_starter=0');
+                 .'SET issue_id='.$_POST['issue_id'].', note_poster=?,'
+                 ." note_poster_id='".intval($_SESSION['user_id'])."', note_poster_ip=?,"
+                 ." note_date='".$note_date."', note_title=?,"
+                 .' note_text=?, is_starter=0');
       $stmt->execute(array($_SESSION['user_name'], $_SERVER['REMOTE_ADDR'], $_POST['note_title'], $_POST['note_text']));
       //put system message
       systext('Deine Notiz wurde gespeichert.', $FD->text('admin', 'info'),
@@ -240,7 +240,7 @@
         {
           echo 'Download #'.$issue['content_id'];
           $sub_query = $FD->sql()->conn()->query('SELECT dl_id, dl_name '
-                                  .'FROM '.$FD->sql()->conn()->query.'dl WHERE dl_id='.$issue['content_id']);
+                                  .'FROM '.$FD->config('pref').'dl WHERE dl_id='.$issue['content_id']);
           if ($sub = $sub_query->fetch(PDO::FETCH_ASSOC))
           {
             echo ' <a href="../?go=dlfile&amp;id='.$sub['dl_id'].'" target=_blank">&quot;'.htmlentities($sub['dl_name']).'&quot;</a>';
@@ -270,7 +270,7 @@
         $result = $FD->sql()->conn()->query('SELECT *, IF(note_poster_id <>0, '.$FD->config('pref').'user.user_name, note_poster) AS real_name '
                            .'FROM '.$FD->config('pref').'feedback_notes '
                            .'LEFT JOIN '.$FD->config('pref').'user ON note_poster_id=user_id WHERE issue_id='.$_GET['details']);
-        while ($row = $result->fetch(POD::FETCH_ASSOC))
+        while ($row = $result->fetch(PDO::FETCH_ASSOC))
         {
           echo '<tr>
                   <td class="configthin">'.$row['real_name'];

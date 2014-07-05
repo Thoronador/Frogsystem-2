@@ -3,11 +3,11 @@
   $always_notify = array(); //add ids here
 
   //news comment configuration - we use that until we have a separate feedback config
-  $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'news_config', $db);
-  $config_arr = mysql_fetch_assoc($index);
+  $FD->loadConfig('news');
+  $config_arr = $FD->configObject('news')->getConfigArray();
   //editor configuration
-  $index = mysql_query('SELECT * FROM '.$global_config_arr['pref'].'editor_config', $db);
-  $editor_config = mysql_fetch_assoc($index);
+  $index = $FD->sql()->conn()->query('SELECT * FROM `'.$FD->config('pref').'editor_config`');
+  $editor_config = $index->fetch(PDO::FETCH_ASSOC);
 
 
   /***************************
@@ -37,28 +37,30 @@
     {
 
       // security functions
-      $_POST['text'] = savesql(trim($_POST['text']));
-      $_POST['name'] = savesql(trim($_POST['name']));
-      $_POST['title'] = savesql(trim($_POST['title']));
-      $_POST['content_type'] = savesql(trim($_POST['content_type']));
+      $_POST['text'] = trim($_POST['text']);
+      $_POST['name'] = trim($_POST['name']);
+      $_POST['title'] = trim($_POST['title']);
+      $_POST['content_type'] = trim($_POST['content_type']);
       $_POST['content_id'] = intval($_POST['content_id']);
       settype ($_SESSION['user_id'], 'integer');
       //get current time and IP
       $note_date = time();
-      $ip = savesql($_SERVER['REMOTE_ADDR']);
+      $ip = $_SERVER['REMOTE_ADDR'];
 
       //create new issue
-      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_issues` '
-                 .'SET content_type=\''.$_POST['content_type']
-                 ."', content_id='".$_POST['content_id']."', status='0'", $db);
-      $issue_id = intval(mysql_insert_id($db));
+      $stmt = $FD->sql()->conn()->prepare('INSERT INTO `'.$FD->config('pref').'feedback_issues` '
+                 .'SET content_type=?,'
+                 ." content_id='".$_POST['content_id']."', status='0'");
+      $stmt->execute(array($_POST['content_type']));
+      $issue_id = intval($FD->sql()->conn()->lastInsertId());
 
       //save note
-      mysql_query('INSERT INTO `'.$global_config_arr['pref'].'feedback_notes` '
-                 .'SET issue_id='.$issue_id.", note_poster='".$_POST['name']
-                 ."', note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip='".$ip
-                 ."', note_date='".$note_date."', note_title='".$_POST['title']
-                 ."', note_text='".$_POST['text']."', is_starter=1", $db);
+      $stmt = $FD->sql()->conn()->prepare('INSERT INTO `'.$FD->config('pref').'feedback_notes` '
+                 .'SET issue_id='.$issue_id.", note_poster=?,"
+                 ." note_poster_id='".$_SESSION['user_id'] ."', note_poster_ip=?,"
+                 ." note_date='".$note_date."', note_title=?,"
+                 ." note_text=?, is_starter=1");
+      $stmt->execute(array($_POST['name'], $ip, $_POST['title'], $_POST['text']));
 
       //check if we have a user related to the reported content
       require_once(FS2_ROOT_PATH.'includes/feedbackfunctions.php');
@@ -66,12 +68,12 @@
       if ($user_id!=0 && is_in_staff($user_id))
       {
         //now get the mail adress of that staff member
-        $result = mysql_query('SELECT user_id, user_name, user_mail FROM '.$global_config_arr['pref'].'user '
-                             .'WHERE user_id = \''.$user_id."' LIMIT 1", $db );
-        if($row = mysql_fetch_assoc($result))
+        $result = $FD->sql()->conn()->query('SELECT user_id, user_name, user_mail FROM '.$FD->config('pref').'user '
+                             .'WHERE user_id = \''.$user_id."' LIMIT 1");
+        if($row = $result->fetch(PDO::FETCH_ASSOC))
         {
           $to = stripslashes($row['user_mail']);
-          $site = $global_config_arr['virtualhost'];
+          $site = $FD->config('virtualhost');
           $subject = 'Neue Meldung auf '.$site;
           $text = 'Hallo '.$row['user_name']."!\n\n"
                  .'Ein Benutzer hat eine neue Meldung zu ';
@@ -112,12 +114,12 @@
         if ($cur_UID>0 && $cur_UID!=$user_id)
         {
           //now get the mail adress of that user
-          $result = mysql_query('SELECT user_id, user_name, user_mail FROM '.$global_config_arr['pref'].'user '
-                               .'WHERE user_id = \''.$cur_UID."' LIMIT 1", $db );
-          if($row = mysql_fetch_assoc($result))
+          $result = $FD->sql()->conn()->query('SELECT user_id, user_name, user_mail FROM '.$FD->config('pref').'user '
+                               .'WHERE user_id = \''.$cur_UID."' LIMIT 1");
+          if($row = $result->fetch(PDO::FETCH_ASSOC))
           {
             $to = stripslashes($row['user_mail']);
-            $site = $global_config_arr['virtualhost'];
+            $site = $FD->config('virtualhost');
             $subject = 'Neue Meldung auf '.$site;
             $text = 'Hallo '.$row['user_name']."!\n\n"
                    .'Ein Benutzer hat eine neue Meldung zu ';
