@@ -66,16 +66,28 @@ $files = $files['files'];
 //total size of all downloads
 $index = mysql_query('SELECT SUM(file_size) AS totalsize FROM `'.$global_config_arr['pref'].'dl_files`', $db);
 $totalsize = mysql_fetch_assoc($index);
+if (is_null($totalsize['totalsize'])) //might be null, if no downloads exist
+{
+  $totalsize['totalsize'] = 0;
+}
 $totalsize = getsize($totalsize['totalsize']);
 
 //Number of downloaded files
 $index = mysql_query('SELECT SUM(file_count) AS totalloads FROM `'.$global_config_arr['pref'].'dl_files`', $db);
 $loads = mysql_fetch_assoc($index);
 $loads = $loads['totalloads'];
+if (is_null($loads)) //might be null, if there are no downloads yet
+{
+  $loads = 0;
+}
 
 //traffic
 $index = mysql_query('SELECT SUM(file_count*file_size) AS traffic FROM `'.$global_config_arr['pref'].'dl_files`', $db);
 $traffic = mysql_fetch_assoc($index);
+if (is_null($traffic['traffic'])) //can be null, if no downloads exist yet
+{
+  $traffic['traffic'] = 0;
+}
 $traffic = getsize($traffic['traffic']);
 
 
