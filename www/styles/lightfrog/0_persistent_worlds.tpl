@@ -1,3 +1,13 @@
+<!--section-start::applet_body-->
+<ul>
+  {..entries..}
+</ul>
+<!--section-end::applet_body-->
+
+<!--section-start::applet_entry-->
+<li><a href="{..detail_url..}">{..name..}</a></li>
+<!--section-end::applet_entry-->
+
 <!--section-start::main_body-->
 <div align="center"><h2>Persistente Welten</h2></div>
 <p>
@@ -221,7 +231,7 @@
 
 <!--section-start::interview_list_entry-->
   <tr>
-    <td><a href="?go=persistentinterview&pw={..link..}">Interview mit {..username..}</a> &uuml;ber die Persistente Welt {..name..}, ein Projekt zu {..spiel..}.</td>
+    <td><a href="?go=persistentinterview&amp;pw={..link..}">Interview mit {..username..}</a> &uuml;ber die Persistente Welt {..name..}, ein Projekt zu {..spiel..}.</td>
   </tr>
 <!--section-end::interview_list_entry-->
 

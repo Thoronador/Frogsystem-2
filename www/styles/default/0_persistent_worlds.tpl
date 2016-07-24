@@ -221,7 +221,7 @@
 
 <!--section-start::interview_list_entry-->
   <tr>
-    <td><a href="?go=persistentinterview&pw={..link..}">Interview mit {..username..}</a> &uuml;ber die Persistente Welt {..name..}, ein Projekt zu {..spiel..}.</td>
+    <td><a href="?go=persistentinterview&amp;pw={..link..}">Interview mit {..username..}</a> &uuml;ber die Persistente Welt {..name..}, ein Projekt zu {..spiel..}.</td>
   </tr>
 <!--section-end::interview_list_entry-->
 
