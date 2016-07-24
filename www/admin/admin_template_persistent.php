@@ -6,6 +6,29 @@
   //TODO: localize titles and descriptions
 
   $TEMPLATE_EDIT[] = array (
+    'name' => 'applet_body',
+    'title' => 'Persis. Welten-Applet-Body',
+    'description' => 'Aussehen der kleinen Liste der Persistenten Welten im Men&uuml;',
+    'rows' => 10,
+    'cols' => 66,
+    'help' => array (
+        array ( 'tag' => 'entries', 'text' => 'Auflistung der Eintr&auml;ge der persistenten Welten' )
+    )
+  );
+
+  $TEMPLATE_EDIT[] = array (
+    'name' => 'applet_entry',
+    'title' => 'Persis. Welten-Applet-Eintrag',
+    'description' => 'Aussehen eines Eintrages in der Liste der Persistenten Welten im Men&uuml;',
+    'rows' => 10,
+    'cols' => 66,
+    'help' => array (
+        array ( 'tag' => 'name', 'text' => 'Name der persistenten Welt' ),
+        array ( 'tag' => 'detail_url', 'text' => 'URL zur Detailseite der persistenten Welt' )
+    )
+  );
+
+  $TEMPLATE_EDIT[] = array (
     'name' => 'main_body',
     'title' => 'Persis. Welten-Body (Liste)',
     'description' => 'Liste der Persistenten Welten',
@@ -141,7 +164,7 @@
         array ( 'tag' => 'antwort13', 'text' => 'Antwort auf die dreizehnte Frage' )
     )
   );
-  
+
   $TEMPLATE_EDIT[] = array (
     'name' => 'interview_add_form',
     'title' => 'Interview-Formular',
@@ -188,9 +211,9 @@
     )
   );
 
-//////////////////////////
-//// Intialise Editor ////
-//////////////////////////
+///////////////////////////
+//// Initialize Editor ////
+///////////////////////////
 
 echo templatepage_init ($TEMPLATE_EDIT, $TEMPLATE_GO, $TEMPLATE_FILE);
 ?>

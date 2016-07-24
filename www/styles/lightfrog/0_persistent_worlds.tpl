@@ -1,3 +1,13 @@
+<!--section-start::applet_body-->
+<ul>
+  {..entries..}
+</ul>
+<!--section-end::applet_body-->
+
+<!--section-start::applet_entry-->
+<li><a href="{..detail_url..}">{..name..}</a></li>
+<!--section-end::applet_entry-->
+
 <!--section-start::main_body-->
 <div align="center"><h2>Persistente Welten</h2></div>
 <p>
