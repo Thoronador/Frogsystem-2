@@ -38,7 +38,6 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
     if (isset($_POST['delpersistent']))
     {
         mysql_query('DELETE FROM `'.$global_config_arr['pref'].'persistent` WHERE persistent_id = '.$_POST['editpersistentid'].' LIMIT 1', $db);
-		mysql_query('DELETE FROM `'.$global_config_arr['pref'].'pwoftheweek` WHERE pwoftheweek_id = '.$_POST['editpersistentid'].' LIMIT 1', $db);
         mysql_query('DELETE FROM `'.$global_config_arr['pref'].'persistent_comments` WHERE persistent_id = \''.$_POST['editpersistentid']."'", $db);
 		$numcomments = mysql_affected_rows($db);
         mysql_query('UPDATE `'.$global_config_arr['pref'].'counter SET comments = comments - '.$numcomments, $db);
@@ -107,11 +106,6 @@ if (isset($_POST['name']) && isset($_POST['url']) && isset($_POST['text']))
                    WHERE persistent_id = '".$_POST['editpersistentid']."'";
         mysql_query($update, $db);
         echo mysql_error();
-		$update = 'UPDATE `'.$global_config_arr['pref'].'pwoftheweek`
-                   SET pwoftheweek_name = \''.$_POST['name']."'
-                   WHERE pwoftheweek_id = '".$_POST['editpersistentid']."'";
-        mysql_query($update, $db);
-		echo mysql_error();
         systext('Persistente Welt wurde aktualisiert');
     }
 }
